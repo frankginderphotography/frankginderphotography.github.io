@@ -49,9 +49,8 @@
     
     $('#photo-wrapper').on('mousewheel', function(e) {
       var oldLeft = parseInt($('#photo-container').css('left')) || 0;
-      if(e.deltaX !== 0) {
-        $('#photo-container').css('left', oldLeft + e.deltaX);
-      }
+      var changed = e.deltaX || e.deltaY;
+      $('#photo-container').css('left', oldLeft + changed);
     });
   </script>
 </html>
