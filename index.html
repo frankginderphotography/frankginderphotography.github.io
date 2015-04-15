@@ -16,7 +16,7 @@
     bootstrap css:
       <link rel="stylesheet" href="css/bootstrap.min.css">-->
     <style>
-      body { margin: 0px; overflow: hidden; }
+      body { margin: 0px; }
       #navbar { height: 35px; padding-left: 20px; padding-top: 15px; position: fixed; top: 0px; left: 0px; }
       #photo-wrapper { font-size: 0px; margin-top: 50px; }
       #photo-container { display: inline-block; white-space: nowrap; position: relative; }
@@ -45,7 +45,7 @@
       });
 
     $('#photo-container').height($(window).height() - 75);
-    //$('#photo-wrapper').width($(window).width());
+    $('#photo-wrapper').width($(window).width());
     
     //$('#photo-wrapper').on('mousewheel', function(e) {
     //  var oldLeft = parseInt($('#photo-container').css('left')) || 0;
