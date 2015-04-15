@@ -17,8 +17,8 @@
       <link rel="stylesheet" href="css/bootstrap.min.css">-->
     <style>
       body { margin: 0px; }
-      #navbar { height: 35px; padding-left: 20px; padding-top: 15px; }
-      #photo-wrapper { overflow: hidden; font-size: 0px; }
+      #navbar { height: 35px; padding-left: 20px; padding-top: 15px; position: fixed; top: 0px; }
+      #photo-wrapper { font-size: 0px; margin-top: 50px; }
       .navbar { margin-bottom: 0px; }
       #photo-container { display: inline-block; white-space: nowrap; position: relative; }
       img.full-size { height: 100%; margin-right: 5px; }
@@ -45,20 +45,6 @@
         ];
       });
 
-    $('#photo-container').height($(window).height() - 50);
-
-    $('#photo-wrapper').on('mousewheel', function(e) {
-      e.preventDefault();
-      if(e.deltaX !== 0) {
-        var oldLeft = parseInt($('#photo-container').css('left'));
-        if(e.deltaX > 0 && oldLeft <= -$('#photo-container').width()) {
-          $('#photo-container').css('left', $(window).width());
-        } else if(e.deltaX < 0 && oldLeft >= $(window).width()) {
-          $('#photo-container').css('left', -$('#photo-container').width());
-        } else {
-          $('#photo-container').css('left', oldLeft - e.deltaX * 40);
-        }
-      }
-    });
+    $('#photo-container').height($(window).height() - 75);
   </script>
 </html>
