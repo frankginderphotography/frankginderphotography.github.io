@@ -18,7 +18,7 @@
     <style>
       body { margin: 0px; }
       #navbar { height: 35px; padding-left: 20px; padding-top: 15px; position: fixed; top: 0px; left: 0px; }
-      #photo-wrapper { font-size: 0px; margin-top: 50px; }
+      #photo-wrapper { font-size: 0px; margin-top: 50px; overflow: hidden; }
       #photo-container { display: inline-block; white-space: nowrap; position: relative; }
       img.full-size { height: 100%; margin-right: 5px; }
     </style>
@@ -45,6 +45,6 @@
       });
 
     $('#photo-container').height($(window).height() - 75);
-    $('#navbar').width($(window).width());
+    $('#photo-wrapper').width($(window).width());
   </script>
 </html>
