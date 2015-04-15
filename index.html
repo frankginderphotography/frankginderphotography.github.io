@@ -48,6 +48,7 @@
     $('#photo-container').height($(window).height() - 50);
 
     $('#photo-wrapper').on('mousewheel', function(e) {
+      e.stopPropagation();
       if(e.deltaX !== 0) {
         var oldLeft = parseInt($('#photo-container').css('left'));
         if(e.deltaX > 0 && oldLeft <= -$('#photo-container').width()) {
