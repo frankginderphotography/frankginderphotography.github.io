@@ -28,7 +28,11 @@
     </div>
   </body>
   <script>
-    $('#photo-container').height($(window).height() - 75);
+    if($(window).width() < 500) {
+      $('#photo-container').height($(window).width() / 500 * $(Window).height());
+    } else {
+      $('#photo-container').height($(window).height() - 75);
+    }
     $('#navbar').width($(window).width());
 
     var widest = 0;
@@ -40,22 +44,22 @@
           'brick_warehouse',
           'graffiti_shed'
         ];
-      }])
-      .directive('fofxCheckSize', function() {
-        return {
-          link: function(scope, element) {
-            element[0].onload = function() {
-              var width = element.width();
-              if(!widest || width > widest) {
-                widest = width;
-                var windowWidth = $(window).width();
-                if(width > windowWidth) {
-                  $('#photo-container').height(windowWidth / width * element.height());
-                }
-              }
-            }
-          }
-        };
-      });
+      }]);
+      //.directive('fofxCheckSize', function() {
+      //  return {
+      //    link: function(scope, element) {
+      //      element[0].onload = function() {
+      //        var width = element.width();
+      //        if(!widest || width > widest) {
+      //          widest = width;
+      //          var windowWidth = $(window).width();
+      //          if(width > windowWidth) {
+      //            $('#photo-container').height(windowWidth / width * element.height());
+      //          }
+      //        }
+      //      }
+      //    }
+      //  };
+      //});
   </script>
 </html>
