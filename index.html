@@ -31,7 +31,7 @@
     $('#photo-container').height($(window).height() - 75);
     $('#navbar').width($(window).width());
 
-    var widest = 0, count = 1;
+    var widest = 0;
     angular.module('homePage', [])
       .controller('photoController', ['$scope', function($scope) {
         $scope.photos = [
@@ -45,12 +45,12 @@
         return {
           link: function(scope, element) {
             element[0].onload = function() {
-              var width = element.width() - 5;
+              var width = element.width();
               if(!widest || width > widest) {
                 widest = width;
                 var windowWidth = $(window).width();
-                if(widest > windowWidth) {
-                  $('#photo-container').height(windowWidth / widest * element.height());
+                if(width > windowWidth) {
+                  $('#photo-container').height(windowWidth / width * element.height());
                 }
               }
             }
