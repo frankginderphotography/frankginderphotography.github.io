@@ -18,18 +18,18 @@
     <link rel="stylesheet" href="index.css"></link>
   </head>
   <body>
+    <div id="navbar">
+      Frank Ginder Photography
+    </div>
     <div id="photo-wrapper">
       <div id="photo-container" ng-controller="photoController">
         <img class="full-size" ng-repeat="photo in photos" ng-src="photos/{{photo}}.jpg"></img>
       </div>
     </div>
-    <div id="navbar">
-      Frank Ginder Photography
-    </div>
   </body>
   <script>
-    $('#photo-container').height($(window).height() - 75);
-    $('#navbar').width($(window).width());
+    $('#photo-container').height($(window).height() - 100);
+    $('#navbar').width($(window).width() - 20);
     $('.full-size').css('max-width', $(window).width());
 
     var widest = 0;
