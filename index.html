@@ -18,13 +18,13 @@
     <link rel="stylesheet" href="index.css"></link>
   </head>
   <body>
-    <div id="navbar">
-      Frank Ginder Photography
-    </div>
     <div id="photo-wrapper">
       <div id="photo-container" ng-controller="photoController as photos">
         <img class="full-size" ng-repeat="photo in photos.photos" src="photos/{{photo}}.jpg"></img>
       </div>
+    </div>
+    <div id="navbar">
+      Frank Ginder Photography
     </div>
   </body>
   <script>
@@ -39,5 +39,6 @@
       });
 
     $('#photo-container').height($(window).height() - 75);
+    $('#navbar').width($(window).width());
   </script>
 </html>
