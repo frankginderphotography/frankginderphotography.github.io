@@ -20,7 +20,7 @@
   <body>
     <div id="photo-wrapper">
       <div id="photo-container" ng-controller="photoController">
-        <img class="full-size" ng-repeat="photo in photos" ng-src="photos/{{photo}}.jpg" fofx-check-size></img>
+        <img class="full-size" ng-repeat="photo in photos" ng-src="photos/{{photo}}.jpg"></img>
       </div>
     </div>
     <div id="navbar">
@@ -28,12 +28,9 @@
     </div>
   </body>
   <script>
-    if($(window).width() < 500) {
-      $('#photo-container').height($(window).width() / 500 * $(Window).height());
-    } else {
-      $('#photo-container').height($(window).height() - 75);
-    }
+    $('#photo-container').height($(window).height() - 75);
     $('#navbar').width($(window).width());
+    $('img').css('max-width', $(window).width());
 
     var widest = 0;
     angular.module('homePage', [])
