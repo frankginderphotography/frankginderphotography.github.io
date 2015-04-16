@@ -26,3 +26,7 @@ img.full-size {
   margin-right: 5px;
   vertical-align: middle;
 }
+
+img.full-size:last-of-type {
+  margin-right: 0px;
+}

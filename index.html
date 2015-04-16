@@ -31,8 +31,10 @@
     $('#photo-container').height($(window).height() - 100);
     $('#navbar').width($(window).width() - 20);
     $('.full-size').css('max-width', $(window).width());
+    $('#photo-container')[0].oncontextmenu = function(e) {
+      e.preventDefault();
+    }
 
-    var widest = 0;
     angular.module('homePage', [])
       .controller('photoController', ['$scope', function($scope) {
         $scope.photos = [
@@ -42,21 +44,5 @@
           'graffiti_shed'
         ];
       }]);
-      //.directive('fofxCheckSize', function() {
-      //  return {
-      //    link: function(scope, element) {
-      //      element[0].onload = function() {
-      //        var width = element.width();
-      //        if(!widest || width > widest) {
-      //          widest = width;
-      //          var windowWidth = $(window).width();
-      //          if(width > windowWidth) {
-      //            $('#photo-container').height(windowWidth / width * element.height());
-      //          }
-      //        }
-      //      }
-      //    }
-      //  };
-      //});
   </script>
 </html>
