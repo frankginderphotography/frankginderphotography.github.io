@@ -19,8 +19,8 @@
   </head>
   <body>
     <div id="photo-wrapper">
-      <div id="photo-container" ng-controller="photoController as photos">
-        <img class="full-size" ng-repeat="photo in photos.photos" src="photos/{{photo}}.jpg"></img>
+      <div id="photo-container" ng-controller="photoController">
+        <img class="full-size" ng-repeat="photo in photos" ng-src="photos/{{photo}}.jpg" fofx-check-size></img>
       </div>
     </div>
     <div id="navbar">
@@ -28,14 +28,32 @@
     </div>
   </body>
   <script>
+    var widest = 0, count = 1;
     angular.module('homePage', [])
-      .controller('photoController', function() {
-        this.photos = [
+      .controller('photoController', ['$scope', function($scope) {
+        $scope.widest = 0;
+        $scope.count = 1;
+        $scope.photos = [
           'black_white_street',
           'black_white_alley',
           'brick_warehouse',
           'graffiti_shed'
         ];
+      }])
+      .directive('fofxCheckSize', function() {
+        return {
+          link: function(scope, element) {
+            element[0].onload = function() {
+              if(!widest || element.width() > widest) {
+                widest = element.width();
+                var windowWidth = $(window).width();
+                if(widest > windowWidth) {
+                  $('#photo-container').height(windowWidth / widest * element.height());
+                }
+              }
+            }
+          }
+        };
       });
 
     $('#photo-container').height($(window).height() - 75);
