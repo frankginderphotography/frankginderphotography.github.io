@@ -28,11 +28,12 @@
     </div>
   </body>
   <script>
+    $('#photo-container').height($(window).height() - 75);
+    $('#navbar').width($(window).width());
+
     var widest = 0, count = 1;
     angular.module('homePage', [])
       .controller('photoController', ['$scope', function($scope) {
-        $scope.widest = 0;
-        $scope.count = 1;
         $scope.photos = [
           'black_white_street',
           'black_white_alley',
@@ -55,8 +56,5 @@
           }
         };
       });
-
-    $('#photo-container').height($(window).height() - 75);
-    $('#navbar').width($(window).width());
   </script>
 </html>
