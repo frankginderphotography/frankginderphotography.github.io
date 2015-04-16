@@ -30,8 +30,7 @@
   <script>
     $('#photo-container').height($(window).height() - 75);
     $('#navbar').width($(window).width());
-    $('img').css('max-width', $(window).width());
-    $('#photo-container').css('line-height', $('#photo-container').height());
+    $('.full-size').css('max-width', $(window).width());
 
     var widest = 0;
     angular.module('homePage', [])

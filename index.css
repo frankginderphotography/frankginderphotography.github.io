@@ -27,6 +27,6 @@ body {
 
 img.full-size {
   max-height: 100%;
-  width: auto;
   margin-right: 5px;
+  vertical-align: middle;
 }
