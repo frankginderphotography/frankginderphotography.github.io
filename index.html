@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--jquery:-->
       <script src=https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js></script>
+    <!--jquery mobile:-->
+      <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <!--angularjs:-->
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
     <!--jquery-mousewheel-->
@@ -34,7 +36,7 @@
     $('#photo-container')[0].oncontextmenu = function(e) {
       e.preventDefault();
     }
-    $('#photo-container').ontouchstart(function(e) {
+    $('#photo-container').on('taphold', function(e) {
       e.preventDefault();
     });
 
