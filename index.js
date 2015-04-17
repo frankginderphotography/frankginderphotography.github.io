@@ -37,3 +37,5 @@ angular.module('homePage', [])
       'graffiti_shed'
     ];
   }]);
+
+window.resize = location.reload;
