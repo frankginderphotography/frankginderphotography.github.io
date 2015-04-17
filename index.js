@@ -39,4 +39,4 @@ angular.module('homePage', [])
   }]);
 
 window.resize = location.reload;
-document.body.onorientationchange = location.reload;
+document.body.onorientationchange = function() { location.reload(); }
