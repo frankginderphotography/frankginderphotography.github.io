@@ -38,5 +38,5 @@ angular.module('homePage', [])
     ];
   }]);
 
-window.resize = function() { location.reload(); }
+window.onresize = function() { location.reload(); }
 document.body.onorientationchange = function() { location.reload(); }
