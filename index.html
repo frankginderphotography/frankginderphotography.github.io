@@ -34,6 +34,9 @@
     $('#photo-container')[0].oncontextmenu = function(e) {
       e.preventDefault();
     }
+    $('#photo-container').ontouchstart(function(e) {
+      e.preventDefault();
+    });
 
     angular.module('homePage', [])
       .controller('photoController', ['$scope', function($scope) {
