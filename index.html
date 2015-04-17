@@ -26,6 +26,7 @@
     <div id="photo-wrapper">
       <div id="photo-container" ng-controller="photoController">
         <img class="full-size" ng-repeat="photo in photos" ng-src="photos/{{photo}}.jpg"></img>
+        <div class="cover-images"></div>
       </div>
     </div>
   </body>
@@ -33,12 +34,9 @@
     $('#photo-container').height($(window).height() - 100);
     $('#navbar').width($(window).width() - 20);
     $('.full-size').css('max-width', $(window).width());
-    $('#photo-container')[0].oncontextmenu = function(e) {
-      e.preventDefault();
-    }
-    $('.full-size').on('taphold', function(e) {
-      e.preventDefault();
-    });
+    //$('#photo-container')[0].oncontextmenu = function(e) {
+    //  e.preventDefault();
+    //}
 
     angular.module('homePage', [])
       .controller('photoController', ['$scope', function($scope) {

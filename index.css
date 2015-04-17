@@ -30,3 +30,11 @@ img.full-size {
 img.full-size:last-of-type {
   margin-right: 0px;
 }
+
+.cover-images {
+  min-height: 100%;
+  min-width: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
