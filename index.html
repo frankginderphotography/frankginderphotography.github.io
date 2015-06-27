@@ -1,24 +1,29 @@
 <!DOCTYPE html>
-<html ng-app="homePage">
+<html>
   <head>
     <meta charset="UTF-8">
     <title>frank ginder photography</title>
     <meta name="description" content="homepage of frank ginder's photography">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--jquery:-->
-      <script src=https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js></script>
-    <!--angularjs:-->
-      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src="fofx.js"></script>
+    <script src="fx_controller.js"></script>
     <link rel="stylesheet" href="index.css"></link>
   </head>
-  <body>
-    <div id="navbar" fginder-navbar>
-      Frank Ginder Photography
-    </div>
-    <div id="photo-wrapper">
-      <div id="photo-container" ng-controller="photoController" fginder-photo-container>
-        <img class="full-size" ng-repeat="photo in photos" ng-src="photos/{{photo}}.jpg" fginder-fullsize></img>
-        <fginder-image-cover></fginder-image-cover>
+  <body fx-controller="photos">
+    <div>
+      <div id="navbar" fx-attr-style="width:{{navBarWidth}};">
+        Frank Ginder Photography
+      </div>
+      <div id="photo-wrapper">
+        <div id="photo-container" fx-attr-style="height:{{containerHeight}};">
+          <img
+            fx-foreach="photos"
+            class="full-size"
+            fx-attr-src="photos/{{toString}}"
+            fx-attr-style="max-width:{{imgMaxWidth}};">
+          </img>
+          <div id="photo-cover"></div>
+        </div>
       </div>
     </div>
   </body>
