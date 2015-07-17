@@ -7,7 +7,7 @@ var lastIndex = +indexRange.split('-')[1];
 for(var i = firstIndex; i <= lastIndex; i++) {
   var id = 'photo_' + i;
   var src = 'photos/' + id + '.jpg';
-  var href = '#/' + indexRange + id;
+  var href = '#/' + indexRange + '/' + id;
   photos.push({ src: src, id: id, href: href });
 }
 
