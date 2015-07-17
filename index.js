@@ -54,9 +54,9 @@ var photoGridSquare;
     resizeImg(clone);
     var photoNumber = +photoId[0].match(/[0-9]+/)[0];
     var prevIndex = photoNumber > firstIndex ? photoNumber - 1 : lastIndex;
-    leftClick.getElementsByTagName('a')[0].href = '#/photo_' + prevIndex;
+    leftClick.getElementsByTagName('a')[0].href = '#/' + indexRange + '/photo_' + prevIndex;
     var nextIndex = photoNumber < lastIndex ? photoNumber + 1 : firstIndex;
-    rightClick.getElementsByTagName('a')[0].href = '#/photo_' + nextIndex;
+    rightClick.getElementsByTagName('a')[0].href = '#/' + indexRange + '/photo_' + nextIndex;
   } else {
     showcase.style.display = 'none';
     if(photoGridSquare) photoGridSquare.className = 'photo-grid-square';
