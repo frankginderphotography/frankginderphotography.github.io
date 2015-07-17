@@ -21,10 +21,10 @@ var resizeImg = function(img) {
   if(img.clientWidth) {
     if(window.innerHeight > window.innerWidth) {
       img.width = window.innerWidth;
-      img.style.height = 'auto';
+      img.removeAttribute('height');
     } else {
       img.height = window.innerHeight;
-      img.style.width = 'auto';
+      img.removeAttribute('width');
     }
     img.style.left = (window.innerWidth - img.width) / 2 + 'px';
     leftClick.style.left = parseInt(img.style.left) - 50 + 'px';
