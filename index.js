@@ -21,16 +21,16 @@ var resizeImg = function(img) {
   if(img.clientWidth) {
     if(window.innerHeight > window.innerWidth) {
       img.width = window.innerWidth;
-      img.style.height = '';
+      img.style.height = 'auto';
     } else {
       img.height = window.innerHeight;
-      img.style.width = '';
+      img.style.width = 'auto';
     }
     img.style.left = (window.innerWidth - img.width) / 2 + 'px';
     leftClick.style.left = parseInt(img.style.left) - 50 + 'px';
     rightClick.style.left = parseInt(img.style.left) + img.width + 'px';
   } else {
-    window.setTimeout(resizeImg(), 500);
+    window.setTimeout(resizeImg.bind(null, img), 500);
   }
 }
 
