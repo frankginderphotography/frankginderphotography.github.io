@@ -40,12 +40,14 @@ var resizeImg = function(img) {
   var prevImg = showcase.lastChild;
   var photoId = location.hash.match(/photo_[0-9]+$/);
   if(photoId) {
-    var img = document.getElementById(photoId[0]).cloneNode();
-    img.id = '';
-    prevImg.tagName === 'IMG' ? showcase.replaceChild(img, prevImg) : showcase.appendChild(img);
-    img.className = 'fullsize';
+    var img = document.getElementById(photoId[0]);
+    img.className = ''; img.className = 'thumbnail';
+    var clone = img.cloneNode();
+    clone.id = '';
+    prevImg.tagName === 'IMG' ? showcase.replaceChild(clone, prevImg) : showcase.appendChild(clone);
+    clone.className = 'fullsize';
     showcase.style.display = 'block';
-    resizeImg(img);
+    resizeImg(clone);
     var photoNumber = +photoId[0].match(/[0-9]+/)[0];
     var prevIndex = photoNumber > firstIndex ? photoNumber - 1 : lastIndex;
     leftClick.getElementsByTagName('a')[0].href = '#/photo_' + prevIndex;
