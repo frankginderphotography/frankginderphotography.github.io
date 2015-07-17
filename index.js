@@ -39,6 +39,7 @@ var photoGridSquare;
 (window.onhashchange = function() {
   var prevImg = showcase.lastChild;
   var photoId = location.hash.match(/photo_[0-9]+$/);
+  if(photoGridSquare) photoGridSquare.className = 'photo-grid-square';
   if(photoId) {
     var img = document.getElementById(photoId[0]);
     photoGridSquare = img.parentElement.parentElement.parentElement.parentElement;
@@ -56,7 +57,6 @@ var photoGridSquare;
     rightClick.getElementsByTagName('a')[0].href = '#/' + indexRange + '/photo_' + nextIndex;
   } else {
     showcase.style.display = 'none';
-    if(photoGridSquare) photoGridSquare.className = 'photo-grid-square';
   }
 })();
 
