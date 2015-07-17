@@ -23,7 +23,7 @@ var resizeImg = function(img) {
     img.style.height = 'auto';
   } else {
     img.height = window.innerHeight;
-    img.width.height = 'auto';
+    img.width.width = 'auto';
   }
   img.style.left = (window.innerWidth - img.width) / 2 + 'px';
   leftClick.style.left = parseInt(img.style.left) - 50 + 'px';
