@@ -22,12 +22,14 @@ var resizeImg = function(img) {
     if(window.innerHeight > window.innerWidth) {
       img.width = window.innerWidth - 204;
       img.removeAttribute('height');
+      img.style.top = '0px';
     } else {
       img.height = window.innerHeight;
+      img.style.top = (window.innerHeight - img.height) / 2 + 'px';
       img.removeAttribute('width');
     }
     img.style.left = (window.innerWidth - img.width) / 2 + 'px';
-    leftClick.style.left = parseInt(img.style.left) - 51 + 'px';
+    leftClick.style.left = parseInt(img.style.left) - 52 + 'px';
     rightClick.style.left = parseInt(img.style.left) + img.width + 'px';
   } else {
     window.setTimeout(resizeImg.bind(null, img), 500);
