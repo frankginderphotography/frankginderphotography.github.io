@@ -30,13 +30,6 @@ var resizeImg = function(img) {
   rightClick.style.left = parseInt(img.style.left) + img.width + 'px';
 };
 
-(window.onresize = function() {
-  var img = showcase.lastChild;
-  if(img.tagName === 'IMG') resizeImg(img);
-  showcase.style.width = window.innerWidth + 'px';
-  showcase.style.height = window.innerHeight + 'px';
-})();
-
 var photoGridSquare;
 
 (window.onhashchange = function() {
@@ -61,4 +54,11 @@ var photoGridSquare;
     showcase.style.display = 'none';
     if(photoGridSquare) photoGridSquare.className = 'photo-grid-square';
   }
+})();
+
+(window.onresize = function() {
+  var img = showcase.lastChild;
+  if(img.tagName === 'IMG') resizeImg(img);
+  showcase.style.width = window.innerWidth + 'px';
+  showcase.style.height = window.innerHeight + 'px';
 })();
