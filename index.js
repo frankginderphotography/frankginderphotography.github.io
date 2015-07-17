@@ -18,16 +18,20 @@ var leftClick = document.getElementById('left-click');
 var rightClick = document.getElementById('right-click');
 
 var resizeImg = function(img) {
-  if(window.innerHeight > window.innerWidth) {
-    img.width = window.innerWidth;
-    img.style.height = '';
+  if(img.clientWidth) {
+    if(window.innerHeight > window.innerWidth) {
+      img.width = window.innerWidth;
+      img.style.height = '';
+    } else {
+      img.height = window.innerHeight;
+      img.style.width = '';
+    }
+    img.style.left = (window.innerWidth - img.width) / 2 + 'px';
+    leftClick.style.left = parseInt(img.style.left) - 50 + 'px';
+    rightClick.style.left = parseInt(img.style.left) + img.width + 'px';
   } else {
-    img.height = window.innerHeight;
-    img.style.width = '';
+    window.setTimeout(resizeImg.bind(null, img), 500);
   }
-  img.style.left = (window.innerWidth - img.width) / 2 + 'px';
-  leftClick.style.left = parseInt(img.style.left) - 50 + 'px';
-  rightClick.style.left = parseInt(img.style.left) + img.width + 'px';
 }
 
 var photoGridSquare;
