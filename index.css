@@ -42,6 +42,8 @@
   position: absolute;
   height: 100%;
   top: 0;
+  border-right: 1px solid white;
+  border-left: 1px solid white;
 }
 
 #left-click a, #right-click a {
@@ -52,14 +54,6 @@
 
 #left-click a:hover, #right-click a:hover {
   background: black;
-}
-
-#left-click {
-  border-left: 1px solid white;
-}
-
-#right-click {
-  border-right: 1px solid white;
 }
 
 .photo-container {
