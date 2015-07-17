@@ -1,7 +1,8 @@
 var photos = [];
-var indexRange = location.hash.match(/#\/([0-9]+-[0-9]+)/) || ['','0-19'];
-var firstIndex = +indexRange[1].split('-')[0];
-var lastIndex = +indexRange[1].split('-')[1];
+var indexRange = (location.hash.match(/#\/([0-9]+-[0-9]+)/) || ['','0-19'])[1];
+document.getElementById('leave-showcase').href = '#/' + indexRange;
+var firstIndex = +indexRange.split('-')[0];
+var lastIndex = +indexRange.split('-')[1];
 
 for(var i = firstIndex; i <= lastIndex; i++) {
   var id = 'photo_' + i;
