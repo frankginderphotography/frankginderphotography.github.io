@@ -5,27 +5,32 @@
     <title>frank ginder photography</title>
     <meta name="description" content="homepage of frank ginder's photography">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="fofx.js"></script>
-    <script src="fx_controller.js"></script>
+    <script src="njn.js"></script>
+    <script src="njn_controller.js"></script>
     <link rel="stylesheet" href="index.css"></link>
   </head>
-  <body fx-controller="photos">
-    <div>
-      <div id="navbar" fx-attr-style="width:{{navBarWidth}};">
+  <body>
+    <div id="photos">
+      <div id="sidebar">
         Frank Ginder Photography
       </div>
-      <div id="photo-wrapper">
-        <div id="photo-container" fx-attr-style="height:{{containerHeight}};">
-          <img
-            fx-foreach="photos"
-            class="full-size"
-            fx-attr-src="photos/{{toString}}"
-            fx-attr-style="max-width:{{imgMaxWidth}};">
-          </img>
-          <div id="photo-cover"></div>
+      <div id="photo-gallery">
+        <div data-njnrepeat="photos" class="photo-grid-square">
+          <div class="photo-viewport">
+            <div class="photo-container">
+              <a href=#/{{photos:id}}>
+                <img id={{photos:id}} data-njnsrc={{photos:src}} class=thumbnail></img>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <div id="showcase">
+      <div><a id="leave-showcase" href="#/"></a></div>
+      <div id="left-click"><a></a></div>
+      <div id="right-click"><a></a></div>
+    </div>
+    <script src="index.js"></script>
   </body>
-  <script src="index.js"></script>
 </html>

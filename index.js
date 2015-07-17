@@ -1,134 +1,56 @@
-var photos = [
-  '175A0152.jpg',
-  '175A0366.jpg',
-  '175A0522.jpg',
-  '175A0524.jpg',
-  '175A0597.jpg',
-  '175A0649.jpg',
-  '175A0674.jpg',
-  '175A0687.jpg',
-  '175A0732.jpg',
-  '175A0847.jpg',
-  '175A0887.jpg',
-  '175A0964.jpg',
-  '175A0984.jpg',
-  '175A0985.jpg',
-  '175A1011.jpg',
-  '175A1104.jpg',
-  '175A1107.jpg',
-  '175A1216_3.jpg',
-  '175A1456.jpg',
-  '175A1795.jpg',
-  '175A1803.jpg',
-  '175A1837.jpg',
-  '175A1854.jpg',
-  '175A1863.jpg',
-  '175A1880_2.jpg',
-  '175A1921_2.jpg',
-  '175A1999.jpg',
-  '175A2150.jpg',
-  '175A2202.jpg',
-  '175A2204.jpg',
-  '175A2253.jpg',
-  '175A2366.jpg',
-  '175A2370.jpg',
-  '175A2568.jpg',
-  '175A2628.jpg',
-  '175A2667.jpg',
-  '175A2677.jpg',
-  '175A3066.jpg',
-  '175A3159.jpg',
-  '175A3560.jpg',
-  '175A3682.jpg',
-  '175A3724.jpg',
-  '175A3750.jpg',
-  '175A3890.jpg',
-  '175A3902.jpg',
-  '175A3953.jpg',
-  '175A3958_2.jpg',
-  '175A3961_2.jpg',
-  '175A4053.jpg',
-  '175A4158.jpg',
-  '175A4175.jpg',
-  '175A4222.jpg',
-  '175A4574.jpg',
-  '175A4721.jpg',
-  '175A5012.jpg',
-  '175A5092.jpg',
-  '175A5237.jpg',
-  '175A5335.jpg',
-  '175A5425.jpg',
-  '175A5465.jpg',
-  '175A6369_2.jpg',
-  '175A6401.jpg',
-  '175A6402.jpg',
-  '175A6409.jpg',
-  '175A6476_3.jpg',
-  '175A6530_2.jpg',
-  '175A6854.jpg',
-  '175A7096.jpg',
-  '175A7172.jpg',
-  '175A7200.jpg',
-  '175A7252.jpg',
-  '175A7402.jpg',
-  '175A7483.jpg',
-  '175A7494.jpg',
-  '175A7540.jpg',
-  '175A7556.jpg',
-  '175A7568.jpg',
-  '175A7662.jpg',
-  '175A7730.jpg',
-  '175A7807.jpg',
-  '175A7831.jpg',
-  '175A7884.jpg',
-  '175A7888b.jpg',
-  '175A7913.jpg',
-  '175A7960.jpg',
-  '175A7990.jpg',
-  '175A8109.jpg',
-  '175A8119.jpg',
-  '175A8201.jpg',
-  '175A8290_2.jpg',
-  '175A8337.jpg',
-  '175A8403.jpg',
-  '175A8516.jpg',
-  '175A8701.jpg',
-  '175A8712.jpg',
-  '175A8721_2.jpg',
-  '175A8730.jpg',
-  '175A8800.jpg',
-  '175A9019.jpg',
-  '175A9175.jpg',
-  '175A9183.jpg',
-  '175A9199.jpg',
-  '175A9228.jpg',
-  '175A9291.jpg',
-  '175A9350.jpg',
-  '175A9442.jpg',
-  '175A9730.jpg',
-  '175A9794B.jpg',
-  'IMG_1988.jpg',
-  'IMG_2356.jpg',
-  'IMG_3615.jpg',
-  'IMG_3618.jpg',
-  'IMG_3989.jpg',
-  'IMG_4218.jpg',
-  'IMG_4312.jpg',
-  'IMG_4456.jpg',
-  'IMG_4761.jpg',
-  'IMG_4812.jpg',
-  'IMG_4913.jpg',
-  'IMG_4979.jpg',
-  'IMG_5126_2.jpg',
-  '_MG_2038.jpg',
-  '_MG_2046.jpg'
-];
+var photos = [];
+var firstId = 0;
+var lastId = 19;
 
-fofx.controller('photos', {
-  photos: photos,
-  navBarWidth: window.innerWidth - 20 + 'px',
-  imgMaxWidth: window.innerWidth + 'px',
-  containerHeight: window.innerHeight - 100 + 'px'
+for(var i = 0; i + firstId <= lastId; i++) {
+  var src = 'photos/photo_' + (i + firstId) + '.jpg';
+  var id = src.match(/\/(\w+)\./)[1];
+  photos.push({ src: src, id: id });
+}
+
+njn.controller('photos', {
+  photos: photos
 });
 
-document.getElementById('photo-cover').oncontextmenu = function(e) { e.preventDefault(); }
+var showcase = document.getElementById('showcase');
+var leftClick = document.getElementById('left-click');
+var rightClick = document.getElementById('right-click');
+
+var resizeImg = function(img) {
+  if(window.innerHeight > window.innerWidth) {
+    img.width = window.innerWidth;
+    img.style.height = 'auto';
+  } else {
+    img.height = window.innerHeight;
+    img.width.height = 'auto';
+  }
+  img.style.left = (window.innerWidth - img.width) / 2 + 'px';
+  leftClick.style.left = parseInt(img.style.left) - 50 + 'px';
+  rightClick.style.left = parseInt(img.style.left) + img.width + 'px';
+};
+
+(window.onresize = function() {
+  var img = showcase.lastChild;
+  if(img.tagName === 'IMG') resizeImg(img);
+  showcase.style.width = window.innerWidth + 'px';
+  showcase.style.height = window.innerHeight + 'px';
+})();
+
+(window.onhashchange = function() {
+  var prevImg = showcase.lastChild;
+  var photoId = location.hash.match(/[^#\/]+/);
+  if(photoId) {
+    var img = document.getElementById(photoId[0]).cloneNode();
+    prevImg.tagName === 'IMG' ? showcase.replaceChild(img, prevImg) : showcase.appendChild(img);
+    img.className = 'fullsize';
+    showcase.style.display = 'block';
+    resizeImg(img);
+    var photoNumber = +photoId[0].match(/[0-9]+/)[0];
+    var prevId = photoNumber > firstId ? photoNumber - 1 : lastId;
+    leftClick.getElementsByTagName('a')[0].href = '#/photo_' + prevId;
+    var nextId = photoNumber < lastId ? photoNumber + 1 : firstId;
+    rightClick.getElementsByTagName('a')[0].href = '#/photo_' + nextId;
+  } else {
+    showcase.style.display = 'none';
+  }
+})();
