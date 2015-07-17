@@ -21,11 +21,11 @@ var resizeImg = function(img) {
   if(img.clientWidth) {
     if(window.innerHeight > window.innerWidth) {
       img.width = window.innerWidth - 204;
+      img.style.top = (window.innerHeight - img.height) / 2 + 'px';
       img.removeAttribute('height');
-      img.style.top = '0px';
     } else {
       img.height = window.innerHeight;
-      img.style.top = (window.innerHeight - img.height) / 2 + 'px';
+      img.style.top = '0px';
       img.removeAttribute('width');
     }
     img.style.left = (window.innerWidth - img.width) / 2 + 'px';
