@@ -37,10 +37,11 @@ var resizeImg = function(img) {
   showcase.style.height = window.innerHeight + 'px';
 })();
 
+var photoGridSquare;
+
 (window.onhashchange = function() {
   var prevImg = showcase.lastChild;
   var photoId = location.hash.match(/photo_[0-9]+$/);
-  var photoGridSquare;
   if(photoId) {
     var img = document.getElementById(photoId[0]);
     photoGridSquare = img.parentElement.parentElement.parentElement.parentElement;
