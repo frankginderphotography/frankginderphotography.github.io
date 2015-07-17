@@ -43,6 +43,7 @@ var resizeImg = function(img) {
   if(photoId) {
     var img = document.getElementById(photoId[0]);
     img.parentElement.parentElement.parentElement.parentElement.className = '';
+    img.parentElement.parentElement.parentElement.parentElement.className = 'photo-grid-square';
     var clone = img.cloneNode();
     clone.id = '';
     prevImg.tagName === 'IMG' ? showcase.replaceChild(clone, prevImg) : showcase.appendChild(clone);
