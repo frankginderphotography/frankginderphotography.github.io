@@ -54,6 +54,14 @@
   background: black;
 }
 
+#left-click {
+  border-left: 1px solid white;
+}
+
+#right-click {
+  border-right: 1px solid white;
+}
+
 .photo-container {
   position: relative;
   left: -150%;
