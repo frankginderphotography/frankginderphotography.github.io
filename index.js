@@ -32,7 +32,7 @@ var resizeImg = function(img) {
 
 var photoGridSquare;
 
-(window.onhashchange = function() {
+window.onhashchange = function() {
   var prevImg = showcase.lastChild;
   var photoId = location.hash.match(/photo_[0-9]+$/);
   if(photoId) {
@@ -54,11 +54,13 @@ var photoGridSquare;
     showcase.style.display = 'none';
     if(photoGridSquare) photoGridSquare.className = 'photo-grid-square';
   }
-})();
+}
 
-(window.onresize = function() {
+window.onresize = function() {
   var img = showcase.lastChild;
   if(img.tagName === 'IMG') resizeImg(img);
   showcase.style.width = window.innerWidth + 'px';
   showcase.style.height = window.innerHeight + 'px';
-})();
+}
+
+window.onload = function() { this.onhashchange(); this.onresize(); }
