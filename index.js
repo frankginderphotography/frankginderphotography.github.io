@@ -20,19 +20,19 @@ var rightClick = document.getElementById('right-click');
 var resizeImg = function(img) {
   if(window.innerHeight > window.innerWidth) {
     img.width = window.innerWidth;
-    img.style.height = 'auto';
+    img.height = '';
   } else {
     img.height = window.innerHeight;
-    img.style.width = 'auto';
-  } console.log(img.width);
+    img.width = '';
+  }
   img.style.left = (window.innerWidth - img.width) / 2 + 'px';
   leftClick.style.left = parseInt(img.style.left) - 50 + 'px';
   rightClick.style.left = parseInt(img.style.left) + img.width + 'px';
-};
+}
 
 var photoGridSquare;
 
-window.onhashchange = function() {
+(window.onhashchange = function() {
   var prevImg = showcase.lastChild;
   var photoId = location.hash.match(/photo_[0-9]+$/);
   if(photoId) {
@@ -54,13 +54,11 @@ window.onhashchange = function() {
     showcase.style.display = 'none';
     if(photoGridSquare) photoGridSquare.className = 'photo-grid-square';
   }
-}
+})();
 
-window.onresize = function() {
+(window.onresize = function() {
   var img = showcase.lastChild;
   if(img.tagName === 'IMG') resizeImg(img);
   showcase.style.width = window.innerWidth + 'px';
   showcase.style.height = window.innerHeight + 'px';
-}
-
-window.onload = function() { this.onhashchange(); this.onresize(); }
+})();
