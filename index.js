@@ -42,7 +42,7 @@ var resizeImg = function(img) {
   var photoId = location.hash.match(/photo_[0-9]+$/);
   if(photoId) {
     var img = document.getElementById(photoId[0]);
-    img.className = '';
+    img.parentElement.parentElement.parentElement.parentElement.className = '';
     var clone = img.cloneNode();
     clone.id = '';
     prevImg.tagName === 'IMG' ? showcase.replaceChild(clone, prevImg) : showcase.appendChild(clone);
