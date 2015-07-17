@@ -20,14 +20,14 @@ var rightClick = document.getElementById('right-click');
 var resizeImg = function(img) {
   if(img.clientWidth) {
     if(window.innerHeight > window.innerWidth) {
-      img.width = window.innerWidth;
+      img.width = window.innerWidth - 204;
       img.removeAttribute('height');
     } else {
       img.height = window.innerHeight;
       img.removeAttribute('width');
     }
     img.style.left = (window.innerWidth - img.width) / 2 + 'px';
-    leftClick.style.left = parseInt(img.style.left) - 50 + 'px';
+    leftClick.style.left = parseInt(img.style.left) - 51 + 'px';
     rightClick.style.left = parseInt(img.style.left) + img.width + 'px';
   } else {
     window.setTimeout(resizeImg.bind(null, img), 500);
