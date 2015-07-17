@@ -80,7 +80,7 @@
   z-index: 1000;
 }
 
-.photo-viewport:hover {
+.photo-grid-square .photo-viewport:hover {
   left: -25px;
   top: -25px;
   height: 300px;
@@ -91,7 +91,7 @@
   height: 250px;
 }
 
-.thumbnail:hover {
+.photo-grid-square .thumbnail:hover {
   height: 300px;
 }
 
