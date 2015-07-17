@@ -43,12 +43,12 @@ var resizeImg = function(img) {
   if(photoId) {
     var img = document.getElementById(photoId[0]);
     img.parentElement.parentElement.parentElement.parentElement.className = '';
-    img.parentElement.parentElement.parentElement.parentElement.className = 'photo-grid-square';
     var clone = img.cloneNode();
     clone.id = '';
     prevImg.tagName === 'IMG' ? showcase.replaceChild(clone, prevImg) : showcase.appendChild(clone);
     clone.className = 'fullsize';
     showcase.style.display = 'block';
+    img.parentElement.parentElement.parentElement.parentElement.className = 'photo-grid-square';
     resizeImg(clone);
     var photoNumber = +photoId[0].match(/[0-9]+/)[0];
     var prevIndex = photoNumber > firstIndex ? photoNumber - 1 : lastIndex;
