@@ -30,7 +30,7 @@ var resizeImg = function(img) {
     leftClick.style.left = parseInt(img.style.left) - 50 + 'px';
     rightClick.style.left = parseInt(img.style.left) + img.width + 'px';
   } else {
-    window.setTimeout(resizeImg.bind(null, img), 500);
+    window.setTimeout(resizeImg(), 500);
   }
 }
 
