@@ -24,7 +24,7 @@ var resizeImg = function(img) {
   } else {
     img.height = window.innerHeight;
     img.style.width = 'auto';
-  }
+  } console.log(img.width);
   img.style.left = (window.innerWidth - img.width) / 2 + 'px';
   leftClick.style.left = parseInt(img.style.left) - 50 + 'px';
   rightClick.style.left = parseInt(img.style.left) + img.width + 'px';
