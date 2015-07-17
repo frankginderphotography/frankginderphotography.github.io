@@ -20,10 +20,10 @@ var rightClick = document.getElementById('right-click');
 var resizeImg = function(img) {
   if(window.innerHeight > window.innerWidth) {
     img.width = window.innerWidth;
-    img.height = '';
+    img.style.height = '';
   } else {
     img.height = window.innerHeight;
-    img.width = '';
+    img.style.width = '';
   }
   img.style.left = (window.innerWidth - img.width) / 2 + 'px';
   leftClick.style.left = parseInt(img.style.left) - 50 + 'px';
