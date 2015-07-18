@@ -42,8 +42,7 @@
   position: absolute;
   height: 100%;
   top: 0;
-  border-right: 1px solid white;
-  border-left: 1px solid white;
+  border: 1px solid white;
 }
 
 #left-click a, #right-click a {
@@ -93,8 +92,16 @@
   height: 250px;
 }
 
+.thumbnail-portrait {
+  width: 250px;
+}
+
 .photo-grid-square .thumbnail:hover {
   height: 300px;
+}
+
+.photo-grid-square .thumbnail-portrait:hover {
+  width: 300px;
 }
 
 /* 420 820 */
