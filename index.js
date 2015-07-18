@@ -19,8 +19,12 @@ for(var i = firstIndex; i <= lastIndex; i++) {
 
 njn.controller('photo-gallery', {  photos: photos });
 
-[].forEach.call(document.getElementsByClassName('thumbnail'), function(thumbnail) {
-  if(thumbnail.height > thumbnail.width) thumbnail.className = 'thumbnail-portrait';
+[].forEach.call(document.getElementsByClassName('thumbnail'), function detectPortrait(thumbnail) {
+  if(thumbnail.clientHeight !== thumbnail.clientWidth) {
+    if(thumbnail.clientHeight > thumbnail.clientWidth) thumbnail.className = 'thumbnail-portrait';
+  } else {
+    window.setTimeout(detectPortrait.bind(null, thumbnail), 500);
+  }
 });
 
 var showcase = document.getElementById('showcase');
