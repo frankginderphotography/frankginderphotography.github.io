@@ -20,7 +20,7 @@ for(var i = firstIndex; i <= lastIndex; i++) {
 njn.controller('photo-gallery', {  photos: photos });
 
 [].forEach.call(document.getElementsByClassName('thumbnail'), function detectPortrait(thumbnail) {
-  if(thumbnail.clientHeight !== thumbnail.clientWidth) {
+  if(thumbnail.clientHeight && thumbnail.clientWidth && thumbnail.clientHeight !== thumbnail.clientWidth) {
     if(thumbnail.clientHeight > thumbnail.clientWidth) thumbnail.className = 'thumbnail-portrait';
   } else {
     window.setTimeout(detectPortrait.bind(null, thumbnail), 500);
