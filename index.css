@@ -8,6 +8,10 @@ a {
   color: white;
 }
 
+a:hover {
+  color: gray;
+}
+
 #photos {
   border-left: 1px solid gray;
   border-right: 1px solid gray;
