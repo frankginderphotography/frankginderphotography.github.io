@@ -1,11 +1,33 @@
+body {
+  background: black;
+  color: white;
+}
+
+a {
+  text-decoration: none;
+}
+
+#photos {
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  width: 1290px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 #sidebar {
-  width: 19%;
+  width: 250px;
   float: left;
 }
 
+.grouplink-div {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+}
+
 #photo-gallery {
-  height: 80%;
-  width: 81%;
+  width: 1040px;
   float: left;
 }
 
@@ -18,40 +40,45 @@
   background: rgba(0, 0, 0, 0.75);
 }
 
-#showcase div:first-child {
+#leave-showcase {
   width: 100%;
   height: 100%;
 }
 
-#leave-showcase {
+#leave-showcase a {
   display: block;
   width: 100%;
   height: 100%;
 }
 
-#leave-showcase:hover {
-  background: black;
-}
-
-#showcase img {
+#photo-floater {
   position: absolute;
   top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+#photo-floater img {
+  display: block;
+  float: left;
 }
 
 #left-click, #right-click {
-  position: absolute;
   height: 100%;
-  top: 0;
+  width: 50px;
   border: 1px solid white;
+  float: left;
 }
 
 #left-click a, #right-click a {
   display: block;
   height: 100%;
-  width: 50px;
+  width: 100%;
 }
 
-#left-click a:hover, #right-click a:hover {
+#left-click a:hover, #right-click a:hover, #leave-showcase a:hover {
   background: black;
 }
 
