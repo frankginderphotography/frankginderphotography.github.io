@@ -1,12 +1,27 @@
+var groups = [], max = 151;
+for(var i = 1, j = 1; i <= max; i++) {
+  if(i - j === 11 || i === max) {
+    groups.push(j + '-' + i);
+    j = i + 1;
+  }
+}
+
 njn.controller('sidebar', {
-  groups: [
-    '1-12', '13-24', '25-36', '37-48', '49-60', '61-72', '73-84', '85-96', '97-108', '109-120', '121-123'
-  ]
+  groups: groups
 });
 
 var photos = [];
 var indexRange = (location.hash.match(/#\/([0-9]+-[0-9]+)/) || ['','1-12'])[1];
+
+var showcase = document.getElementById('showcase');
+var photoFloater = document.getElementById('photo-floater');
+var fullsizeA = document.getElementById('fullsize-a');
+var leftClick = document.getElementById('left-click');
+var rightClick = document.getElementById('right-click');
+
+fullsizeA.href = '#/' + indexRange;
 document.getElementById('leave-showcase').children[0].href = '#/' + indexRange;
+
 var firstIndex = +indexRange.split('-')[0];
 var lastIndex = +indexRange.split('-')[1];
 
@@ -26,11 +41,6 @@ njn.controller('photo-gallery', {  photos: photos });
     window.setTimeout(detectPortrait.bind(null, thumbnail), 500);
   }
 });
-
-var showcase = document.getElementById('showcase');
-var photoFloater = document.getElementById('photo-floater');
-var leftClick = document.getElementById('left-click');
-var rightClick = document.getElementById('right-click');
 
 var resizeImg = function(img) {
   if(img.clientWidth) {
@@ -67,7 +77,7 @@ var photoGridSquare;
   if(newRange && newRange[1] !== indexRange) {
     location.reload(true);
   } else {
-    var prevImg = photoFloater.children[1];
+    var prevImg = fullsizeA.children[0];
     var photoId = location.hash.match(/photo_[0-9]+$/);
     if(photoGridSquare) photoGridSquare.className = 'photo-grid-square';
     if(photoId) {
@@ -76,9 +86,9 @@ var photoGridSquare;
       photoGridSquare.className = 'photo-grid-square-behind';
       var clone = img.cloneNode();
       clone.id = '';
-      prevImg.tagName === 'IMG' ?
-        photoFloater.replaceChild(clone, prevImg) :
-        photoFloater.insertBefore(clone, rightClick);
+      prevImg ?
+        fullsizeA.replaceChild(clone, prevImg) :
+        fullsizeA.appendChild(clone);
       clone.className = 'fullsize';
       showcase.style.display = 'block';
       resizeImg(clone);
@@ -94,8 +104,8 @@ var photoGridSquare;
 })();
 
 (window.onresize = function() {
-  var img = photoFloater.children[1];
-  if(img.tagName === 'IMG') resizeImg(img);
+  var img = photoFloater.children[1].children[0];
+  if(img) resizeImg(img);
   showcase.style.width = window.innerWidth + 'px';
   showcase.style.height = window.innerHeight + 'px';
 })();

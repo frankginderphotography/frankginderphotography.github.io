@@ -86,7 +86,7 @@ a:hover {
   margin: auto;
 }
 
-#photo-floater img {
+#photo-floater a {
   display: block;
   float: left;
 }
