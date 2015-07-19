@@ -20,17 +20,19 @@
       <div id="photo-gallery">
         <div data-njnrepeat="photos" class="photo-grid-square">
           <a class="photo-link" href={{photos:href}}>
-            <img id={{photos:id}} height=250 width=250 data-njnsrc={{photos:thumbnail}} class=thumbnail></img>
+            <img height=250 width=250 id={{photos:id}} data-photoindex={{photos:photoInd}} data-njnsrc={{photos:thumbnail}} class=thumbnail></img>
           </a>
         </div>
       </div>
     </div>
-    <div id="showcase">
-      <div id="leave-showcase"><a></a></div>
-      <div id="photo-floater">
-        <div id="left-click"><a></a></div>
-        <a id="fullsize-a"><img></img></a>
-        <div id="right-click"><a></a></div>
+    <div class="showcase">
+      <div class="leave-showcase"><a></a></div>
+      <div class="photo-floater">
+        <a id="left-click"></a>
+        <a id="right-click"></a>
+        <a class="fullsize-a">
+          <img class="fullsize"></img>
+        </a>
       </div>
     </div>
     <script src="index.js"></script>

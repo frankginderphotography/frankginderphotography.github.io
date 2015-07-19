@@ -6,19 +6,19 @@
   <body>
     <div id="canvases"></div>
     <script>
-      var minInd = 141;
+      var minInd = 145;
       var maxInd = 151;//151;
       for(var i = minInd; i <= maxInd; i++) {
         var image = new Image();
-        image.onload = function() {
+        var canvas = document.createElement('canvas');
+        document.getElementById('canvases').appendChild(canvas);
+        canvas.height = 300;
+        canvas.width = 300;
+        var context = canvas.getContext('2d');
+        image.onload = (function(canvas, context) {
           document.body.appendChild(this);
           var height = this.height;
           var width = this.width;
-          var canvas = document.createElement('canvas');
-          document.getElementById('canvases').appendChild(canvas);
-          canvas.height = 300;
-          canvas.width = 300;
-          var context = canvas.getContext('2d');
           var leastDim = Math.min(width, height);
           if(width < height) {
             height = 300 / width * height;
@@ -40,7 +40,7 @@
           a.href = imgData;
           a.download = this.src.match(/photo_[0-9]+/)[0] + '.png';
           a.dispatchEvent(new MouseEvent('click'));
-        }
+        }).bind(image, canvas, context);
         image.src = "photos/photo_" + i + ".jpg";
       }
     </script>
