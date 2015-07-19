@@ -1,3 +1,6 @@
+// var max = number of photos on server
+// break up into groups of twelve, returning strings like: '1-12', '31-42', etc:
+
 var groups = [], max = 151;
 for(var i = 1, j = 1; i <= max; i++) {
   if(i - j === 11 || i === max) {
@@ -6,9 +9,7 @@ for(var i = 1, j = 1; i <= max; i++) {
   }
 }
 
-njn.controller('sidebar', {
-  groups: groups
-});
+njn.controller('sidebar', { groups: groups });
 
 var photos = [];
 var indexRange = (location.hash.match(/#\/([0-9]+-[0-9]+)/) || ['','1-12'])[1];
@@ -29,18 +30,11 @@ for(var i = firstIndex; i <= lastIndex; i++) {
   var id = 'photo_' + i;
   var src = 'photos/' + id + '.jpg';
   var href = '#/' + indexRange + '/' + id;
-  photos.push({ src: src, id: id, href: href });
+  var thumbnail = 'thumbnails/' + id + '.png';
+  photos.push({ src: src, id: id, href: href, thumbnail: thumbnail });
 }
 
 njn.controller('photo-gallery', {  photos: photos });
-
-[].forEach.call(document.getElementsByClassName('thumbnail'), function detectPortrait(thumbnail) {
-  if(thumbnail.clientHeight && thumbnail.clientWidth && thumbnail.clientHeight !== thumbnail.clientWidth) {
-    if(thumbnail.clientHeight > thumbnail.clientWidth) thumbnail.className = 'thumbnail-portrait';
-  } else {
-    window.setTimeout(detectPortrait.bind(null, thumbnail), 500);
-  }
-});
 
 var resizeImg = function(img) {
   if(img.clientWidth) {
@@ -82,13 +76,11 @@ var photoGridSquare;
     if(photoGridSquare) photoGridSquare.className = 'photo-grid-square';
     if(photoId) {
       var img = document.getElementById(photoId[0]);
-      photoGridSquare = img.parentElement.parentElement.parentElement.parentElement;
+      photoGridSquare = img.parentElement.parentElement;
       photoGridSquare.className = 'photo-grid-square-behind';
       var clone = img.cloneNode();
       clone.id = '';
-      prevImg ?
-        fullsizeA.replaceChild(clone, prevImg) :
-        fullsizeA.appendChild(clone);
+      fullsizeA.replaceChild(clone, prevImg);
       clone.className = 'fullsize';
       showcase.style.display = 'block';
       resizeImg(clone);

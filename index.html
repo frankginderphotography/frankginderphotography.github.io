@@ -19,13 +19,9 @@
       </div>
       <div id="photo-gallery">
         <div data-njnrepeat="photos" class="photo-grid-square">
-          <div class="photo-viewport">
-            <div class="photo-container">
-              <a href={{photos:href}}>
-                <img id={{photos:id}} data-njnsrc={{photos:src}} class=thumbnail></img>
-              </a>
-            </div>
-          </div>
+          <a class="photo-link" href={{photos:href}}>
+            <img id={{photos:id}} height=250 width=250 data-njnsrc={{photos:thumbnail}} class=thumbnail></img>
+          </a>
         </div>
       </div>
     </div>
@@ -33,7 +29,7 @@
       <div id="leave-showcase"><a></a></div>
       <div id="photo-floater">
         <div id="left-click"><a></a></div>
-        <a id="fullsize-a"></a>
+        <a id="fullsize-a"><img></img></a>
         <div id="right-click"><a></a></div>
       </div>
     </div>

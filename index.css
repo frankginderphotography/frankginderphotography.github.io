@@ -13,8 +13,6 @@ a:hover {
 }
 
 #photos {
-  border-left: 1px solid gray;
-  border-right: 1px solid gray;
   width: 1290px;
   margin-left: auto;
   margin-right: auto;
@@ -108,20 +106,6 @@ a:hover {
   background: black;
 }
 
-.photo-container {
-  position: relative;
-  left: -150%;
-  width: 400%;
-  text-align: center;
-}
-
-.photo-viewport {
-  position: absolute;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-}
-
 .photo-grid-square, .photo-grid-square-behind {
   position: relative;
   display: inline-block;
@@ -130,30 +114,25 @@ a:hover {
   margin: 5px;
 }
 
+.photo-grid-square .photo-link {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
 .photo-grid-square:hover {
   z-index: 1000;
 }
 
-.photo-grid-square .photo-viewport:hover {
+.photo-grid-square .photo-link:hover {
   left: -25px;
   top: -25px;
   height: 300px;
   width: 300px;
 }
 
-.thumbnail {
-  height: 250px;
-}
-
-.thumbnail-portrait {
-  width: 250px;
-}
-
 .photo-grid-square .thumbnail:hover {
   height: 300px;
-}
-
-.photo-grid-square .thumbnail-portrait:hover {
   width: 300px;
 }
 
