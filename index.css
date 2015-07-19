@@ -31,6 +31,27 @@ a {
   float: left;
 }
 
+@media (max-width: 1320px) {
+  #photos { width: 1030px; }
+  #photo-gallery { width: 780px; }
+}
+
+@media (max-width: 1060px) {
+  #photos { width: 770px; }
+  #photo-gallery { width: 520px; }
+}
+
+
+@media (max-width: 800px) {
+  #photos { width: 510px; }
+  #photo-gallery { width: 260px; }
+}
+
+@media (max-width: 550px) {
+  #photos { width: 260px; }
+  #sidebar { display: none; }
+}
+
 #showcase {
   position: fixed;
   top: 0;
