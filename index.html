@@ -11,18 +11,20 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
   </head>
   <body>
-    <div id="photos">
-      <div id="sidebar">
-        <h2>Frank Ginder<br>Photography</h2>
-        <div data-njnrepeat="groups" class="grouplink-div">
-          <a href="#/{{groups:toString}}">/{{groups:toString}}</a>
+    <div id="outer">
+      <div id="inner">
+        <div id="sidebar">
+          <h2>Frank Ginder<br>Photography</h2>
+          <div data-njnrepeat="groups" class="grouplink-div">
+            <a href="#/{{groups:toString}}">/{{groups:toString}}</a>
+          </div>
         </div>
-      </div>
-      <div id="photo-gallery">
-        <div data-njnrepeat="photos" class="photo-grid-square">
-          <a class="photo-link" href={{photos:href}}>
-            <img height=250 width=250 id={{photos:id}} data-photoindex={{photos:photoInd}} data-njnsrc={{photos:thumbnail}} class=thumbnail></img>
-          </a>
+        <div id="photo-gallery">
+          <div data-njnrepeat="photos" class="photo-grid-square">
+            <a class="photo-link" href={{photos:href}}>
+              <img height=250 width=250 id={{photos:id}} data-photoindex={{photos:photoInd}} data-njnsrc={{photos:thumbnail}} class=thumbnail></img>
+            </a>
+          </div>
         </div>
       </div>
     </div>

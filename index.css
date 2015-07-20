@@ -2,11 +2,20 @@ body {
   background: black;
   color: white;
   font-family: 'Open Sans Condensed', sans-serif;
+}
+
+#outer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
   text-align: center;
 }
 
 h2 {
   text-align: right;
+  padding: 0px;
   padding-right: 10px;
 }
 
@@ -19,8 +28,10 @@ a:hover {
   font-weight: bold;
 }
 
-#photos {
+#inner {
   display: inline-block;
+  height: 100%;
+  overflow: hidden;
 }
 
 #sidebar {
@@ -35,22 +46,26 @@ a:hover {
 }
 
 #photo-gallery {
-  width: 1040px;
+  position: relative;
+  left: 20px;
+  width: 1060px;
   float: left;
   text-align: left;
+  height: 100%;
+  overflow: auto;
 }
 
 @media (max-width: 1320px) {
-  #photo-gallery { width: 780px; }
+  #photo-gallery { width: 800px; }
 }
 
 @media (max-width: 1060px) {
-  #photo-gallery { width: 520px; }
+  #photo-gallery { width: 540px; }
 }
 
 
 @media (max-width: 800px) {
-  #photo-gallery { width: 260px; }
+  #photo-gallery { width: 280px; }
 }
 
 @media (max-width: 550px) {
