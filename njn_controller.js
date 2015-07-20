@@ -1,3 +1,6 @@
+// prevent layout from changin (when template removed)
+// 
+
 var __njn_controller_utilities__ = (function defineNJNController() {
 
 njn.Controller = function NJNController() { }
@@ -66,15 +69,6 @@ function processHTML (elementOrHTML, resolveIn, listName) {
 }
 
 var interpolatorRE = ['\\{\\{', '[!=]?\\w+\\??\\}\\}(?!\\})'];
-
-//function interpolatorRE(depth) {
-//  var plusSigns = '';
-//  for(var i = 0; i < depth; i++) {
-//    plusSigns += '\\+';
-//  }
-//  var regexp = '\\{\\{' + plusSigns + '[!=]?\\w+\\??\\}\\}(?!\\})';
-//  return new RegExp(regexp, 'g');
-//}
 
 var escapeHTMLRE = /\[\[([^\]]|\n)+\]\]/g;
 

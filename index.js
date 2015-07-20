@@ -4,7 +4,7 @@
 var groups = [], max = 151;
 
 for(var i = 1, j = 1; i <= max; i++) {
-  if(i - j === 11 || i === max) {
+  if(i - j === 23 || i === max) {
     groups.push(j + '-' + i);
     j = i + 1;
   }
@@ -13,7 +13,7 @@ for(var i = 1, j = 1; i <= max; i++) {
 njn.controller('sidebar', { groups: groups });
 
 var photos = [];
-var indexRange = (location.hash.match(/#\/([0-9]+-[0-9]+)/) || ['','1-12'])[1];
+var indexRange = (location.hash.match(/#\/([0-9]+-[0-9]+)/) || ['','1-24'])[1];
 var showcase = document.getElementsByClassName('showcase')[0];
 var photoFloater = document.getElementsByClassName('photo-floater')[0];
 var fullsizeA = document.getElementsByClassName('fullsize-a')[0];
@@ -32,6 +32,7 @@ for(var i = firstIndex; i <= lastIndex; i++) {
   photos.push({ src: src, id: id, href: href, thumbnail: thumbnail, photoInd: i - firstIndex });
 }
 
+/* hack, need to fix: */ document.getElementById('sidebar').style.width = document.getElementById('sidebar').clientWidth + 'px';
 njn.controller('photo-gallery', {  photos: photos });
 
 var loaded = {};
@@ -60,7 +61,7 @@ var photoGridSquare;
 (window.onhashchange = function() {
   var newRange = location.hash.match(/#\/([0-9]+-[0-9]+)/);
   if(newRange && newRange[1] !== indexRange) {
-    location.reload(true);
+    location.reload();
   } else {
     var prevImg = fullsizeA.children[0];
     var photoId = location.hash.match(/photo_[0-9]+$/);
