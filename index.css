@@ -31,7 +31,6 @@ a:hover {
 #inner {
   display: inline-block;
   height: 100%;
-  overflow: hidden;
 }
 
 #sidebar {
@@ -45,72 +44,70 @@ a:hover {
   text-align: right;
 }
 
-#photo-gallery {
+#photo-gallery, #hide-scrollbar {
   position: relative;
-  left: 20px;
-  width: 1060px;
-  float: left;
-  text-align: left;
+  width: 1060px; /* four thumbnails, each 250px wide + 5px left- and right-margin, plus extra 20 for scrollbar */
   height: 100%;
-  overflow: auto;
+}
+
+#photo-gallery {
+  overflow-y: auto;
+  left: 20px; /* move to the right to hide scrollbar */
+}
+
+#hide-scrollbar {
+  float: left;
+  left: -20px;
+  overflow-x: hidden;
+}
+
+#photo-gallery {
+  text-align: left; /* because set to center on #outer */
 }
 
 @media (max-width: 1320px) {
-  #photo-gallery { width: 800px; }
+  #hide-scrollbar, #photo-gallery { width: 800px; }
 }
 
 @media (max-width: 1060px) {
-  #photo-gallery { width: 540px; }
+  #hide-scrollbar, #photo-gallery { width: 540px; }
 }
 
 
 @media (max-width: 800px) {
-  #photo-gallery { width: 280px; }
+  #hide-scrollbar, #photo-gallery { width: 280px; }
 }
 
 @media (max-width: 550px) {
   #sidebar { display: none; }
 }
 
-.showcase {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+#showcases {
   display: none;
+  position: fixed;
+  top: 0; bottom: 0; left: 0;
+}
+
+.showcase {
+  float: left;
+  height: 100%;
   background: rgba(0, 0, 0, 0.75);
 }
 
-.leave-showcase {
-  width: 100%;
-  height: 100%;
-}
-
-.leave-showcase a {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.photo-floater {
+.photo-viewer {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
+  top: 0; left: 0; right: 0; bottom: 0;
 }
 
-.photo-floater a:hover {
-  background-color: black;
-}
-
-#left-click, #right-click {
+.left-click, .right-click {
   display: block;
   height: 100%;
   width: 50%;
   float: left;
+}
+
+.left-click:hover, .right-click:hover {
+  background-color: black;
 }
 
 .fullsize {
@@ -152,6 +149,14 @@ a:hover {
 .photo-grid-square .thumbnail:hover {
   height: 300px;
   width: 300px;
+}
+
+.loading {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: url(./loading.gif) center no-repeat;
+  background-size: 64px 64px;
 }
 
 /* 420 820 */

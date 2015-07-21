@@ -1,5 +1,5 @@
 // var max = number of photos on server
-// break up into groups of twelve, returning strings like: '1-12', '31-42', etc:
+// break up into groups of 24, returning strings like: '1-24', '25-48', etc:
 
 var groups = [], max = 151;
 
@@ -14,12 +14,10 @@ njn.controller('sidebar', { groups: groups });
 
 var photos = [];
 var indexRange = (location.hash.match(/#\/([0-9]+-[0-9]+)/) || ['','1-24'])[1];
-var showcase = document.getElementsByClassName('showcase')[0];
-var photoFloater = document.getElementsByClassName('photo-floater')[0];
-var fullsizeA = document.getElementsByClassName('fullsize-a')[0];
 
+var fullsizeA = document.getElementsByClassName('fullsize-a')[0];
 fullsizeA.href = '#/' + indexRange;
-document.getElementsByClassName('leave-showcase')[0].children[0].href = '#/' + indexRange;
+
 
 var firstIndex = +indexRange.split('-')[0];
 var lastIndex = +indexRange.split('-')[1];
@@ -32,27 +30,34 @@ for(var i = firstIndex; i <= lastIndex; i++) {
   photos.push({ src: src, id: id, href: href, thumbnail: thumbnail, photoInd: i - firstIndex });
 }
 
-/* hack, need to fix: */ document.getElementById('sidebar').style.width = document.getElementById('sidebar').clientWidth + 'px';
-njn.controller('photo-gallery', {  photos: photos });
+njn.controller('photo-gallery', { photos: photos });
+njn.controller('showcases', { photos: photos });
 
+var showcases = document.getElementById('showcases');
 var loaded = {};
 
 function loadFullSizeImg(photo, i) {
-  var fullsize = loaded[photo.src];
-  if(!fullsize) {
-    fullsize = new Image();
-    fullsize.src = photo.src;
-    fullsize.className = 'fullsize';
-    loaded[photo.src] = fullsize;
-  }
+  if(!showcases.style.width)
+    showcases.style.width = photos.length * document.getElementById('outer').offsetWidth + 'px';
   if(!i) {
-    var prevImg = showcase.getElementsByClassName('fullsize')[0];
-    fullsizeA.replaceChild(fullsize, prevImg);
-    showcase.style.display = 'block';
-  } else if(i === 1) {
-    document.getElementById('right-click').href = photo.href;
+    showcases.style.display = 'block';
+    showcases.style.left = -photo.photoInd * document.getElementById('outer').offsetWidth + 'px';
+  }
+  var showcase = showcases.children[photo.photoInd];
+  if(!showcase.style.width) showcase.style.width = document.getElementById('outer').offsetWidth + 'px';
+  var fullsize = showcase.getElementsByTagName('img')[0];
+  if(!fullsize.src) {
+    showcase.style.left = photo.photoInd * parseInt(window.getComputedStyle(showcase).width) + 'px';
+    fullsize.onload = function() {
+      var loading = showcase.getElementsByClassName('loading')[0];
+      showcase.removeChild(loading);
+    }
+    fullsize.src = photo.src;
+  }
+  if(i === 1) {
+    showcases.children[i - 1].getElementsByClassName('right-click')[0].href = photo.href;
   } else if(i === -1) {
-    document.getElementById('left-click').href = photo.href;
+    showcases.children[i + 1].getElementsByClassName('left-click')[0].href = photo.href;
   }
 }
 
@@ -71,14 +76,14 @@ var photoGridSquare;
       if(photoGridSquare) photoGridSquare.className = 'photo-grid-square-behind';
       var thumbnail = document.getElementById(photoId);
       var photoIndex = +photoId[0].match(/[0-9]+/)[0];
-      var startIndex = +thumbnail.dataset.photoindex;
+      var startIndex = +thumbnail.getAttribute('data-photoindex');
       for(var i = 0, diffs = [0, 1, -1, 2, -2]; i < 5; i++) {
         var currIndex = (startIndex + diffs[i]) % photos.length;
         var currPhoto = photos.slice(currIndex)[0];
         loadFullSizeImg(currPhoto, diffs[i]);
       }
     } else {
-      showcase.style.display = 'none';
+      showcases.style.display = 'none';
     }
   }
 })();

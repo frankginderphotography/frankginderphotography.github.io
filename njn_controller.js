@@ -34,7 +34,7 @@ njn.Controller.prototype.refreshView = function() {
   var liveElement = document.getElementById(this.name);
   liveElement.outerHTML = stripBracketsAndTripleBraces(liveElement.outerHTML);
   [].forEach.call(document.querySelectorAll('[data-njnsrc]'), function(img) {
-    img.src = img.dataset.njnsrc;
+    img.src = img.getAttribute('data-njnsrc');
   });
   return document.getElementById(this.name);
 }
@@ -45,7 +45,7 @@ function repeatElements(parentElement, resolveIn, listName) {
   for(i = 0; i < repeaters.length; i++) {
     var repeater = repeaters[i];
     var listNameRegExp = new RegExp('(?:' + listName + ':)?(.+)');
-    var newListName = repeater.dataset.njnrepeat.match(listNameRegExp)[1];
+    var newListName = repeater.getAttribute('data-njnrepeat').match(listNameRegExp)[1];
     var list = resolveValue(newListName, resolveIn);
     var html = '';
     for(var j = 0; j < list.length; j++) {

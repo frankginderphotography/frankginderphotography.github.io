@@ -19,6 +19,7 @@
             <a href="#/{{groups:toString}}">/{{groups:toString}}</a>
           </div>
         </div>
+        <div id="hide-scrollbar">
         <div id="photo-gallery">
           <div data-njnrepeat="photos" class="photo-grid-square">
             <a class="photo-link" href={{photos:href}}>
@@ -26,16 +27,19 @@
             </a>
           </div>
         </div>
+        </div>
       </div>
     </div>
-    <div class="showcase">
-      <div class="leave-showcase"><a></a></div>
-      <div class="photo-floater">
-        <a id="left-click"></a>
-        <a id="right-click"></a>
-        <a class="fullsize-a">
-          <img class="fullsize"></img>
-        </a>
+    <div id="showcases">
+      <div data-njnrepeat="photos" class="showcase">
+        <div class="photo-viewer">
+          <a class="left-click"></a>
+          <a class="right-click"></a>
+          <a class="fullsize-a">
+            <img class="fullsize"></img>
+          </a>
+        </div>
+        <div class="loading"></div>
       </div>
     </div>
     <script src="index.js"></script>
