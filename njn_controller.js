@@ -32,10 +32,7 @@ njn.Controller.prototype.refreshView = function() {
   (document.getElementById(this.name) || this.template).outerHTML = processed;
   repeatElements(document.getElementById(this.name), this.viewInterface);
   var liveElement = document.getElementById(this.name);
-  liveElement.outerHTML = stripBracketsAndTripleBraces(liveElement.outerHTML);
-  [].forEach.call(document.querySelectorAll('[data-njnsrc]'), function(img) {
-    img.src = img.getAttribute('data-njnsrc');
-  });
+  liveElement.outerHTML = stripBracketsAndTripleBraces(liveElement.outerHTML).replace(/data-njn/g, '');
   return document.getElementById(this.name);
 }
 
@@ -50,7 +47,6 @@ function repeatElements(parentElement, resolveIn, listName) {
     var html = '';
     for(var j = 0; j < list.length; j++) {
       html += processHTML(repeater, list[j], newListName);
-      //repeatElements(container.lastChild, list[j], newListName);
     }
     repeater.outerHTML = html;
   }
@@ -60,12 +56,11 @@ function processHTML (elementOrHTML, resolveIn, listName) {
   var html = '';
   html = elementOrHTML.outerHTML || elementOrHTML;
   var interpolator = new RegExp(interpolatorRE.join(listName ? listName + ':' : ''), 'g');
-  // if any [[]] were in the original html but no {{}}, make sure the [[]] are processed:
-  html = processText(html, resolveIn, interpolator);
   while(html.search(interpolator) > -1) {
     html = processText(html, resolveIn, interpolator);
   }
-  return html;
+  // if any [[]] were in the original html but no {{}}, make sure the [[]] are processed:
+  return processText(html, resolveIn, interpolator);;
 }
 
 var interpolatorRE = ['\\{\\{', '[!=]?\\w+\\??\\}\\}(?!\\})'];

@@ -85,18 +85,19 @@ a:hover {
 #showcases {
   display: none;
   position: fixed;
-  top: 0; bottom: 0; left: 0;
+  top: 0; bottom: 0;
 }
 
 .showcase {
-  float: left;
+  position: relative;
+  display: inline-block;
   height: 100%;
   background: rgba(0, 0, 0, 0.75);
 }
 
 .photo-viewer {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  position: relative;
+  height: 100%;
 }
 
 .left-click, .right-click {
@@ -121,6 +122,14 @@ a:hover {
   top: 0;
   bottom: 0;
   margin: auto;
+  background: black;
+}
+
+#loading {
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: rgba(0, 0, 0, 0.75) url(./loading.gif) center no-repeat;
+  background-size: 64px 64px;
 }
 
 .photo-grid-square, .photo-grid-square-behind {
@@ -139,24 +148,16 @@ a:hover {
   z-index: 1000;
 }
 
-.photo-grid-square .photo-link:hover {
+.photo-grid-square:hover .photo-link {
   left: -25px;
   top: -25px;
   height: 300px;
   width: 300px;
 }
 
-.photo-grid-square .thumbnail:hover {
+.photo-grid-square:hover .thumbnail {
   height: 300px;
   width: 300px;
-}
-
-.loading {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background: url(./loading.gif) center no-repeat;
-  background-size: 64px 64px;
 }
 
 /* 420 820 */
