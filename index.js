@@ -27,34 +27,28 @@ for(var i = firstIndex; i <= lastIndex; i++) {
 }
 
 njn.controller('photo-gallery', { photos: photos });
-njn.controller('showcases', { photos: photos, fullwidth: window.innerWidth + 'px', indexRange: indexRange });
+njn.controller('showcases', { photos: photos, indexRange: indexRange });
 
 var loading = document.body.removeChild(document.getElementById('loading'));
 var showcases = document.getElementById('showcases');
-showcases.style.width = photos.length * window.innerWidth + 'px';
-
-var numLeft;
 
 function loadFullSizeImg(photo, i) {
-  if(!i) {
-    document.body.appendChild(loading);
-    numLeft = photo.photoInd;
-  }
+  if(!i)  document.body.appendChild(loading);
   var children = showcases.children;
   var showcase = children[photo.photoInd];
   var fullsize = showcase.getElementsByTagName('img')[0];
   var newload = false;
+
   if(!fullsize.src) {
     newload = true;
     if(!i) fullsize.onload = function() {
-      showcases.style.left = -photo.photoInd * window.innerWidth + 'px';
       showcases.style.display = 'block';
       document.body.removeChild(loading);
     }
     fullsize.src = photo.src;
   }
+
   if(!newload && !i) {
-    showcases.style.left = -photo.photoInd * window.innerWidth + 'px';
     showcases.style.display = 'block';
     document.body.removeChild(loading);
   } else if(i === 1) {
@@ -62,6 +56,8 @@ function loadFullSizeImg(photo, i) {
   } else if(i === -1) {
     children[photo.photoInd + 1].getElementsByClassName('left-click')[0].href = photo.href;
   }
+
+  showcase.style.left = i ? i > 0 ? '100%' : '-100%' : '0';
 }
 
 var photoGridSquare;
@@ -79,6 +75,7 @@ var photoGridSquare;
       var thumbnail = document.getElementById(photoId);
       var photoIndex = +photoId[0].match(/[0-9]+/)[0];
       var startIndex = +thumbnail.getAttribute('data-photoindex');
+      for(var i = 0; i < photos.length; i++) { showcases.children[i].style.left = '-100%'; }
       for(var i = 0, diffs = [0, 1, -1, 2, -2]; i < 5; i++) {
         var currIndex = (startIndex + diffs[i]) % photos.length;
         var currPhoto = photos.slice(currIndex)[0];
@@ -89,12 +86,3 @@ var photoGridSquare;
     }
   }
 })();
-
-window.onresize = function() {
-  showcases.style.width = photos.length * window.innerWidth + 'px';
-  showcases.style.left = -numLeft * window.innerWidth + 'px';
-  var children = showcases.children;
-  for(var i = 0; i < children.length; i++) {
-    children[i].style.width = window.innerWidth + 'px';
-  }
-}
