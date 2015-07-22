@@ -31,6 +31,7 @@ njn.controller('showcases', { photos: photos, indexRange: indexRange });
 
 var loading = document.body.removeChild(document.getElementById('loading'));
 var showcases = document.getElementById('showcases');
+var shownShowcase;
 
 function loadFullSizeImg(photo, i) {
   var children = showcases.children;
@@ -40,8 +41,9 @@ function loadFullSizeImg(photo, i) {
 
   if(!i) {
     document.body.appendChild(loading);
+    shownShowcase = showcase;
     showcase.style.left = '0';
-    showcase.style.transition = 'left 500ms ease 500ms';
+    showcase.style.transition = 'left 400ms ease 400ms';
   }
 
   if(!fullsize.src) {
@@ -95,3 +97,36 @@ var photoGridSquare, lastShown;
     }
   }
 })();
+
+var whichKey = function(e) {
+  if('key' in e)  return e.key;
+  var codes = [];
+  codes[37] = 'ArrowLeft';
+  codes[38] = 'ArrowUp';
+  codes[39] = 'ArrowRight';
+  codes[40] = 'ArrowDown';
+  return codes[e.which];
+}
+
+function navigatePhotos(direction) {
+  if(showcases.style.display === 'block') {
+    var leftClick  = shownShowcase.getElementsByClassName('left-click')[0];
+    var rightClick = shownShowcase.getElementsByClassName('right-click')[0];
+    (direction === 'Left' ? leftClick : rightClick).dispatchEvent(new MouseEvent('click'));
+  }
+}
+
+function scrollThumbnails(direction) {
+  if(showcases.style.display === 'none') {
+    document.getElementById('photo-gallery').scrollTop += (direction === 'Up' ? -50 : 50);
+  }
+}
+
+window.addEventListener('keypress', function(e) {
+  var match;
+  if(match = whichKey(e).match(/Left|Right/)) {
+    navigatePhotos(match[0]);
+  } else if(match = whichKey(e).match(/Up|Down/)) {
+    scrollThumbnails(match[0]);
+  }
+}, false);
