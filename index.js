@@ -33,34 +33,39 @@ var loading = document.body.removeChild(document.getElementById('loading'));
 var showcases = document.getElementById('showcases');
 
 function loadFullSizeImg(photo, i) {
-  if(!i)  document.body.appendChild(loading);
   var children = showcases.children;
   var showcase = children[photo.photoInd];
   var fullsize = showcase.getElementsByTagName('img')[0];
   var newload = false;
 
+  if(!i) {
+    document.body.appendChild(loading);
+    showcase.style.left = '0';
+    showcase.style.transition = 'left 500ms ease 500ms';
+  }
+
   if(!fullsize.src) {
     newload = true;
     if(!i) fullsize.onload = function() {
-      showcases.style.display = 'block';
       document.body.removeChild(loading);
+      showcases.style.display = 'block';
     }
     fullsize.src = photo.src;
   }
 
   if(!newload && !i) {
-    showcases.style.display = 'block';
     document.body.removeChild(loading);
+    showcases.style.display = 'block';
   } else if(i === 1) {
     children[photo.photoInd - 1].getElementsByClassName('right-click')[0].href = photo.href;
+    showcase.style.left = '100%';
   } else if(i === -1) {
     children[photo.photoInd + 1].getElementsByClassName('left-click')[0].href = photo.href;
+    showcase.style.left = '-100%';
   }
-
-  showcase.style.left = i ? i > 0 ? '100%' : '-100%' : '0';
 }
 
-var photoGridSquare;
+var photoGridSquare, lastShown;
 
 (window.onhashchange = function() {
   var newRange = location.hash.match(/#\/([0-9]+-[0-9]+)/);
@@ -73,13 +78,17 @@ var photoGridSquare;
       photoGridSquare = document.querySelector('.photo-grid-square:hover');
       if(photoGridSquare) photoGridSquare.className = 'photo-grid-square-behind';
       var thumbnail = document.getElementById(photoId);
-      var photoIndex = +photoId[0].match(/[0-9]+/)[0];
-      var startIndex = +thumbnail.getAttribute('data-photoindex');
-      for(var i = 0; i < photos.length; i++) { showcases.children[i].style.left = '-100%'; }
+      var startIndex = lastShown = +thumbnail.getAttribute('data-photoindex');
       for(var i = 0, diffs = [0, 1, -1, 2, -2]; i < 5; i++) {
         var currIndex = (startIndex + diffs[i]) % photos.length;
         var currPhoto = photos.slice(currIndex)[0];
         loadFullSizeImg(currPhoto, diffs[i]);
+      }
+      for(var i = 0; i < photos.length; i++) {
+        if(Math.abs(i - startIndex) > 1) {
+          showcases.children[i].style.transition = 'none';
+          showcases.children[i].style.left = '-100%';
+        }
       }
     } else {
       showcases.style.display = 'none';
