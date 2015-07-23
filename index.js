@@ -142,8 +142,8 @@ window.addEventListener('touchmove', function(e) {
   if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
     return;
   }
-  var deltaX = currTouch.pageX - firstTouch.pageX,
-      deltaY = currTouch.pageY - firstTouch.pageY,
+  var deltaX = currTouch.screenX - firstTouch.screenX,
+      deltaY = currTouch.screenY - firstTouch.screenY,
       isVertical = Math.abs(deltaY) > Math.abs(deltaX);
   if(isVertical) {
     showcases.style.top = deltaY + 'px';
