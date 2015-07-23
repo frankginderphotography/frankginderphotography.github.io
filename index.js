@@ -134,10 +134,10 @@ var firstTouch;
 
 showcases.addEventListener('touchstart', function(e) {
   (firstTouch = e.touches[0]).time = Date.now();
-alert(firstTouch);
 }, false);
 
 showcases.addEventListener('touchmove', function(e) {
+alert(firstTouch.pageY, firstTouch.pageX);
   var currTouch = e.touches[0];
   // Ensure this is a one touch swipe and not, e.g. a pinch:
   if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
@@ -151,7 +151,6 @@ showcases.addEventListener('touchmove', function(e) {
   } else {
     // disable horizontal scrolling:
     e.preventDefault();
-alert(deltaX);
     this.style.left = deltaX + 'px';
   }
 }, false);
