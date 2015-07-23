@@ -150,11 +150,11 @@ showcases.addEventListener('touchmove', function(e) {
       isVertical = Math.abs(deltaY) > Math.abs(deltaX);
   if(isVertical) {
     showcases.style.top = deltaY + 'px';
-    showcases.style.bottom = deltaY + 'px';
+    showcases.style.bottom = -deltaY + 'px';
   } else {
     // disable horizontal scrolling:
     e.preventDefault();
     showcases.style.left = deltaX + 'px';
-    showcases.style.right = deltaX + 'px';
+    showcases.style.right = -deltaX + 'px';
   }
 }, false);
