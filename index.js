@@ -130,13 +130,15 @@ window.addEventListener('keypress', function(e) {
   }
 }, false);
 
-var firstTouch;
+var firstTouch = {};
 
-window.addEventListener('touchstart', function(e) {
-  (firstTouch = e.changedTouches[0]).time = Date.now();
+showcases.addEventListener('touchstart', function(e) {
+  firstTouch.screenX = e.changedTouches[0].screenX;
+  firstTouch.screenY = e.changedTouches[0].screenY;
+  firstTouch.time = Date.now();
 }, false);
 
-window.addEventListener('touchmove', function(e) {
+showcases.addEventListener('touchmove', function(e) {
   var currTouch = e.changedTouches[0];
   // Ensure this is a one touch swipe and not, e.g. a pinch:
   if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
