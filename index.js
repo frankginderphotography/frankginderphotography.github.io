@@ -99,13 +99,12 @@ var photoGridSquare, lastShown;
 })();
 
 var whichKey = function(e) {
-  if('key' in e)  return e.key;
-  var codes = [];
-  codes[37] = 'ArrowLeft';
-  codes[38] = 'ArrowUp';
-  codes[39] = 'ArrowRight';
-  codes[40] = 'ArrowDown';
-  return codes[e.which];
+  return e.key || {
+    37: 'ArrowLeft',
+    38: 'ArrowUp',
+    39: 'ArrowRight',
+    40: 'ArrowDown'
+  }[e.which];
 }
 
 function navigatePhotos(direction) {
@@ -128,5 +127,29 @@ window.addEventListener('keypress', function(e) {
     navigatePhotos(match[0]);
   } else if(match = whichKey(e).match(/Up|Down/)) {
     scrollThumbnails(match[0]);
+  }
+}, false);
+
+var firstTouch;
+
+showcases.addEventListener('touchstart', function(e) {
+  (firstTouch = e.touches[0]).time = Date.now();
+}, false);
+
+showcases.addEventListener('touchmove', function(e) {
+  var currTouch = e.touches[0];
+  // Ensure this is a one touch swipe and not, e.g. a pinch:
+  if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
+    return;
+  }
+  var deltaX = currTouch.pageX - firstTouch.pageX,
+      deltaY = currTouch.pageY - firstTouch.pageY,
+      isVertical = Math.abs(deltaY) > Math.abs(deltaX);
+  if(isVertical) {
+    this.style.top = deltaY + 'px';
+  } else {
+    // disable horizontal scrolling:
+    e.preventDefault();
+    this.style.left = deltaX + 'px';
   }
 }, false);
