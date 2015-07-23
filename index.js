@@ -138,7 +138,6 @@ showcases.addEventListener('touchstart', function(e) {
 
 showcases.addEventListener('touchmove', function(e) {
   var currTouch = e.touches[0];
-alert('currTouch: ' + currTouch.pageY + ' ' + currTouch.pageX);
   // Ensure this is a one touch swipe and not, e.g. a pinch:
   if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
     return;
@@ -146,6 +145,7 @@ alert('currTouch: ' + currTouch.pageY + ' ' + currTouch.pageX);
   var deltaX = currTouch.pageX - firstTouch.pageX,
       deltaY = currTouch.pageY - firstTouch.pageY,
       isVertical = Math.abs(deltaY) > Math.abs(deltaX);
+alert('deltaX: ' + deltaX + ' deltaY: ' + deltaY);
   if(isVertical) {
     this.style.top = deltaY + 'px';
   } else {
