@@ -133,6 +133,7 @@ window.addEventListener('keypress', function(e) {
 var firstTouch = {};
 
 showcases.addEventListener('touchstart', function(e) {
+  // iOS safari reuses touch objects across events, so store properties in separate object:
   firstTouch.screenX = e.changedTouches[0].screenX;
   firstTouch.screenY = e.changedTouches[0].screenY;
   firstTouch.time = Date.now();
@@ -149,9 +150,11 @@ showcases.addEventListener('touchmove', function(e) {
       isVertical = Math.abs(deltaY) > Math.abs(deltaX);
   if(isVertical) {
     showcases.style.top = deltaY + 'px';
+    showcases.style.bottom = deltaY + 'px';
   } else {
     // disable horizontal scrolling:
     e.preventDefault();
     showcases.style.left = deltaX + 'px';
+    showcases.style.right = deltaX + 'px';
   }
 }, false);
