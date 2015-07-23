@@ -86,14 +86,14 @@ a:hover {
   display: none;
   position: fixed;
   top: 0; bottom: 0; right: 0; left: 0;
+  background: rgba(0, 0, 0, 0.75);
 }
 
 .showcase {
   position: absolute;
   height: 100%;
   width: 100%;
-  left: -100%;
-  background: rgba(0, 0, 0, 0.75);
+  left: -200%;
 }
 
 .photo-viewer {
