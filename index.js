@@ -1,10 +1,12 @@
 // var max = number of photos on server
 // break up into groups of 24, returning strings like: '1-24', '25-48', etc:
 
-var groups = [], max = 151;
+var groups = [],
+    max = 151,
+    groupsOf = window.innerWidth < 551 ? 11 : 23;
 
 for(var i = 1, j = 1; i <= max; i++) {
-  if(i - j === 23 || i === max) {
+  if(i - j === groupsOf || i === max) {
     groups.push(j + '-' + i);
     j = i + 1;
   }
@@ -150,11 +152,9 @@ showcases.addEventListener('touchmove', function(e) {
       isVertical = Math.abs(deltaY) > Math.abs(deltaX);
   if(isVertical) {
     shownShowcase.style.top = deltaY + 'px';
-    shownShowcase.style.bottom = -deltaY + 'px';
   } else {
     // disable horizontal scrolling:
-    e.preventDefault();
+    // e.preventDefault();
     shownShowcase.style.left = deltaX + 'px';
-    shownShowcase.style.right = -deltaX + 'px';
   }
 }, false);
