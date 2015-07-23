@@ -145,7 +145,7 @@ showcases.addEventListener('touchmove', function(e) {
   var deltaX = currTouch.pageX - firstTouch.pageX,
       deltaY = currTouch.pageY - firstTouch.pageY,
       isVertical = Math.abs(deltaY) > Math.abs(deltaX);
-alert('deltaX: ' + deltaX + ' deltaY: ' + deltaY);
+alert('firstTouchX: ' + firstTouch.pageX + ' currTouchX: ' + currTouch.pageX + ' deltaX: ' + deltaX);
   if(isVertical) {
     this.style.top = deltaY + 'px';
   } else {
