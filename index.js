@@ -134,6 +134,7 @@ var firstTouch;
 
 showcases.addEventListener('touchstart', function(e) {
   (firstTouch = e.touches[0]).time = Date.now();
+alert(firstTouch);
 }, false);
 
 showcases.addEventListener('touchmove', function(e) {
