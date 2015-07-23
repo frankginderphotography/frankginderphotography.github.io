@@ -132,11 +132,11 @@ window.addEventListener('keypress', function(e) {
 
 var firstTouch;
 
-showcases.addEventListener('touchstart', function(e) {
+window.addEventListener('touchstart', function(e) {
   (firstTouch = e.changedTouches[0]).time = Date.now();
 }, false);
 
-showcases.addEventListener('touchmove', function(e) {
+window.addEventListener('touchmove', function(e) {
   var currTouch = e.changedTouches[0];
   // Ensure this is a one touch swipe and not, e.g. a pinch:
   if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
@@ -145,12 +145,11 @@ showcases.addEventListener('touchmove', function(e) {
   var deltaX = currTouch.pageX - firstTouch.pageX,
       deltaY = currTouch.pageY - firstTouch.pageY,
       isVertical = Math.abs(deltaY) > Math.abs(deltaX);
-alert([].join.call(e.changedTouches, ','));
   if(isVertical) {
-    this.style.top = deltaY + 'px';
+    showcases.style.top = deltaY + 'px';
   } else {
     // disable horizontal scrolling:
     e.preventDefault();
-    this.style.left = deltaX + 'px';
+    showcases.style.left = deltaX + 'px';
   }
 }, false);
