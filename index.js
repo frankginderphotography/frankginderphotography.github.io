@@ -150,6 +150,7 @@ showcases.addEventListener('touchmove', function(e) {
   } else {
     // disable horizontal scrolling:
     e.preventDefault();
+alert(deltaX);
     this.style.left = deltaX + 'px';
   }
 }, false);
