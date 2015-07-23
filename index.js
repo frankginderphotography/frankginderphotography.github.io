@@ -138,7 +138,7 @@ showcases.addEventListener('touchstart', function(e) {
 
 showcases.addEventListener('touchmove', function(e) {
   var currTouch = e.touches[0];
-alert(currTouch.pageY + ' ' + currTouch.pageX);
+alert('currTouch: ' + currTouch.pageY + ' ' + currTouch.pageX);
   // Ensure this is a one touch swipe and not, e.g. a pinch:
   if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
     return;
