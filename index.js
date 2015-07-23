@@ -133,11 +133,11 @@ window.addEventListener('keypress', function(e) {
 var firstTouch;
 
 showcases.addEventListener('touchstart', function(e) {
-  (firstTouch = e.touches[0]).time = Date.now();
+  (firstTouch = e.changedTouches[0]).time = Date.now();
 }, false);
 
 showcases.addEventListener('touchmove', function(e) {
-  var currTouch = e.touches[0];
+  var currTouch = e.changedTouches[0];
   // Ensure this is a one touch swipe and not, e.g. a pinch:
   if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
     return;
