@@ -149,12 +149,12 @@ showcases.addEventListener('touchmove', function(e) {
       deltaY = currTouch.screenY - firstTouch.screenY,
       isVertical = Math.abs(deltaY) > Math.abs(deltaX);
   if(isVertical) {
-    showcases.style.top = deltaY + 'px';
-    showcases.style.bottom = -deltaY + 'px';
+    shownShowcase.style.top = deltaY + 'px';
+    shownShowcase.style.bottom = -deltaY + 'px';
   } else {
     // disable horizontal scrolling:
     e.preventDefault();
-    showcases.style.left = deltaX + 'px';
-    showcases.style.right = -deltaX + 'px';
+    shownShowcase.style.left = deltaX + 'px';
+    shownShowcase.style.right = -deltaX + 'px';
   }
 }, false);
