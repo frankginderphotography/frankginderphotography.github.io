@@ -89,11 +89,38 @@ a:hover {
   background: rgba(0, 0, 0, 0.75);
 }
 
+#showcases > .showcase {
+  left: -200%;
+}
+
+#currently-shown {
+  position: absolute;
+  top: 0; bottom: 0; right: 0; left: 0;
+}
+
+#currently-shown .showcase {
+  transition: left 400ms ease 400ms;
+}
+
+#currently-shown .showcase:first-child {
+  left: -100%;
+}
+
+#currently-shown .showcase:nth-child(2) {
+  left: 0;
+}
+
+#currently-shown .showcase:nth-child(3) {
+  left: 100%;
+}
+#currently-shown .showcase:nth-child(4) {
+  left: 200%;
+}
+
 .showcase {
   position: absolute;
   height: 100%;
   width: 100%;
-  left: -200%;
 }
 
 .photo-viewer {

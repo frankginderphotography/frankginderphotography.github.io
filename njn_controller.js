@@ -63,16 +63,19 @@ function processHTML (elementOrHTML, resolveIn, listName) {
   return processText(html, resolveIn, interpolator);;
 }
 
-var interpolatorRE = ['\\{\\{', '[!=]?\\w+\\??\\}\\}(?!\\})'];
+var interpolatorRE = ['\\{\\{', '[!=]?\\w+[\\?\\+\\-]?\\}\\}(?!\\})'];
 
 var escapeHTMLRE = /\[\[([^\]]|\n)+\]\]/g;
 
 function processText(text, resolveIn, interpolator) {
   return text.replace(interpolator, function(match) {
-    var innerMatch = match.match(/\{\{(?:\w+:)?(.+)\}\}/)[1];
+    var innerMatch = match.match(/\{\{(?:\w+:)?((?:[^\}]|\}(?!\}))+)\}\}/)[1];
     var negate = /^!/.test(innerMatch);
+    var incr = /\+$/.test(innerMatch);
+    var decr = /\-$/.test(innerMatch);
     var propertyName = innerMatch.match(/\w+\??/)[0];
     var replacement = resolveValue(propertyName, resolveIn);
+    replacement = incr ? replacement + 1 : decr ? replacement - 1 : replacement;
     if(njn.isDefined(replacement)) {
       if(negate) { replacement = !replacement; }
       if(njn.isHTMLElement(replacement)) {
