@@ -31,74 +31,70 @@ for(var i = firstIndex; i <= lastIndex; i++) {
 njn.controller('photo-gallery', { photos: photos });
 njn.controller('showcases', { photos: photos, indexRange: indexRange });
 
+var photoGallery = document.getElementById('photo-gallery');
 var loading = document.body.removeChild(document.getElementById('loading'));
 var showcases = document.getElementById('showcases');
-var shownShowcase;
+var currentlyShown = document.getElementById('currently-shown');
+var children = showcases.children;
 
-function loadFullSizeImg(photo, i) {
-  var children = showcases.children;
-  var showcase = children[photo.photoInd];
+function loadFullSizeImg(i, photoind) {
+  var showcase = showcases.querySelector('[data-photoindex="' + photoind + '"]');
   var fullsize = showcase.getElementsByTagName('img')[0];
-  var newload = false;
-
-  if(!i) {
-    document.body.appendChild(loading);
-    shownShowcase = showcase;
-    showcase.style.left = '0';
-    showcase.style.transition = 'left 400ms ease 400ms';
-  }
+  var photo = photos[photoind];
 
   if(!fullsize.src) {
-    newload = true;
-    if(!i) fullsize.onload = function() {
-      document.body.removeChild(loading);
-      showcases.style.display = 'block';
+    if(!i) {
+      document.body.appendChild(loading);
+      fullsize.onload = function() {
+        document.body.removeChild(loading);
+        showcases.style.display = 'block';
+      }
     }
     fullsize.src = photo.src;
-  }
-
-  if(!newload && !i) {
-    document.body.removeChild(loading);
+  } else if(!i) {
     showcases.style.display = 'block';
-  } else if(i === 1) {
-    children[photo.photoInd - 1].getElementsByClassName('right-click')[0].href = photo.href;
-    showcase.style.left = '100%';
-  } else if(i === -1) {
-    children[photo.photoInd + 1].getElementsByClassName('left-click')[0].href = photo.href;
-    showcase.style.left = '-100%';
   }
 }
 
-var photoGridSquare, lastShown;
+var photoGridSquare;
 
-(window.onhashchange = function() {
+window.onhashchange = function() {
   var newRange = location.hash.match(/#\/([0-9]+-[0-9]+)/);
-  if(newRange && newRange[1] !== indexRange) {
-    location.reload();
-  } else {
-    var photoId = location.hash.match(/photo_[0-9]+$/);
-    if(photoGridSquare) photoGridSquare.className = 'photo-grid-square';
-    if(photoId) {
-      photoGridSquare = document.querySelector('.photo-grid-square:hover');
-      if(photoGridSquare) photoGridSquare.className = 'photo-grid-square-behind';
-      var thumbnail = document.getElementById(photoId);
-      var startIndex = lastShown = +thumbnail.getAttribute('data-photoindex');
-      for(var i = 0, diffs = [0, 1, -1, 2, -2]; i < 5; i++) {
-        var currIndex = (startIndex + diffs[i]) % photos.length;
-        var currPhoto = photos.slice(currIndex)[0];
-        loadFullSizeImg(currPhoto, diffs[i]);
+  if(newRange && newRange[1] !== indexRange) location.reload();
+}
+
+photoGallery.addEventListener('click', function(e) {
+  var photoId = location.hash.match(/photo_[0-9]+$/);
+  if(photoId) {
+    photoGridSquare = document.querySelector('.photo-grid-square:hover');
+    if(photoGridSquare) photoGridSquare.className = 'photo-grid-square-behind';
+    var thumbnail = document.getElementById(photoId);
+    var startIndex = +thumbnail.getAttribute('data-photoindex');
+    for(var i = -1; i < 2; i++) {
+      var showcase = showcases.querySelector('[data-photoindex="' + (startIndex + i) + '"]');
+      if(currentlyShown.children[i + 1]) {
+        currentlyShown.replaceChild(showcase, currentlyShown.children[i + 1]);
+      } else {
+        currentlyShown.appendChild(showcase);
       }
-      for(var i = 0; i < photos.length; i++) {
-        if(Math.abs(i - startIndex) > 1) {
-          showcases.children[i].style.transition = 'none';
-          showcases.children[i].style.left = '-100%';
-        }
-      }
-    } else {
-      showcases.style.display = 'none';
+    }
+    for(var i = 0, diffs = [0, 1, -1, 2, -2]; i < 5; i++) {
+      var currIndex = (startIndex + diffs[i]) % photos.length;
+      currIndex = currIndex < 0 ? photos.length + currIndex : currIndex;
+      loadFullSizeImg(diffs[i], currIndex);
     }
   }
-})();
+}, false);
+
+currentlyShown.addEventListener('click', function() {
+  var photoId = location.hash.match(/photo_[0-9]+$/);
+  if(photoId) {
+
+  } else {
+    if(photoGridSquare) photoGridSquare.className = 'photo-grid-square';
+    showcases.style.display = 'none';
+  }
+}
 
 var whichKey = function(e) {
   return e.key || {

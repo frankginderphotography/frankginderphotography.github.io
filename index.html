@@ -32,10 +32,11 @@
     </div>
     <div id="loading"></div>
     <div id="showcases">
-      <div data-njnrepeat="photos" class="showcase">
+      <div id="currently-shown"></div>
+      <div data-njnrepeat="photos" class="showcase" data-photoindex={{photos:photoInd}}>
         <div class="photo-viewer">
-          <a class="left-click"></a>
-          <a class="right-click"></a>
+          <a class="left-click" href="#/{{indexRange}}/photo_{{photos:photoInd-}}"></a>
+          <a class="right-click" href="#/{{indexRange}}/photo_{{photos:photoInd+}}"></a>
           <a class="fullsize-a" href=#/{{indexRange}}>
             <img class="fullsize"></img>
           </a>
