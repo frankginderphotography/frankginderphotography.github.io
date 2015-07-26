@@ -25,21 +25,49 @@ var photos = [];
 
 for(var i = firstIndex; i <= lastIndex; i++) {
   var id = 'photo_' + i;
+  var nextHref = '#/' + (
+		i < lastIndex ?
+    	indexRange :
+        lastIndex === max ?
+        groups[0] :
+        max - lastIndex > groupsOf ?
+        lastIndex + 1 + '-' + (lastIndex + 1 + groupsOf) :
+        lastIndex + 1 + '-' + max
+      ) + '/photo_' + (
+        i < max ?
+        i + 1 :
+        1
+      );
+  var prevHref = '#/' + (
+        i > firstIndex ?
+        indexRange :
+        firstIndex === 1 ?
+        groups[groups.length - 1] :
+        firstIndex > groupsOf + 1 ?
+        firstIndex - (groupsOf + 1) + '-' + (firstIndex - 1) :
+        '1-' + (firstIndex - 1)
+      ) + '/photo_' + (
+        i > 1 ?
+        i - 1 :
+        max
+      );
   photos.push({
-    id:        id,
-    src:       'photos/' + id + '.jpg',
-    href:      '#/' + indexRange + '/' + id,
-    thumbnail: 'thumbnails/' + id + '.png',
-    photoInd:  i - firstIndex
+    id:         id,
+    prevHref:	prevHref,
+    nextHref:	nextHref,
+    src:        'photos/' + id + '.jpg',
+    href:       '#/' + indexRange + '/' + id,
+    thumbnail:  'thumbnails/' + id + '.png',
+    photoInd:   i - firstIndex
   });
 }
 
 njn.controller('photo-gallery', { photos: photos });
 njn.controller('showcases', { photos: photos, indexRange: indexRange });
 
-var photoGallery = document.getElementById('photo-gallery');
-var loading = document.body.removeChild(document.getElementById('loading'));
-var showcases = document.getElementById('showcases');
+var photoGallery   = document.getElementById('photo-gallery');
+var loading        = document.body.removeChild(document.getElementById('loading'));
+var showcases      = document.getElementById('showcases');
 var currentlyShown = document.getElementById('currently-shown');
 
 function loadFullSizeImg(i, photoidx) {
@@ -122,7 +150,7 @@ photoGallery.addEventListener('click', function(e) {
   // string to prevent exception:
   var photoId = (anchor.href || '').match(/photo_[0-9]+$/);
   if(photoId) {
-    // the thumbnail you just clicked is still being hovered and is
+    // the thumbnail we just clicked is still being hovered and is
     // covering the fullsize image.  Store it in photoGridSquare so
     // we can remove the -behind class later:
     photoGridSquare = document.querySelector('.photo-grid-square:hover');
@@ -134,12 +162,17 @@ photoGallery.addEventListener('click', function(e) {
 
 currentlyShown.addEventListener('click', function(e) {
   if(e.target.className.match(/(right|left)-click/)) {
-    var nextIndex;
+    var nextIndex,
+        currIndex = +shownShowcase.getAttribute('data-photoindex');
     if(e.target.className.match(/right/)) {
-      nextIndex = getIndex(+e.target.getAttribute('data-toindex'), 1);
-      var nextShowcase = showcases.querySelector('[data-photoindex="' + nextIndex + '"]');
-      currentlyShown.appendChild(nextShowcase);
-      showcases.appendChild(currentlyShown.firstChild);
+      nextIndex = +e.target.getAttribute('data-toindex');
+      if(nextIndex < lastIndex) {
+        var nextShowcase = showcases.querySelector('[data-photoindex="' + (nextIndex + 1) + '"]');
+        if(nextShowcase) {
+          currentlyShown.appendChild(nextShowcase);
+        }
+        showcases.appendChild(currentlyShown.firstChild);
+      }
     } else {
       nextIndex = getIndex(+e.target.getAttribute('data-toindex'), -1);
       var nextShowcase  = showcases.querySelector('[data-photoindex="' + nextIndex + '"]');
@@ -169,7 +202,7 @@ function navigatePhotos(direction) {
 
 function scrollThumbnails(direction) {
   if(showcases.style.display !== 'block') {
-    document.getElementById('photo-gallery').scrollTop += (direction === 'Up' ? -50 : 50);
+    document.getElementById('photo-gallery').scrollTop += (direction === 'Up' ? -75 : 75);
   }
 }
 
