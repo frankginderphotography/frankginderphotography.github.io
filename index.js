@@ -205,7 +205,7 @@ showcases.addEventListener('touchmove', function(e) {
   } else {
     // disable horizontal scrolling:
     e.preventDefault();
-    var prevLeft = parseInt(currentlyShown.style.left);
+    var prevLeft = parseInt(currentlyShown.style.left) || 0;
     currentlyShown.style.left = prevLeft + deltaX + 'px';
     alert(prevLeft, currentlyShown.style.left);
   }
