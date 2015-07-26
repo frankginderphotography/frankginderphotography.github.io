@@ -205,6 +205,6 @@ showcases.addEventListener('touchmove', function(e) {
   } else {
     // disable horizontal scrolling:
     e.preventDefault();
-    currentlyShown.style.transform = '-webkit-translateX(' + deltaX + 'px)';
+    currentlyShown.style.webkitTransform = 'translateX(' + deltaX + 'px)';
   }
 }, false);
