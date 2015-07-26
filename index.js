@@ -71,6 +71,8 @@ function loadAhead(startIndex) {
   }
 }
 
+var shownShowcase;
+
 function loadShowcase(photoId) {
   var thumbnail = document.getElementById(photoId);
   var startIndex = +thumbnail.getAttribute('data-photoindex');
@@ -80,6 +82,7 @@ function loadShowcase(photoId) {
   for(var i = -1; i < 2; i++) {
     var currIndex = getIndex(startIndex, i);
     var showcase = showcases.querySelector('[data-photoindex="' + currIndex + '"]');
+    if(!i) shownShowcase = showcase;
     currentlyShown.appendChild(showcase);
   }
   loadAhead(startIndex);
@@ -139,10 +142,11 @@ currentlyShown.addEventListener('click', function(e) {
       showcases.appendChild(currentlyShown.firstChild);
     } else {
       nextIndex = getIndex(+e.target.getAttribute('data-toindex'), -1);
-      var nextShowcase = showcases.querySelector('[data-photoindex="' + nextIndex + '"]');
+      var nextShowcase  = showcases.querySelector('[data-photoindex="' + nextIndex + '"]');
       currentlyShown.insertBefore(nextShowcase, currentlyShown.firstChild);
       showcases.appendChild(currentlyShown.lastChild);
     }
+    shownShowcase = currentlyShown.children[1];
     loadAhead(nextIndex);
   }
 }, false);
@@ -153,23 +157,23 @@ var whichKey = function(e) {
     38: 'ArrowUp',
     39: 'ArrowRight',
     40: 'ArrowDown'
-  }[e.which];
+  }[e.which] || '';
 }
 
 function navigatePhotos(direction) {
   if(showcases.style.display === 'block') {
-    var toClick = shownSowcase.getElementsByClassName(direction.toLowerCase() + '-click')[0];
-    toClick.dispatchEvent(new MouseEvent('click'));
+    var click = new MouseEvent('click', { bubbles: true });
+    shownShowcase.querySelector('.' + direction.toLowerCase() + '-click').dispatchEvent(click);
   }
 }
 
 function scrollThumbnails(direction) {
-  if(showcases.style.display === 'none') {
+  if(showcases.style.display !== 'block') {
     document.getElementById('photo-gallery').scrollTop += (direction === 'Up' ? -50 : 50);
   }
 }
 
-window.addEventListener('keypress', function(e) {
+window.addEventListener('keydown', function(e) {
   var match;
   if(match = whichKey(e).match(/Left|Right/)) {
     navigatePhotos(match[0]);
