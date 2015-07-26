@@ -206,5 +206,17 @@ showcases.addEventListener('touchmove', function(e) {
     // disable horizontal scrolling:
     e.preventDefault();
     currentlyShown.style.webkitTransform = 'translateX(' + deltaX + 'px)';
+    currentlyShown.style.mozTransform    = 'translateX(' + deltaX + 'px)';
+    currentlyShown.style.msTransform     = 'translateX(' + deltaX + 'px)';
+    currentlyShown.style.oTransform      = 'translateX(' + deltaX + 'px)';
+    currentlyShown.style.transform       = 'translateX(' + deltaX + 'px)';
   }
+}, false);
+
+showcases.addEventListener('touchend', function(e) {
+  currentlyShown.style.webkitTransform = 'translateX(0px)';
+  currentlyShown.style.mozTransform    = 'translateX(0px)';
+  currentlyShown.style.msTransform     = 'translateX(0px)';
+  currentlyShown.style.oTransform      = 'translateX(0px)';
+  currentlyShown.style.transform       = 'translateX(0px)';
 }, false);
