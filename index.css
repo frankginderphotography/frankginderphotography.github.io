@@ -99,6 +99,7 @@ a:hover {
 }
 
 #currently-shown .showcase {
+  position: relative;
   transition: transform 400ms ease 400ms;
 }
 
