@@ -207,6 +207,6 @@ showcases.addEventListener('touchmove', function(e) {
     e.preventDefault();
     var prevLeft = parseInt(currentlyShown.style.left) || 0;
     currentlyShown.style.left = prevLeft + deltaX + 'px';
-    alert(prevLeft, currentlyShown.style.left);
+    currentlyShown.style.right = prevLeft - deltaX + 'px';
   }
 }, false);
