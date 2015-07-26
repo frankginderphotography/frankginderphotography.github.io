@@ -201,11 +201,10 @@ showcases.addEventListener('touchmove', function(e) {
       deltaY = currTouch.screenY - firstTouch.screenY,
       isVertical = Math.abs(deltaY) > Math.abs(deltaX);
   if(isVertical) {
-    shownShowcase.style.top = deltaY + 'px';
+    // shownShowcase.style.top = deltaY + 'px';
   } else {
     // disable horizontal scrolling:
-    e.preventDefault();
-    shownShowcase.style.transition = 'none';
-    shownShowcase.style.left = deltaX + 'px';
+    // e.preventDefault();
+    shownShowcase.style.transform = 'translateX(' + deltaX + ')';
   }
 }, false);
