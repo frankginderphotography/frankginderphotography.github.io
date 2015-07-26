@@ -205,6 +205,7 @@ showcases.addEventListener('touchmove', function(e) {
   } else {
     // disable horizontal scrolling:
     e.preventDefault();
-    currentlyShown.style.transform = 'translateX(' + deltaX + 'px)';
+    var prevLeft = parseInt(currentlyShown.style.left);
+    currentlyShown.style.left = prevLeft + deltaX + 'px';
   }
 }, false);
