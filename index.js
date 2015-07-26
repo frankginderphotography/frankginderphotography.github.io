@@ -1,5 +1,6 @@
 // var max = number of photos on server
-// break up into groups of 24, returning strings like: '1-24', '25-48', etc:
+// break up into groups of 24, returning strings like: '1-24', '25-48', etc.
+// if small screen, groups of 12 instead to minimize loading time
 
 var groups = [],
     max = 151,
@@ -12,20 +13,25 @@ for(var i = 1, j = 1; i <= max; i++) {
   }
 }
 
+// populate links for the above groups:
+
 njn.controller('sidebar', { groups: groups });
 
-var photos = [];
 var indexRange = (location.hash.match(/#\/([0-9]+-[0-9]+)/) || ['','1-24'])[1];
-
 var firstIndex = +indexRange.split('-')[0];
 var lastIndex = +indexRange.split('-')[1];
 
+var photos = [];
+
 for(var i = firstIndex; i <= lastIndex; i++) {
   var id = 'photo_' + i;
-  var src = 'photos/' + id + '.jpg';
-  var href = '#/' + indexRange + '/' + id;
-  var thumbnail = 'thumbnails/' + id + '.png';
-  photos.push({ src: src, id: id, href: href, thumbnail: thumbnail, photoInd: i - firstIndex });
+  photos.push({
+    id:        id,
+    src:       'photos/' + id + '.jpg',
+    href:      '#/' + indexRange + '/' + id,
+    thumbnail: 'thumbnails/' + id + '.png',
+    photoInd:  i - firstIndex
+  });
 }
 
 njn.controller('photo-gallery', { photos: photos });
@@ -35,12 +41,10 @@ var photoGallery = document.getElementById('photo-gallery');
 var loading = document.body.removeChild(document.getElementById('loading'));
 var showcases = document.getElementById('showcases');
 var currentlyShown = document.getElementById('currently-shown');
-var children = showcases.children;
 
-function loadFullSizeImg(i, photoind) {
-  var showcase = showcases.querySelector('[data-photoindex="' + photoind + '"]');
+function loadFullSizeImg(i, photoidx) {
+  var showcase = showcases.querySelector('[data-photoindex="' + photoidx + '"]');
   var fullsize = showcase.getElementsByTagName('img')[0];
-  var photo = photos[photoind];
 
   if(!fullsize.src) {
     if(!i) {
@@ -50,51 +54,98 @@ function loadFullSizeImg(i, photoind) {
         showcases.style.display = 'block';
       }
     }
-    fullsize.src = photo.src;
+    fullsize.src = photos[photoidx].src;
   } else if(!i) {
     showcases.style.display = 'block';
   }
 }
 
-var photoGridSquare;
-
-window.onhashchange = function() {
-  var newRange = location.hash.match(/#\/([0-9]+-[0-9]+)/);
-  if(newRange && newRange[1] !== indexRange) location.reload();
+function getIndex(startIndex, offset) {
+  var newIndex = (startIndex + offset) % photos.length;
+  return newIndex < 0 ? photos.length + newIndex : newIndex;
 }
 
-photoGallery.addEventListener('click', function(e) {
-  var photoId = location.hash.match(/photo_[0-9]+$/);
-  if(photoId) {
-    photoGridSquare = document.querySelector('.photo-grid-square:hover');
-    if(photoGridSquare) photoGridSquare.className = 'photo-grid-square-behind';
-    var thumbnail = document.getElementById(photoId);
-    var startIndex = +thumbnail.getAttribute('data-photoindex');
-    for(var i = -1; i < 2; i++) {
-      var showcase = showcases.querySelector('[data-photoindex="' + (startIndex + i) + '"]');
-      if(currentlyShown.children[i + 1]) {
-        currentlyShown.replaceChild(showcase, currentlyShown.children[i + 1]);
-      } else {
-        currentlyShown.appendChild(showcase);
+function loadAhead(startIndex) {
+  for(var i = 0, diffs = [0, 1, -1, 2, -2]; i < 5; i++) {
+    loadFullSizeImg(diffs[i], getIndex(startIndex, diffs[i]));
+  }
+}
+
+function loadShowcase(photoId) {
+  var thumbnail = document.getElementById(photoId);
+  var startIndex = +thumbnail.getAttribute('data-photoindex');
+  while(currentlyShown.firstChild) {
+    showcases.appendChild(currentlyShown.firstChild);
+  }
+  for(var i = -1; i < 2; i++) {
+    var currIndex = getIndex(startIndex, i);
+    var showcase = showcases.querySelector('[data-photoindex="' + currIndex + '"]');
+    currentlyShown.appendChild(showcase);
+  }
+  loadAhead(startIndex);
+}
+
+var photoId = location.hash.match(/photo_[0-9]+/);
+if(photoId) loadShowcase(photoId[0]);
+
+var photoGridSquare;
+
+window.addEventListener('hashchange', function() {
+  // on clicking one of the group links, the index range part of the
+  // hash is changes, so load the new group:
+  var newRange = location.hash.match(/#\/([0-9]+-[0-9]+)/);
+  if(newRange && newRange[1] !== indexRange) {
+    location.reload();
+  } else {
+    // if a fullsized image was clicked, the photo_id part of the hash
+    // was removed, so hide #showcases:
+    var photoId = location.hash.match(/photo_[0-9]+/);
+    if(!photoId) {
+      showcases.style.display = 'none';
+      // if a hovered thumbnail's class had been changed to -behind when
+      // the fullsize image was first loaded, now change it back:
+      if(photoGridSquare) {
+        photoGridSquare.className = 'photo-grid-square';
       }
-    }
-    for(var i = 0, diffs = [0, 1, -1, 2, -2]; i < 5; i++) {
-      var currIndex = (startIndex + diffs[i]) % photos.length;
-      currIndex = currIndex < 0 ? photos.length + currIndex : currIndex;
-      loadFullSizeImg(diffs[i], currIndex);
     }
   }
 }, false);
 
-currentlyShown.addEventListener('click', function() {
-  var photoId = location.hash.match(/photo_[0-9]+$/);
+photoGallery.addEventListener('click', function(e) {
+  // if you've clicked on one of the thumbnail images, its parent is
+  // an <a> element:
+  var anchor = e.target.parentElement;
+  // in case you didn't click on the child of an <a>, provide empty
+  // string to prevent exception:
+  var photoId = (anchor.href || '').match(/photo_[0-9]+$/);
   if(photoId) {
-
-  } else {
-    if(photoGridSquare) photoGridSquare.className = 'photo-grid-square';
-    showcases.style.display = 'none';
+    // the thumbnail you just clicked is still being hovered and is
+    // covering the fullsize image.  Store it in photoGridSquare so
+    // we can remove the -behind class later:
+    photoGridSquare = document.querySelector('.photo-grid-square:hover');
+    // Change its class so it is no longer hovered:
+    if(photoGridSquare) photoGridSquare.className = 'photo-grid-square-behind';
+    loadShowcase(photoId[0]);
   }
-}
+}, false);
+
+currentlyShown.addEventListener('click', function(e) {
+  if(e.target.className.match(/(right|left)-click/)) {
+    var nextIndex;
+    if(e.target.className.match(/right/)) {
+      nextIndex = getIndex(+e.target.getAttribute('data-toindex'), 1);
+      var nextShowcase = showcases.querySelector('[data-photoindex="' + nextIndex + '"]');
+      currentlyShown.appendChild(nextShowcase);
+      showcases.appendChild(currentlyShown.firstChild);
+    } else {
+      nextIndex = getIndex(+e.target.getAttribute('data-toindex'), -1);
+      var nextShowcase = showcases.querySelector('[data-photoindex="' + nextIndex + '"]');
+      currentlyShown.insertBefore(nextShowcase, currentlyShown.firstChild);
+      showcases.appendChild(currentlyShown.lastChild);
+    }
+    loadAhead(nextIndex);
+  }
+}, false);
 
 var whichKey = function(e) {
   return e.key || {
@@ -107,9 +158,8 @@ var whichKey = function(e) {
 
 function navigatePhotos(direction) {
   if(showcases.style.display === 'block') {
-    var leftClick  = shownShowcase.getElementsByClassName('left-click')[0];
-    var rightClick = shownShowcase.getElementsByClassName('right-click')[0];
-    (direction === 'Left' ? leftClick : rightClick).dispatchEvent(new MouseEvent('click'));
+    var toClick = shownSowcase.getElementsByClassName(direction.toLowerCase() + '-click')[0];
+    toClick.dispatchEvent(new MouseEvent('click'));
   }
 }
 

@@ -63,7 +63,7 @@ function processHTML (elementOrHTML, resolveIn, listName) {
   return processText(html, resolveIn, interpolator);;
 }
 
-var interpolatorRE = ['\\{\\{', '[!=]?\\w+[\\?\\+\\-]?\\}\\}(?!\\})'];
+var interpolatorRE = ['\\{\\{', '[!=]?\\w+(?:\\?|(?:\\+|\\-)[0-9]*)?\\}\\}(?!\\})'];
 
 var escapeHTMLRE = /\[\[([^\]]|\n)+\]\]/g;
 
@@ -71,11 +71,14 @@ function processText(text, resolveIn, interpolator) {
   return text.replace(interpolator, function(match) {
     var innerMatch = match.match(/\{\{(?:\w+:)?((?:[^\}]|\}(?!\}))+)\}\}/)[1];
     var negate = /^!/.test(innerMatch);
-    var incr = /\+$/.test(innerMatch);
-    var decr = /\-$/.test(innerMatch);
+    var incr = innerMatch.match(/\+([0-9]*)$/);
+    var decr = innerMatch.match(/\-([0-9]*)$/);
     var propertyName = innerMatch.match(/\w+\??/)[0];
     var replacement = resolveValue(propertyName, resolveIn);
-    replacement = incr ? replacement + 1 : decr ? replacement - 1 : replacement;
+    replacement =
+      incr ? replacement + (+incr[1] || 1) :
+      decr ? replacement - (+decr[1] || 1) :
+      replacement;
     if(njn.isDefined(replacement)) {
       if(negate) { replacement = !replacement; }
       if(njn.isHTMLElement(replacement)) {

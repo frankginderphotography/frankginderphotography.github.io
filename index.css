@@ -99,20 +99,36 @@ a:hover {
 }
 
 #currently-shown .showcase {
-  transition: left 400ms ease 400ms;
+  transition: transform 400ms ease 400ms;
 }
 
-#currently-shown .showcase:first-child {
-  left: -100%;
+#currently-shown .showcase:nth-child(1) {
+  -webkit-transform: translateX(-100%);
+     -moz-transform: translateX(-100%);
+      -ms-transform: translateX(-100%);
+       -o-transform: translateX(-100%);
+          transform: translateX(-100%);
+  /* left: -100%; */
 }
 
 #currently-shown .showcase:nth-child(2) {
-  left: 0;
+  -webkit-transform: translateX(0);
+     -moz-transform: translateX(0);
+      -ms-transform: translateX(0);
+       -o-transform: translateX(0);
+          transform: translateX(0);
+  /* left: 0; */
 }
 
 #currently-shown .showcase:nth-child(3) {
-  left: 100%;
+  -webkit-transform: translateX(100%);
+     -moz-transform: translateX(100%);
+      -ms-transform: translateX(100%);
+       -o-transform: translateX(100%);
+          transform: translateX(100%);
+  /* left: 100%; */
 }
+
 #currently-shown .showcase:nth-child(4) {
   left: 200%;
 }
@@ -187,5 +203,3 @@ a:hover {
   height: 300px;
   width: 300px;
 }
-
-/* 420 820 */
