@@ -32,7 +32,7 @@ njn.Controller.prototype.refreshView = function() {
   (document.getElementById(this.name) || this.template).outerHTML = processed;
   repeatElements(document.getElementById(this.name), this.viewInterface);
   var liveElement = document.getElementById(this.name);
-  liveElement.outerHTML = stripBracketsAndTripleBraces(liveElement.outerHTML).replace(/data-njn/g, '');
+  liveElement.outerHTML = stripBracketsAndTripleBraces(liveElement.outerHTML).replace(/data-njnsrc/g, 'src');
   return document.getElementById(this.name);
 }
 

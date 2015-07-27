@@ -108,8 +108,12 @@ function loadShowcase(photoId) {
     showcases.appendChild(currentlyShown.firstChild);
   }
   for(var i = -1; i < 2; i++) {
-    var currIndex = getIndex(startIndex, i);
+    var currIndex = startIndex + i;
     var showcase = showcases.querySelector('[data-photoindex="' + currIndex + '"]');
+    if(!showcase) {
+      showcase = document.createElement('div');
+      showcase.className = 'showcase';
+    }
     if(!i) shownShowcase = showcase;
     currentlyShown.appendChild(showcase);
   }
@@ -166,20 +170,37 @@ currentlyShown.addEventListener('click', function(e) {
         currIndex = +shownShowcase.getAttribute('data-photoindex');
     if(e.target.className.match(/right/)) {
       nextIndex = +e.target.getAttribute('data-toindex');
-      if(nextIndex < lastIndex) {
+      if(nextIndex + firstIndex <= lastIndex) {
+        shownShowcase = showcases.querySelector('[data-photoindex="' + nextIndex + '"]');
         var nextShowcase = showcases.querySelector('[data-photoindex="' + (nextIndex + 1) + '"]');
-        if(nextShowcase) {
-          currentlyShown.appendChild(nextShowcase);
+        if(!nextShowcase) {
+          nextShowcase = document.createElement('div');
+          nextShowcase.className = 'showcase';
         }
-        showcases.appendChild(currentlyShown.firstChild);
+        currentlyShown.appendChild(nextShowcase);
+        if(currentlyShown.firstChild.querySelector('img')) {
+          showcases.appendChild(currentlyShown.firstChild);
+        } else {
+          currentlyShown.removeChild(currentlyShown.firstChild);
+        }
       }
     } else {
-      nextIndex = getIndex(+e.target.getAttribute('data-toindex'), -1);
-      var nextShowcase  = showcases.querySelector('[data-photoindex="' + nextIndex + '"]');
-      currentlyShown.insertBefore(nextShowcase, currentlyShown.firstChild);
-      showcases.appendChild(currentlyShown.lastChild);
+      nextIndex = +e.target.getAttribute('data-toindex');
+      if(nextIndex + firstIndex >= firstIndex - 1) {
+        shownShowcase = showcases.querySelector('[data-photoindex="' + nextIndex + '"]');
+        var nextShowcase  = showcases.querySelector('[data-photoindex="' + (nextIndex - 1) + '"]');
+        if(!nextShowcase) {
+          nextShowcase = document.createElement('div');
+          nextShowcase.className = 'showcase';
+        }
+        currentlyShown.insertBefore(nextShowcase, currentlyShown.firstChild);
+        if(currentlyShown.lastChild.querySelector('img')) {
+          showcases.appendChild(currentlyShown.lastChild);
+        } else {
+          currentlyShown.removeChild(currentlyShown.lastChild);
+        }
+      }
     }
-    shownShowcase = currentlyShown.children[1];
     loadAhead(nextIndex);
   }
 }, false);
