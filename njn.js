@@ -144,6 +144,12 @@ njn.Array = {
         return array[i];
       }
     }
+  },
+  forEach: function(array, fn, thisArg) {
+    if(array.forEach) return array.forEach(fn, thisArg);
+    for(var i = 0; i < array.length; i++) {
+      fn.call(thisArg, array[i], i, array);
+    }
   }
 }
 

@@ -91,52 +91,38 @@ a:hover {
 
 #showcases > .showcase {
   left: -200%;
-}
-
-#currently-shown {
   position: absolute;
-  top: 0; bottom: 0; right: 0; left: 0;
+  height: 100%;
+  width: 100%;
 }
 
-#currently-shown .showcase {
+
+#showcases > .in-transition {
   transition: transform 400ms ease 400ms;
 }
 
-#currently-shown .showcase:nth-child(1) {
-  -webkit-transform: translateX(-100%);
-     -moz-transform: translateX(-100%);
-      -ms-transform: translateX(-100%);
-       -o-transform: translateX(-100%);
-          transform: translateX(-100%);
-  /* left: -100%; */
-}
-
-#currently-shown .showcase:nth-child(2) {
-  -webkit-transform: translateX(0);
-     -moz-transform: translateX(0);
-      -ms-transform: translateX(0);
-       -o-transform: translateX(0);
-          transform: translateX(0);
-  /* left: 0; */
-}
-
-#currently-shown .showcase:nth-child(3) {
+#showcases > .to-left {
   -webkit-transform: translateX(100%);
      -moz-transform: translateX(100%);
       -ms-transform: translateX(100%);
        -o-transform: translateX(100%);
           transform: translateX(100%);
-  /* left: 100%; */
 }
 
-#currently-shown .showcase:nth-child(4) {
-  left: 200%;
+#showcases > .currently-shown {
+  -webkit-transform: translateX(200%);
+     -moz-transform: translateX(200%);
+      -ms-transform: translateX(200%);
+       -o-transform: translateX(200%);
+          transform: translateX(200%);
 }
 
-.showcase {
-  position: absolute;
-  height: 100%;
-  width: 100%;
+#showcases > .to-right {
+  -webkit-transform: translateX(300%);
+     -moz-transform: translateX(300%);
+      -ms-transform: translateX(300%);
+       -o-transform: translateX(300%);
+          transform: translateX(300%);
 }
 
 .photo-viewer {

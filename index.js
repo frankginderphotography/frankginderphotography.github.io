@@ -1,3 +1,6 @@
+// strict mode broke mobile, need to find out why:
+// "use strict";
+
 // var max = number of photos on server
 // break up into groups of 24, returning strings like: '1-24', '25-48', etc.
 // if small screen, groups of 12 instead to minimize loading time:
@@ -99,7 +102,6 @@ njn.controller('showcases', { photos: photos, indexRange: indexRange });
 var photoGallery   = document.getElementById('photo-gallery');
 var loading        = document.body.removeChild(document.getElementById('loading'));
 var showcases      = document.getElementById('showcases');
-var currentlyShown = document.getElementById('currently-shown');
 
 function loadFullSizeImg(i, photoidx) {
   var showcase = showcases.querySelector('[data-photoindex="' + photoidx + '"]');
@@ -130,23 +132,15 @@ function loadAhead(startIndex) {
   }
 }
 
-var shownShowcase;
-
 function loadShowcase(photoId) {
   var thumbnail = document.getElementById(photoId);
   var startIndex = +thumbnail.getAttribute('data-photoindex');
-  while(currentlyShown.firstChild) {
-    showcases.appendChild(currentlyShown.firstChild);
-  }
   for(var i = -1; i < 2; i++) {
     var currIndex = startIndex + i;
     var showcase = showcases.querySelector('[data-photoindex="' + currIndex + '"]');
-    if(!showcase) {
-      showcase = document.createElement('div');
-      showcase.className = 'showcase';
-    }
-    if(!i) shownShowcase = showcase;
-    currentlyShown.appendChild(showcase);
+    if(i == -1 && showcase) showcase.className = 'showcase to-left';
+    if(i == 0) showcase.className = 'showcase currently-shown';
+    if(i == 1 && showcase) showcase.className = 'showcase to-right';
   }
   loadAhead(startIndex);
 }
@@ -168,6 +162,10 @@ window.addEventListener('hashchange', function() {
     var photoId = location.hash.match(/photo_[0-9]+/);
     if(!photoId) {
       showcases.style.display = 'none';
+      njn.Array.forEach(['to-left', 'currently-shown', 'to-right'], function(className) {
+        var previouslyAssigned = document.getElementsByClassName(className);
+        (previouslyAssigned[0] || previouslyAssigned).className = 'showcase';
+      });
       // if a hovered thumbnail's class had been changed to -behind when
       // the fullsize image was first loaded, now change it back:
       if(photoGridSquare) {
@@ -195,37 +193,25 @@ photoGallery.addEventListener('click', function(e) {
   }
 }, false);
 
-var dummyShowcase = document.createElement('div');
-dummyShowcase.className = 'showcase';
-
-currentlyShown.addEventListener('click', function(e) {
+showcases.addEventListener('click', function(e) {
   if(e.target.className.match(/(right|left)-click/)) {
-    var nextIndex,
-        currIndex = +shownShowcase.getAttribute('data-photoindex');
+    var nextIndex = +e.target.getAttribute('data-toindex');
     if(e.target.className.match(/right/)) {
-      nextIndex = +e.target.getAttribute('data-toindex');
-      if(nextIndex + rangeStart <= rangeEnd) {
-        shownShowcase = showcases.querySelector('[data-photoindex="' + nextIndex + '"]');
-        var nextShowcase = showcases.querySelector('[data-photoindex="' + (nextIndex + 1) + '"]');
-        if(nextShowcase) currentlyShown.appendChild(nextShowcase);
-        if(currentlyShown.firstChild.querySelector('img')) {
-          showcases.appendChild(currentlyShown.firstChild);
-        } else {
-          currentlyShown.removeChild(currentlyShown.firstChild);
-        }
-      }
+      var toLeft = document.getElementsByClassName('to-left');
+      (toLeft[0] || toLeft).className = 'showcase';
+      document.getElementsByClassName('currently-shown')[0].className = 'showcase in-transition to-left';
+      var toRight = document.getElementsByClassName('to-right');
+      (toRight[0] || toRight).className = 'showcase in-transition currently-shown';
+      var nextToRight = showcases.querySelector('[data-photoindex="' + (nextIndex + 1) + '"]');
+      if(nextToRight) nextToRight.className = 'showcase to-right';
     } else {
-      nextIndex = +e.target.getAttribute('data-toindex');
-      if(nextIndex + rangeStart >= rangeStart - 1) {
-        shownShowcase = showcases.querySelector('[data-photoindex="' + nextIndex + '"]');
-        var nextShowcase =
-            showcases.querySelector('[data-photoindex="' + (nextIndex - 1) + '"]') ||
-            dummyShowcase;
-        currentlyShown.insertBefore(nextShowcase, currentlyShown.firstChild);
-        if(currentlyShown.children.length > 3) {
-          showcases.appendChild(currentlyShown.lastChild);
-        }
-      }
+      var toRight = document.getElementsByClassName('to-right');
+      (toRight[0] || toRight).className = 'showcase';
+      document.getElementsByClassName('currently-shown')[0].className = 'showcase in-transition to-right';
+      var toLeft = document.getElementsByClassName('to-left');
+      (toLeft[0] || toLeft).className = 'showcase in-transition currently-shown';
+      var nextToLeft = showcases.querySelector('[data-photoindex="' + (nextIndex - 1) + '"]');
+      if(nextToLeft) nextToLeft.className = 'showcase to-left';
     }
     loadAhead(nextIndex);
   }
