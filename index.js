@@ -135,7 +135,6 @@ function loadAhead(startIndex) {
 var shownShowcase;
 
 function loadShowcase(photoId) {
-  alert(photoId);
   var thumbnail = document.getElementById(photoId);
   var startIndex = +thumbnail.getAttribute('data-photoindex');
   while(currentlyShown.firstChild) {
@@ -188,6 +187,7 @@ photoGallery.addEventListener('click', function(e) {
   // string to prevent exception:
   var photoId = (anchor.href || '').match(/photo_[0-9]+$/);
   if(photoId) {
+  alert(photoId);
     // the thumbnail we just clicked is still being hovered and is
     // covering the fullsize image.  Store it in photoGridSquare so
     // we can remove the -behind class later:
