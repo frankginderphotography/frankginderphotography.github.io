@@ -1,56 +1,89 @@
+"use strict";
+
 // var max = number of photos on server
 // break up into groups of 24, returning strings like: '1-24', '25-48', etc.
-// if small screen, groups of 12 instead to minimize loading time
+// if small screen, groups of 12 instead to minimize loading time:
 
-var groups = [],
+var indexRanges = [],
     max = 151,
     groupsOf = window.innerWidth < 551 ? 11 : 23;
 
-for(var i = 1, j = 1; i <= max; i++) {
-  if(i - j === groupsOf || i === max) {
-    groups.push(j + '-' + i);
-    j = i + 1;
+(function() {
+  // will reuse rangeEnd and rangeStart below, so segregate them in a function scope here:
+  for(var rangeEnd = 1, rangeStart = 1; rangeEnd <= max; rangeEnd++) {
+    if(rangeEnd - rangeStart === groupsOf || rangeEnd === max) {
+      indexRanges.push(rangeStart + '-' + rangeEnd);
+      rangeStart = rangeEnd + 1;
+    }
   }
-}
+})();
 
-// populate links for the above groups:
+// populate links for the above indexRanges:
 
-njn.controller('sidebar', { groups: groups });
+njn.controller('sidebar', { indexRanges: indexRanges });
 
-var indexRange = (location.hash.match(/#\/([0-9]+-[0-9]+)/) || ['','1-24'])[1];
-var firstIndex = +indexRange.split('-')[0];
-var lastIndex = +indexRange.split('-')[1];
+// Detect whether the location hash contains an index range, in the form of
+// #/[startNum]-[endNum]. It may not be present when the site is first
+// loaded, so we'll provide a fallback array in case there is no match.
+// This fallback defaults to the first index range in the ranges array
+// defined above:
+var indexRange = (location.hash.match(/#\/([0-9]+-[0-9]+)/) || ['',indexRanges[0]])[1];
+var rangeStart = +indexRange.split('-')[0];
+var rangeEnd = +indexRange.split('-')[1];
 
 var photos = [];
 
-for(var i = firstIndex; i <= lastIndex; i++) {
-  var id = 'photo_' + i;
+for(var i = rangeStart; i <= rangeEnd; i++) {
+  // construct the href for navigating rightward through the fullsize photos:
   var nextHref = '#/' + (
-		i < lastIndex ?
-    	indexRange :
-        lastIndex === max ?
-        groups[0] :
-        max - lastIndex > groupsOf ?
-        lastIndex + 1 + '-' + (lastIndex + 1 + groupsOf) :
-        lastIndex + 1 + '-' + max
+        // if we are not on the last image of the current range yet:
+		      i < rangeEnd ?
+        // then keep the current range in the url:
+    	      indexRange :
+        // else if we are on the last of all images, not just the last of the current range:
+              rangeEnd === max ?
+        // then cycle back to the first range of images:
+              indexRanges[0] :
+        // else if we are more than "groupsOf" images from the last of all images:
+              max - rangeEnd > groupsOf ?
+        // then create a new index range, starting from the index after the current one, to "groupsOf" more than that:
+              rangeEnd + 1 + '-' + (rangeEnd + 1 + groupsOf) :
+        // else create a new range, starting from the index after the current one to the last of all images:
+              rangeEnd + 1 + '-' + max
+        // now construct the photo id:
       ) + '/photo_' + (
-        i < max ?
-        i + 1 :
-        1
+        // if we are not at the last of all images yet:
+              i < max ?
+        // use the index after the current one:
+              i + 1 :
+        // else go back to the first of all images:
+              1
       );
   var prevHref = '#/' + (
-        i > firstIndex ?
-        indexRange :
-        firstIndex === 1 ?
-        groups[groups.length - 1] :
-        firstIndex > groupsOf + 1 ?
-        firstIndex - (groupsOf + 1) + '-' + (firstIndex - 1) :
-        '1-' + (firstIndex - 1)
+        // if we are not on the first image of the current range yet:
+            i > rangeStart ?
+        // then keep the current range in the url:
+            indexRange :
+        // else if we are on the first of all images:
+            rangeStart === 1 ?
+        // then cycle back to the last of the ranges:
+            indexRanges[indexRanges.length - 1] :
+        // else if we are at least one more than "groupsOf" away from the beginning:
+            rangeStart > groupsOf + 1 ?
+        // then create a new range from "groupsOf" plus one less than the current number to one less than the current number:
+            rangeStart - (groupsOf + 1) + '-' + (rangeStart - 1) :
+        // else create a new range from 1 to one less than the current number:
+            '1-' + (rangeStart - 1)
+        // now construct the photo id:
       ) + '/photo_' + (
-        i > 1 ?
-        i - 1 :
-        max
+        // if we are not on the first of all images yet:
+            i > 1 ?
+        // use the number before the current one:
+            i - 1 :
+        // else cycle back to the last of all images:
+            max
       );
+  var id = 'photo_' + i;
   photos.push({
     id:         id,
     prevHref:	prevHref,
@@ -58,7 +91,7 @@ for(var i = firstIndex; i <= lastIndex; i++) {
     src:        'photos/' + id + '.jpg',
     href:       '#/' + indexRange + '/' + id,
     thumbnail:  'thumbnails/' + id + '.png',
-    photoInd:   i - firstIndex
+    photoInd:   i - rangeStart
   });
 }
 
@@ -164,20 +197,19 @@ photoGallery.addEventListener('click', function(e) {
   }
 }, false);
 
+var dummyShowcase = document.createElement('div');
+dummyShowcase.className = 'showcase';
+
 currentlyShown.addEventListener('click', function(e) {
   if(e.target.className.match(/(right|left)-click/)) {
     var nextIndex,
         currIndex = +shownShowcase.getAttribute('data-photoindex');
     if(e.target.className.match(/right/)) {
       nextIndex = +e.target.getAttribute('data-toindex');
-      if(nextIndex + firstIndex <= lastIndex) {
+      if(nextIndex + rangeStart <= rangeEnd) {
         shownShowcase = showcases.querySelector('[data-photoindex="' + nextIndex + '"]');
         var nextShowcase = showcases.querySelector('[data-photoindex="' + (nextIndex + 1) + '"]');
-        if(!nextShowcase) {
-          nextShowcase = document.createElement('div');
-          nextShowcase.className = 'showcase';
-        }
-        currentlyShown.appendChild(nextShowcase);
+        if(nextShowcase) currentlyShown.appendChild(nextShowcase);
         if(currentlyShown.firstChild.querySelector('img')) {
           showcases.appendChild(currentlyShown.firstChild);
         } else {
@@ -186,18 +218,14 @@ currentlyShown.addEventListener('click', function(e) {
       }
     } else {
       nextIndex = +e.target.getAttribute('data-toindex');
-      if(nextIndex + firstIndex >= firstIndex - 1) {
+      if(nextIndex + rangeStart >= rangeStart - 1) {
         shownShowcase = showcases.querySelector('[data-photoindex="' + nextIndex + '"]');
-        var nextShowcase  = showcases.querySelector('[data-photoindex="' + (nextIndex - 1) + '"]');
-        if(!nextShowcase) {
-          nextShowcase = document.createElement('div');
-          nextShowcase.className = 'showcase';
-        }
+        var nextShowcase =
+            showcases.querySelector('[data-photoindex="' + (nextIndex - 1) + '"]') ||
+            dummyShowcase;
         currentlyShown.insertBefore(nextShowcase, currentlyShown.firstChild);
-        if(currentlyShown.lastChild.querySelector('img')) {
+        if(currentlyShown.children.length > 3) {
           showcases.appendChild(currentlyShown.lastChild);
-        } else {
-          currentlyShown.removeChild(currentlyShown.lastChild);
         }
       }
     }
