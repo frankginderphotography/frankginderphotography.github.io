@@ -148,6 +148,7 @@ function loadShowcase(photoId) {
       showcase.className = 'showcase';
     }
     if(!i) shownShowcase = showcase;
+    console.log(i);
     currentlyShown.appendChild(showcase);
   }
   loadAhead(startIndex);
