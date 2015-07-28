@@ -1,5 +1,3 @@
-"use strict";
-
 // var max = number of photos on server
 // break up into groups of 24, returning strings like: '1-24', '25-48', etc.
 // if small screen, groups of 12 instead to minimize loading time:
@@ -186,7 +184,6 @@ photoGallery.addEventListener('click', function(e) {
   // in case you didn't click on the child of an <a>, provide empty
   // string to prevent exception:
   var photoId = (anchor.href || '').match(/photo_[0-9]+$/);
-  alert(photoId);
   if(photoId) {
     // the thumbnail we just clicked is still being hovered and is
     // covering the fullsize image.  Store it in photoGridSquare so
