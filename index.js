@@ -135,6 +135,7 @@ function loadAhead(startIndex) {
 var shownShowcase;
 
 function loadShowcase(photoId) {
+  alert(photoId);
   var thumbnail = document.getElementById(photoId);
   var startIndex = +thumbnail.getAttribute('data-photoindex');
   while(currentlyShown.firstChild) {
@@ -148,7 +149,6 @@ function loadShowcase(photoId) {
       showcase.className = 'showcase';
     }
     if(!i) shownShowcase = showcase;
-    alert(i);
     currentlyShown.appendChild(showcase);
   }
   loadAhead(startIndex);
