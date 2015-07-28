@@ -145,14 +145,20 @@ a:hover {
 }
 
 .left-click, .right-click {
-  display: block;
-  height: 100%;
-  width: 50%;
-  float: left;
+  /* taken from blueimp/Gallery: */
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  margin-top: -23px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 60px;
+  line-height: 30px;
+  z-index: 2;
 }
 
-.left-click:hover, .right-click:hover {
-  background-color: black;
+.right-click {
+  left: auto;
+  right: 15px;
 }
 
 .fullsize {
