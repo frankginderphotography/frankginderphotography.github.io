@@ -186,8 +186,8 @@ photoGallery.addEventListener('click', function(e) {
   // in case you didn't click on the child of an <a>, provide empty
   // string to prevent exception:
   var photoId = (anchor.href || '').match(/photo_[0-9]+$/);
-  if(photoId) {
   alert(photoId);
+  if(photoId) {
     // the thumbnail we just clicked is still being hovered and is
     // covering the fullsize image.  Store it in photoGridSquare so
     // we can remove the -behind class later:
