@@ -35,60 +35,9 @@ var rangeEnd = +indexRange.split('-')[1];
 var photos = [];
 
 for(var i = rangeStart; i <= rangeEnd; i++) {
-  // construct the href for navigating rightward through the fullsize photos:
-  var nextHref = '#/' + (
-        // if we are not on the last image of the current range yet:
-		      i < rangeEnd ?
-        // then keep the current range in the url:
-    	      indexRange :
-        // else if we are on the last of all images, not just the last of the current range:
-              rangeEnd === max ?
-        // then cycle back to the first range of images:
-              indexRanges[0] :
-        // else if we are more than "groupsOf" images from the last of all images:
-              max - rangeEnd > groupsOf ?
-        // then create a new index range, starting from the index after the current one, to "groupsOf" more than that:
-              rangeEnd + 1 + '-' + (rangeEnd + 1 + groupsOf) :
-        // else create a new range, starting from the index after the current one to the last of all images:
-              rangeEnd + 1 + '-' + max
-        // now construct the photo id:
-      ) + '/photo_' + (
-        // if we are not at the last of all images yet:
-              i < max ?
-        // use the index after the current one:
-              i + 1 :
-        // else go back to the first of all images:
-              1
-      );
-  var prevHref = '#/' + (
-        // if we are not on the first image of the current range yet:
-            i > rangeStart ?
-        // then keep the current range in the url:
-            indexRange :
-        // else if we are on the first of all images:
-            rangeStart === 1 ?
-        // then cycle back to the last of the ranges:
-            indexRanges[indexRanges.length - 1] :
-        // else if we are at least one more than "groupsOf" away from the beginning:
-            rangeStart > groupsOf + 1 ?
-        // then create a new range from "groupsOf" plus one less than the current number to one less than the current number:
-            rangeStart - (groupsOf + 1) + '-' + (rangeStart - 1) :
-        // else create a new range from 1 to one less than the current number:
-            '1-' + (rangeStart - 1)
-        // now construct the photo id:
-      ) + '/photo_' + (
-        // if we are not on the first of all images yet:
-            i > 1 ?
-        // use the number before the current one:
-            i - 1 :
-        // else cycle back to the last of all images:
-            max
-      );
   var id = 'photo_' + i;
   photos.push({
     id:         id,
-    prevHref:	prevHref,
-    nextHref:	nextHref,
     src:        'photos/' + id + '.jpg',
     href:       '#/' + indexRange + '/' + id,
     thumbnail:  'thumbnails/' + id + '.png',
@@ -100,49 +49,50 @@ njn.controller('photo-gallery', { photos: photos });
 njn.controller('showcases', { photos: photos, indexRange: indexRange });
 
 var photoGallery   = document.getElementById('photo-gallery');
-var loading        = document.body.removeChild(document.getElementById('loading'));
 var showcases      = document.getElementById('showcases');
+var leftClick      = document.getElementById('left-click');
+var rightClick     = document.getElementById('right-click');
 
-function loadFullSizeImg(i, photoidx) {
-  var showcase = showcases.querySelector('[data-photoindex="' + photoidx + '"]');
-  var fullsize = showcase.getElementsByTagName('img')[0];
-
-  if(!fullsize.src) {
-    if(!i) {
-      document.body.appendChild(loading);
-      fullsize.onload = function() {
-        document.body.removeChild(loading);
-        showcases.style.display = 'block';
-      }
-    }
-    fullsize.src = photos[photoidx].src;
-  } else if(!i) {
-    showcases.style.display = 'block';
-  }
-}
-
-function getIndex(startIndex, offset) {
-  var newIndex = (startIndex + offset) % photos.length;
-  return newIndex < 0 ? photos.length + newIndex : newIndex;
-}
-
-function loadAhead(startIndex) {
+function loadAhead(photoId) {
+  var startNum = +photoId.match(/[0-9]+/)[0];
   for(var i = 0, diffs = [0, 1, -1, 2, -2]; i < 5; i++) {
-    loadFullSizeImg(diffs[i], getIndex(startIndex, diffs[i]));
+    var currPhoto = 'photo_' + (startNum + i);
+    var showcase = showcases.querySelector('[data-photo="' + currPhoto + '"]');
+    if(showcase) {
+      showcase.getElementsByTagName('img')[0].src = 'photos/' + currPhoto + '.jpg';
+    }
   }
+}
+
+function getPositionedShowcase(partialClass) {
+  var className = partialClass ? partialClass + '-of-shown' : 'currently-shown';
+  return document.getElementsByClassName(className)[0] || {};
+}
+
+function setHrefs() {
+  var idNum = +getPositionedShowcase().getAttribute('data-photo').match(/[0-9]+/)[0];
+  var leftNum = idNum - 1, rightNum = idNum + 1;
+  leftClick.href = '#/' +
+    (leftNum >= rangeStart ? indexRange : Math.max(leftNum - groupsOf, 1) + '-' + leftNum) +
+    '/photo_' + leftNum;
+  rightClick.href = '#/' +
+    (rightNum <= rangeEnd ? indexRange : rightNum + '-' + Math.min(rightNum + groupsOf, max)) +
+    '/photo_' + rightNum;
 }
 
 function loadShowcase(photoId) {
   var thumbnail = document.getElementById(photoId);
-  var startIndex = +thumbnail.getAttribute('data-photoindex');
+  var photoNum = +photoId.match(/[0-9]+/)[0];
   for(var i = -1; i < 2; i++) {
-    var currIndex = startIndex + i;
-    var showcase = showcases.querySelector('[data-photoindex="' + currIndex + '"]');
-    if(i == -1 && showcase) showcase.className = 'showcase to-left';
+    var currPhoto = 'photo_' + (photoNum + i);
+    var showcase = showcases.querySelector('[data-photo="' + currPhoto + '"]');
+    if(i == -1 && showcase) showcase.className = 'showcase left-of-shown';
     if(i == 0) showcase.className = 'showcase currently-shown';
-    if(i == 1 && showcase) showcase.className = 'showcase to-right';
+    if(i == 1 && showcase) showcase.className = 'showcase right-of-shown';
   }
-  loadAhead(startIndex);
+  setHrefs();
+  loadAhead(photoId);
+  showcases.style.display = 'block';
 }
 
 var photoId = location.hash.match(/photo_[0-9]+/);
@@ -157,12 +107,13 @@ window.addEventListener('hashchange', function() {
   if(newRange && newRange[1] !== indexRange) {
     location.reload();
   } else {
+    setHrefs();
     // if a fullsized image was clicked, the photo_id part of the hash
     // was removed, so hide #showcases:
     var photoId = location.hash.match(/photo_[0-9]+/);
     if(!photoId) {
       showcases.style.display = 'none';
-      njn.Array.forEach(['to-left', 'currently-shown', 'to-right'], function(className) {
+      njn.Array.forEach(['left-of-shown', 'currently-shown', 'right-of-shown'], function(className) {
         var previouslyAssigned = document.getElementsByClassName(className);
         (previouslyAssigned[0] || previouslyAssigned).className = 'showcase';
       });
@@ -194,26 +145,21 @@ photoGallery.addEventListener('click', function(e) {
 }, false);
 
 showcases.addEventListener('click', function(e) {
-  if(e.target.className.match(/(right|left)-click/)) {
-    var nextIndex = +e.target.getAttribute('data-toindex');
-    if(e.target.className.match(/right/)) {
-      var toLeft = document.getElementsByClassName('to-left');
-      (toLeft[0] || toLeft).className = 'showcase';
-      document.getElementsByClassName('currently-shown')[0].className = 'showcase in-transition to-left';
-      var toRight = document.getElementsByClassName('to-right');
-      (toRight[0] || toRight).className = 'showcase in-transition currently-shown';
-      var nextToRight = showcases.querySelector('[data-photoindex="' + (nextIndex + 1) + '"]');
-      if(nextToRight) nextToRight.className = 'showcase to-right';
-    } else {
-      var toRight = document.getElementsByClassName('to-right');
-      (toRight[0] || toRight).className = 'showcase';
-      document.getElementsByClassName('currently-shown')[0].className = 'showcase in-transition to-right';
-      var toLeft = document.getElementsByClassName('to-left');
-      (toLeft[0] || toLeft).className = 'showcase in-transition currently-shown';
-      var nextToLeft = showcases.querySelector('[data-photoindex="' + (nextIndex - 1) + '"]');
-      if(nextToLeft) nextToLeft.className = 'showcase to-left';
-    }
-    loadAhead(nextIndex);
+  var idMatch = e.target.id.match(/left|right/);
+  if(idMatch) {
+    var previouslyShown = getPositionedShowcase();
+    var oppositeDir = idMatch[0] == 'left' ? 'right' : 'left';
+
+    getPositionedShowcase(oppositeDir).className = 'showcase';
+    previouslyShown.className = 'showcase in-transition ' + oppositeDir + '-of-shown';
+    getPositionedShowcase(idMatch[0]).className = 'showcase in-transition currently-shown';
+
+    var upOrDown = idMatch[0] == 'left' ? -2 : 2;
+    var newNextPhotoId = +previouslyShown.getAttribute('data-photo').match(/[0-9]+/)[0] + upOrDown;
+    var newNextPhoto = showcases.querySelector('[data-photo="photo_' + newNextPhotoId + '"]');
+    if(newNextPhoto) newNextPhoto.className = 'showcase ' + idMatch[0] + '-of-shown';
+
+    loadAhead(getPositionedShowcase().getAttribute('data-photo'));
   }
 }, false);
 

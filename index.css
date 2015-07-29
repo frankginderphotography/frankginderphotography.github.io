@@ -90,10 +90,13 @@ a:hover {
 }
 
 #showcases > .showcase {
+  display: block;
   left: -200%;
   position: absolute;
   height: 100%;
   width: 100%;
+  background: rgba(0, 0, 0, 0.75) url(./loading.gif) center no-repeat;
+  background-size: 64px 64px;
 }
 
 
@@ -101,7 +104,7 @@ a:hover {
   transition: transform 400ms ease 400ms;
 }
 
-#showcases > .to-left {
+#showcases > .showcase.left-of-shown {
   -webkit-transform: translateX(100%);
      -moz-transform: translateX(100%);
       -ms-transform: translateX(100%);
@@ -109,7 +112,7 @@ a:hover {
           transform: translateX(100%);
 }
 
-#showcases > .currently-shown {
+#showcases > .showcase.currently-shown {
   -webkit-transform: translateX(200%);
      -moz-transform: translateX(200%);
       -ms-transform: translateX(200%);
@@ -117,7 +120,7 @@ a:hover {
           transform: translateX(200%);
 }
 
-#showcases > .to-right {
+#showcases > .showcase.right-of-shown {
   -webkit-transform: translateX(300%);
      -moz-transform: translateX(300%);
       -ms-transform: translateX(300%);
@@ -125,12 +128,7 @@ a:hover {
           transform: translateX(300%);
 }
 
-.photo-viewer {
-  position: relative;
-  height: 100%;
-}
-
-.left-click, .right-click {
+#left-click, #right-click {
   /* taken from blueimp/Gallery: */
   position: absolute;
   top: 50%;
@@ -142,7 +140,7 @@ a:hover {
   z-index: 2;
 }
 
-.right-click {
+#right-click {
   left: auto;
   right: 15px;
 }
@@ -159,13 +157,6 @@ a:hover {
   bottom: 0;
   margin: auto;
   background: black;
-}
-
-#loading {
-  position: fixed;
-  top: 0; right: 0; bottom: 0; left: 0;
-  background: rgba(0, 0, 0, 0.75) url(./loading.gif) center no-repeat;
-  background-size: 64px 64px;
 }
 
 .photo-grid-square, .photo-grid-square-behind {

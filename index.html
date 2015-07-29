@@ -30,17 +30,12 @@
         </div>
       </div>
     </div>
-    <div id="loading"></div>
     <div id="showcases">
-      <div data-njnrepeat="photos" class="showcase" data-photoindex={{photos:photoInd}}>
-        <div class="photo-viewer">
-          <a class="left-click" href="{{photos:prevHref}}" data-toindex="{{photos:photoInd-}}">&lt;</a>
-          <a class="right-click" href="{{photos:nextHref}}" data-toindex="{{photos:photoInd+}}">&gt;</a>
-          <a class="fullsize-a" href="#/{{indexRange}}">
-            <img class="fullsize">
-          </a>
-        </div>
-      </div>
+      <a id="left-click">&lt;</a>
+      <a data-njnrepeat="photos" class="showcase" data-photo="{{photos:id}}" href="#/{{indexRange}}">
+        <img class="fullsize">
+      </a>
+      <a id="right-click">&gt;</a>
     </div>
     <script src="index.js"></script>
   </body>
