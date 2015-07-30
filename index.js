@@ -71,13 +71,25 @@ function getPositionedShowcase(partialClass) {
 
 function setHrefs() {
   var idNum = +getPositionedShowcase().getAttribute('data-photo').match(/[0-9]+/)[0];
-  var leftNum = idNum - 1, rightNum = idNum + 1;
+  var leftNum = idNum - 1, rightNum = idNum < max ? idNum + 1 : 1;
+
   leftClick.href = '#/' +
-    (leftNum >= rangeStart ? indexRange : Math.max(leftNum - groupsOf, 1) + '-' + leftNum) +
-    '/photo_' + leftNum;
+    (
+      leftNum >= rangeStart ? indexRange :
+      (
+        leftNum ? Math.max(leftNum - groupsOf, 1) + '-' + leftNum : max - groupsOf + '-' + max
+      )
+    )
+  + '/photo_' + (leftNum || max);
+
   rightClick.href = '#/' +
-    (rightNum <= rangeEnd ? indexRange : rightNum + '-' + Math.min(rightNum + groupsOf, max)) +
-    '/photo_' + rightNum;
+    (
+      idNum < rangeEnd ? indexRange :
+      (
+        idNum < max ? rightNum + '-' + Math.min(rightNum + groupsOf, max) : indexRanges[0]
+      )
+    )
+  + '/photo_' + rightNum;
 }
 
 function loadShowcase(photoId) {
@@ -98,8 +110,6 @@ function loadShowcase(photoId) {
 var photoId = location.hash.match(/photo_[0-9]+/);
 if(photoId) loadShowcase(photoId[0]);
 
-var photoGridSquare;
-
 window.addEventListener('hashchange', function() {
   // on clicking one of the group links, the index range part of the
   // hash is changes, so load the new group:
@@ -117,29 +127,13 @@ window.addEventListener('hashchange', function() {
         var previouslyAssigned = document.getElementsByClassName(className);
         (previouslyAssigned[0] || previouslyAssigned).className = 'showcase';
       });
-      // if a hovered thumbnail's class had been changed to -behind when
-      // the fullsize image was first loaded, now change it back:
-      if(photoGridSquare) {
-        photoGridSquare.className = 'photo-grid-square';
-      }
     }
   }
 }, false);
 
 photoGallery.addEventListener('click', function(e) {
-  // if you've clicked on one of the thumbnail images, its parent is
-  // an <a> element:
-  var anchor = e.target.parentElement;
-  // in case you didn't click on the child of an <a>, provide empty
-  // string to prevent exception:
-  var photoId = (anchor.href || '').match(/photo_[0-9]+$/);
+  var photoId = (e.target.id || '').match(/photo_[0-9]+$/);
   if(photoId) {
-    // the thumbnail we just clicked is still being hovered and is
-    // covering the fullsize image.  Store it in photoGridSquare so
-    // we can remove the -behind class later:
-    photoGridSquare = document.querySelector('.photo-grid-square:hover');
-    // Change its class so it is no longer hovered:
-    if(photoGridSquare) photoGridSquare.className = 'photo-grid-square-behind';
     loadShowcase(photoId[0]);
   }
 }, false);
@@ -175,13 +169,13 @@ var whichKey = function(e) {
 function navigatePhotos(direction) {
   if(showcases.style.display === 'block') {
     var click = new MouseEvent('click', { bubbles: true });
-    shownShowcase.querySelector('.' + direction.toLowerCase() + '-click').dispatchEvent(click);
+    document.getElementById(direction.toLowerCase() + '-click').dispatchEvent(click);
   }
 }
 
 function scrollThumbnails(direction) {
   if(showcases.style.display !== 'block') {
-    document.getElementById('photo-gallery').scrollTop += (direction === 'Up' ? -75 : 75);
+    photoGallery.scrollTop += (direction === 'Up' ? -75 : 75);
   }
 }
 
