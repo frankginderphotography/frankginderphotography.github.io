@@ -8,7 +8,6 @@
     <script src="njn.js"></script>
     <script src="njn_controller.js"></script>
     <link rel="stylesheet" href="index.css">
-    <!--<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>-->
   </head>
   <body>
     <div id="outer">
@@ -20,13 +19,16 @@
           </div>
         </div>
         <div id="hide-scrollbar">
-        <div id="photo-gallery">
-          <div data-njnrepeat="photos" class="photo-grid-square">
-            <a class="photo-link" href={{photos:href}}>
-              <img height=250 width=250 id={{photos:id}} data-njnsrc={{photos:thumbnail}} class=thumbnail>
-            </a>
+          <div id="photo-gallery">
+            <div data-njnrepeat="photos" class="photo-grid-square">
+              <a class="photo-link" href={{photos:href}}>
+                <img height=250 width=250 id={{photos:id}} data-njnsrc={{photos:thumbnail}} class=thumbnail>
+              </a>
+            </div>
           </div>
         </div>
+        <div id="scrollbar">
+          <div></div>
         </div>
       </div>
     </div>

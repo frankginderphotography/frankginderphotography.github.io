@@ -1,16 +1,15 @@
+@font-face {
+  font-family: 'Open Sans Condensed';
+  font-style: normal;
+  font-weight: 300;
+  src: url('open_sans_condensed.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
 body {
   background: black;
   color: white;
   font-family: 'Open Sans Condensed', sans-serif;
-}
-
-#outer {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  text-align: center;
 }
 
 h2 {
@@ -28,12 +27,21 @@ a:hover {
   font-weight: bold;
 }
 
+#outer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  text-align: center;
+}
+
 #inner {
   display: inline-block;
   height: 100%;
 }
 
-#sidebar {
+#inner > div {
   float: left;
 }
 
@@ -46,36 +54,53 @@ a:hover {
 
 #photo-gallery, #hide-scrollbar {
   position: relative;
-  width: 1060px; /* four thumbnails, each 250px wide + 5px left- and right-margin, plus extra 20 for scrollbar */
+  /* four thumbnails, each 250px wide + 5px left- and right-margin + extra 25px on left and right */
+  /* plus extra 20 for default scrollbar and extra 10 for custom scrollbar: */
+  width: 1120px;
   height: 100%;
 }
 
 #photo-gallery {
   overflow-y: auto;
   left: 20px; /* move to the right to hide scrollbar */
+  text-align: left; /* because set to center on #outer */
+  overflow-x: hidden;
+  padding-left: 25px;
+  padding-right: 25px;
 }
 
 #hide-scrollbar {
-  float: left;
   left: -20px;
   overflow-x: hidden;
 }
 
-#photo-gallery {
-  text-align: left; /* because set to center on #outer */
+#scrollbar {
+  width: 10px;
+  height: 100%;
+  position: relative;
+  left: -20px;
+}
+
+#scrollbar div {
+  position: relative;
+  background: rgb(150,150,150);
+}
+
+#scrollbar div:hover, #scrollbar div.hovered {
+  background: rgb(175,175,175);
 }
 
 @media (max-width: 1320px) {
-  #hide-scrollbar, #photo-gallery { width: 800px; }
+  #hide-scrollbar, #photo-gallery { width: 860px; }
 }
 
 @media (max-width: 1060px) {
-  #hide-scrollbar, #photo-gallery { width: 540px; }
+  #hide-scrollbar, #photo-gallery { width: 600px; }
 }
 
 
 @media (max-width: 800px) {
-  #hide-scrollbar, #photo-gallery { width: 280px; }
+  #hide-scrollbar, #photo-gallery { width: 340px; }
 }
 
 @media (max-width: 550px) {
@@ -156,10 +181,9 @@ a:hover {
   top: 0;
   bottom: 0;
   margin: auto;
-  background: black;
 }
 
-.photo-grid-square, .photo-grid-square-behind {
+.photo-grid-square {
   position: relative;
   display: inline-block;
   width: 250px;
@@ -178,8 +202,6 @@ a:hover {
 .photo-grid-square:hover .photo-link {
   left: -25px;
   top: -25px;
-  height: 300px;
-  width: 300px;
 }
 
 .photo-grid-square:hover .thumbnail {

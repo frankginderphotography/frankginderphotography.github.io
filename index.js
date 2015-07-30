@@ -226,3 +226,34 @@ showcases.addEventListener('touchend', function(e) {
   currentlyShown.style.oTransform      = 'translateX(0px)';
   currentlyShown.style.transform       = 'translateX(0px)';
 }, false);
+
+var scrollbar = document.getElementById('scrollbar');
+var scroller = scrollbar.children[0];
+
+photoGallery.addEventListener('scroll', function() {
+  scroller.style.top = Math.round(photoGallery.scrollTop / photoGallery.scrollHeight * 100) + '%';
+}, false);
+
+(window.onresize = function() {
+  var heightRatio = Math.round(photoGallery.clientHeight / photoGallery.scrollHeight * 100);
+  if(heightRatio < 100) {
+    scroller.style.height = heightRatio + '%';
+    scroller.style.top = Math.round(photoGallery.scrollTop / photoGallery.scrollHeight * 100) + '%';
+  }
+})();
+
+scroller.addEventListener('mousedown', function(e) {
+  var startY = e.pageY,
+      startScroll = photoGallery.scrollTop;
+  window.addEventListener('mousemove', function handleMove(e2) {
+    e2.preventDefault();
+    scroller.className = 'hovered';
+    var scrolledRatio = (e2.pageY - startY) / scrollbar.clientHeight;
+    photoGallery.scrollTop = startScroll + scrolledRatio * photoGallery.scrollHeight;
+    window.addEventListener('mouseup', function handleUp() {
+      window.removeEventListener('mousemove', handleMove, false);
+      window.removeEventListener('mouseup', handleUp, false);
+      scroller.className = '';
+    });
+  });
+}, false);
