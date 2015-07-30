@@ -126,7 +126,8 @@ a:hover {
 
 
 #showcases > .in-transition {
-  transition: transform 400ms ease 400ms;
+  -webkit-transition: -webkit-transform 400ms ease 400ms;
+          transition:         transform 400ms ease 400ms;
 }
 
 #showcases > .showcase.left-of-shown {
