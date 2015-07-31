@@ -20,7 +20,6 @@ var indexRanges = [],
 })();
 
 // populate links for the above indexRanges:
-
 njn.controller('sidebar', { indexRanges: indexRanges });
 
 // Detect whether the location hash contains an index range, in the form of
