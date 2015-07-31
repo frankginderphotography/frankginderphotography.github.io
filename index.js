@@ -230,6 +230,7 @@ showcases.addEventListener('touchmove', function(e) {
         getPositionedShowcase().style.webkitTransform = 'translateX(' + deltaX + 'px)';
       }
     );
+  }
 }, false);
 
 showcases.addEventListener('touchend', function(e) {
