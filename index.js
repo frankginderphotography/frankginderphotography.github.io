@@ -138,6 +138,19 @@ photoGallery.addEventListener('click', function(e) {
   }
 }, false);
 
+function setTransitionClass(element, className) {
+  njn.Array.forEach(
+    ['transitionend', 'webkitTransitionEnd', 'oTransitionEnd', 'otransitionend'],
+    function(transitionName) {
+      element.addEventListener(transitionName, function transitionEnd() {
+        element.className = className;
+        element.removeEventListener(transitionName, transitionEnd, false);
+      }, false);
+      element.className = className + ' in-transition';
+    }
+  );
+}
+
 showcases.addEventListener('click', function(e) {
   var idMatch = e.target.id.match(/left|right/);
   if(idMatch) {
@@ -145,8 +158,8 @@ showcases.addEventListener('click', function(e) {
     var oppositeDir = idMatch[0] == 'left' ? 'right' : 'left';
 
     getPositionedShowcase(oppositeDir).className = 'showcase';
-    previouslyShown.className = 'showcase in-transition ' + oppositeDir + '-of-shown';
-    getPositionedShowcase(idMatch[0]).className = 'showcase in-transition currently-shown';
+    setTransitionClass(previouslyShown,'showcase ' + oppositeDir + '-of-shown');
+    setTransitionClass(getPositionedShowcase(idMatch[0]), 'showcase currently-shown');
 
     var upOrDown = idMatch[0] == 'left' ? -2 : 2;
     var newNextPhotoId = +previouslyShown.getAttribute('data-photo').match(/[0-9]+/)[0] + upOrDown;
@@ -239,6 +252,8 @@ photoGallery.addEventListener('scroll', function() {
   if(heightRatio < 100) {
     scroller.style.height = heightRatio + '%';
     scroller.style.top = Math.round(photoGallery.scrollTop / photoGallery.scrollHeight * 100) + '%';
+  } else {
+    scroller.style.height = '0px';
   }
 })();
 
