@@ -224,21 +224,28 @@ showcases.addEventListener('touchmove', function(e) {
   } else {
     // disable horizontal scrolling:
     e.preventDefault();
+    var widthRatio = deltaX / window.innerWidth * 100;
     njn.Array.forEach(
       ['webkitTransform', 'mozTransform', 'msTransform', 'oTransform', 'transform'],
       function(transformName) {
-        getPositionedShowcase().style.webkitTransform = 'translateX(' + deltaX + 'px)';
+        njn.Array.forEach(
+          ['left', null, 'right'], function(position) {
+            var element = getPositionedShowcase(position);
+            var basePct = position == 'left' ? 100 : position == null ? 200 : 300;
+            element.style[transformName] = 'translateX(' + (basePct + widthRatio) + '%)';
+          }
+        );
       }
     );
   }
 }, false);
 
 showcases.addEventListener('touchend', function(e) {
-  currentlyShown.style.webkitTransform = 'translateX(0px)';
-  currentlyShown.style.mozTransform    = 'translateX(0px)';
-  currentlyShown.style.msTransform     = 'translateX(0px)';
-  currentlyShown.style.oTransform      = 'translateX(0px)';
-  currentlyShown.style.transform       = 'translateX(0px)';
+  //currentlyShown.style.webkitTransform = 'translateX(0px)';
+  //currentlyShown.style.mozTransform    = 'translateX(0px)';
+  //currentlyShown.style.msTransform     = 'translateX(0px)';
+  //currentlyShown.style.oTransform      = 'translateX(0px)';
+  //currentlyShown.style.transform       = 'translateX(0px)';
 }, false);
 
 var scrollbar = document.getElementById('scrollbar');
