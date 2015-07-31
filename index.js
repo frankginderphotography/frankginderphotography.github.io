@@ -224,12 +224,12 @@ showcases.addEventListener('touchmove', function(e) {
   } else {
     // disable horizontal scrolling:
     e.preventDefault();
-    currentlyShown.style.webkitTransform = 'translateX(' + deltaX + 'px)';
-    currentlyShown.style.mozTransform    = 'translateX(' + deltaX + 'px)';
-    currentlyShown.style.msTransform     = 'translateX(' + deltaX + 'px)';
-    currentlyShown.style.oTransform      = 'translateX(' + deltaX + 'px)';
-    currentlyShown.style.transform       = 'translateX(' + deltaX + 'px)';
-  }
+    njn.Array.forEach(
+      ['webkitTransform', 'mozTransform', 'msTransform', 'oTransform', 'transform'],
+      function(transformName) {
+        getPositionedShowcase().style.webkitTransform = 'translateX(' + deltaX + 'px)';
+      }
+    );
 }, false);
 
 showcases.addEventListener('touchend', function(e) {
