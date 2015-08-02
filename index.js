@@ -92,7 +92,10 @@ function setHrefs() {
 }
 
 function loadShowcase(photoId) {
-  var thumbnail = document.getElementById(photoId);
+  njn.Array.forEach(['left-of-shown', 'currently-shown', 'right-of-shown'], function(className) {
+    var previouslyAssigned = document.getElementsByClassName(className);
+    (previouslyAssigned[0] || previouslyAssigned).className = 'showcase';
+  });
   var photoNum = +photoId.match(/[0-9]+/)[0];
   for(var i = -1; i < 2; i++) {
     var currPhoto = 'photo_' + (photoNum + i);
@@ -113,19 +116,21 @@ window.addEventListener('hashchange', function() {
   // on clicking one of the group links, the index range part of the
   // hash is changes, so load the new group:
   var newRange = location.hash.match(/#\/([0-9]+-[0-9]+)/);
+  var photoId = location.hash.match(/photo_[0-9]+/);
   if(newRange && newRange[1] !== indexRange) {
     location.reload();
   } else {
-    setHrefs();
     // if a fullsized image was clicked, the photo_id part of the hash
     // was removed, so hide #showcases:
     var photoId = location.hash.match(/photo_[0-9]+/);
-    if(!photoId) {
+    if(photoId) {
+      if(showcases.style.display != 'block' || photoId[0] != getPositionedShowcase().getAttribute('data-photo')) {
+        loadShowcase(photoId[0]);
+      } else {
+        setHrefs();
+      }
+    } else {
       showcases.style.display = 'none';
-      njn.Array.forEach(['left-of-shown', 'currently-shown', 'right-of-shown'], function(className) {
-        var previouslyAssigned = document.getElementsByClassName(className);
-        (previouslyAssigned[0] || previouslyAssigned).className = 'showcase';
-      });
     }
   }
 }, false);
