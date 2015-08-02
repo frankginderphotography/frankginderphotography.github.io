@@ -188,7 +188,7 @@ a:hover {
   margin: auto;
 }
 
-.photo-grid-square {
+.photo-grid-square, .photo-grid-square-no-hover {
   position: relative;
   display: inline-block;
   width: 250px;
@@ -196,7 +196,7 @@ a:hover {
   margin: 5px;
 }
 
-.photo-grid-square .photo-link {
+.photo-grid-square .photo-link, .photo-grid-square-no-hover .photo-link {
   position: absolute;
 }
 

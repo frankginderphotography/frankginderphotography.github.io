@@ -91,11 +91,15 @@ function setHrefs() {
   + '/photo_' + rightNum;
 }
 
-function loadShowcase(photoId) {
+function clearShowcasePositions() {
   njn.Array.forEach(['left-of-shown', 'currently-shown', 'right-of-shown'], function(className) {
     var previouslyAssigned = document.getElementsByClassName(className);
     (previouslyAssigned[0] || previouslyAssigned).className = 'showcase';
   });
+}
+
+function loadShowcase(photoId) {
+  clearShowcasePositions();
   var photoNum = +photoId.match(/[0-9]+/)[0];
   for(var i = -1; i < 2; i++) {
     var currPhoto = 'photo_' + (photoNum + i);
@@ -120,16 +124,18 @@ window.addEventListener('hashchange', function() {
   if(newRange && newRange[1] !== indexRange) {
     location.reload();
   } else {
-    // if a fullsized image was clicked, the photo_id part of the hash
-    // was removed, so hide #showcases:
     var photoId = location.hash.match(/photo_[0-9]+/);
     if(photoId) {
-      if(showcases.style.display != 'block' || photoId[0] != getPositionedShowcase().getAttribute('data-photo')) {
+      var isShown = photoId[0] == getPositionedShowcase().getAttribute('data-photo');
+      if(showcases.style.display != 'block' || !isShown) {
         loadShowcase(photoId[0]);
       } else {
         setHrefs();
       }
     } else {
+      // if a fullsized image was clicked, the photo_id part of the hash
+      // was removed, so hide #showcases:
+      clearShowcasePositions();
       showcases.style.display = 'none';
     }
   }
@@ -202,6 +208,16 @@ window.addEventListener('keydown', function(e) {
     navigatePhotos(match[0]);
   } else if(match = whichKey(e).match(/Up|Down/)) {
     scrollThumbnails(match[0]);
+  }
+}, false);
+
+photoGallery.addEventListener('touchstart', function(e) {
+  if(e.target.className === 'thumbnail') {
+    e.target.parentElement.parentElement.className = 'photo-grid-square-no-hover';
+    e.target.addEventListener('mouseenter', function makeHoverableAgain() {
+      e.target.parentElement.parentElement.className = 'photo-grid-square';
+      e.target.removeEventListener('mouseenter', makeHoverableAgain, false);
+    }, false);
   }
 }, false);
 
