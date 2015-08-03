@@ -63,9 +63,31 @@ function loadAhead(photoId) {
   }
 }
 
+function clearTransform(element) {
+  element.style.webkitTransform = 'translateX(0%)';
+  element.style.mozTransform    = 'translateX(0%)';
+  element.style.msTransform     = 'translateX(0%)';
+  element.style.oTransform      = 'translateX(0%)';
+  element.style.transform       = 'translateX(0%)';
+}
+
 function getPositionedShowcase(partialClass) {
   var className = partialClass ? partialClass + '-of-shown' : 'currently-shown';
-  return document.getElementsByClassName(className)[0] || {};
+  var list = document.getElementsByClassName(className);
+  var toReturn = list[0];
+  if(list.length > 1) {
+    for(var i = 0; i < list.length; i++) {
+      if(!i && partialClass == 'right') {
+        toReturn = list[i];
+      } else if(i == list.length - 1 && partialClass == 'left') {
+        toReturn = list[i];
+      } else {
+        list[i].className = 'showcase';
+        clearTransform(list[i]);
+      }
+    }
+  }
+  return toReturn || {};
 }
 
 function setHrefs() {
@@ -89,14 +111,6 @@ function setHrefs() {
       )
     )
   + '/photo_' + rightNum;
-}
-
-function clearTransform(element) {
-  element.style.webkitTransform = 'translateX(0%)';
-  element.style.mozTransform    = 'translateX(0%)';
-  element.style.msTransform     = 'translateX(0%)';
-  element.style.oTransform      = 'translateX(0%)';
-  element.style.transform       = 'translateX(0%)';
 }
 
 function clearShowcasePositions() {
