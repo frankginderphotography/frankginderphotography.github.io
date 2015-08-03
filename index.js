@@ -55,7 +55,7 @@ var rightClick     = document.getElementById('right-click');
 function loadAhead(photoId) {
   var startNum = +photoId.match(/[0-9]+/)[0];
   for(var i = 0, diffs = [0, 1, -1, 2, -2]; i < 5; i++) {
-    var currPhoto = 'photo_' + (startNum + i);
+    var currPhoto = 'photo_' + (startNum + diffs[i]);
     var showcase = showcases.querySelector('[data-photo="' + currPhoto + '"]');
     if(showcase) {
       showcase.getElementsByTagName('img')[0].src = 'photos/' + currPhoto + '.jpg';
@@ -91,10 +91,34 @@ function setHrefs() {
   + '/photo_' + rightNum;
 }
 
+function clearTransform(element) {
+  element.style.webkitTransform = 'translateX(0%)';
+  element.style.mozTransform    = 'translateX(0%)';
+  element.style.msTransform     = 'translateX(0%)';
+  element.style.oTransform      = 'translateX(0%)';
+  element.style.transform       = 'translateX(0%)';
+}
+
 function clearShowcasePositions() {
   njn.Array.forEach(['left-of-shown', 'currently-shown', 'right-of-shown'], function(className) {
     var previouslyAssigned = document.getElementsByClassName(className);
-    (previouslyAssigned[0] || previouslyAssigned).className = 'showcase';
+    if(previouslyAssigned[0]) {
+      previouslyAssigned[0].className = 'showcase';
+      clearTransform(previouslyAssigned[0]);
+    }
+  });
+}
+
+function transformPositionedShowcases(pctOffset) {
+  njn.Array.forEach(['left', null, 'right'], function(position, i) {
+    var showcase = getPositionedShowcase(position);
+    if(showcase.style) {
+      showcase.style.webkitTransform = 'translateX(' + (i * 100 + (pctOffset || 0)) + '%)';
+      showcase.style.mozTransform    = 'translateX(' + (i * 100 + (pctOffset || 0)) + '%)';
+      showcase.style.msTransform     = 'translateX(' + (i * 100 + (pctOffset || 0)) + '%)';
+      showcase.style.oTransform      = 'translateX(' + (i * 100 + (pctOffset || 0)) + '%)';
+      showcase.style.transform       = 'translateX(' + (i * 100 + (pctOffset || 0)) + '%)';
+    }
   });
 }
 
@@ -108,6 +132,7 @@ function loadShowcase(photoId) {
     if(i == 0) showcase.className = 'showcase currently-shown';
     if(i == 1 && showcase) showcase.className = 'showcase right-of-shown';
   }
+  transformPositionedShowcases();
   setHrefs();
   loadAhead(photoId);
   showcases.style.display = 'block';
@@ -149,6 +174,7 @@ photoGallery.addEventListener('click', function(e) {
 }, false);
 
 function setTransitionClass(element, className) {
+  if(!element.addEventListener) { return; }
   njn.Array.forEach(
     ['transitionend', 'webkitTransitionEnd', 'oTransitionEnd', 'otransitionend'],
     function(transitionName) {
@@ -167,7 +193,12 @@ showcases.addEventListener('click', function(e) {
     var previouslyShown = getPositionedShowcase();
     var oppositeDir = idMatch[0] == 'left' ? 'right' : 'left';
 
-    getPositionedShowcase(oppositeDir).className = 'showcase';
+    var positionedOpposite = getPositionedShowcase(oppositeDir);
+    if(positionedOpposite.style) {
+      positionedOpposite.className = 'showcase';
+      clearTransform(positionedOpposite);
+    }
+
     setTransitionClass(previouslyShown,'showcase ' + oppositeDir + '-of-shown');
     setTransitionClass(getPositionedShowcase(idMatch[0]), 'showcase currently-shown');
 
@@ -176,7 +207,10 @@ showcases.addEventListener('click', function(e) {
     var newNextPhoto = showcases.querySelector('[data-photo="photo_' + newNextPhotoId + '"]');
     if(newNextPhoto) newNextPhoto.className = 'showcase ' + idMatch[0] + '-of-shown';
 
-    loadAhead(getPositionedShowcase().getAttribute('data-photo'));
+    if(getPositionedShowcase().getAttribute) {
+      transformPositionedShowcases();    
+      loadAhead(getPositionedShowcase().getAttribute('data-photo'));
+    }
   }
 }, false);
 
@@ -213,11 +247,14 @@ window.addEventListener('keydown', function(e) {
 
 photoGallery.addEventListener('touchstart', function(e) {
   if(e.target.className === 'thumbnail') {
-    e.target.parentElement.parentElement.className = 'photo-grid-square-no-hover';
-    e.target.addEventListener('mouseenter', function makeHoverableAgain() {
-      e.target.parentElement.parentElement.className = 'photo-grid-square';
-      e.target.removeEventListener('mouseenter', makeHoverableAgain, false);
-    }, false);
+    var gridSquare = e.target.parentElement.parentElement;
+    if(gridSquare.className === 'photo-grid-square') {
+      gridSquare.className = 'photo-grid-square-no-hover';
+      e.target.addEventListener('mouseenter', function makeHoverableAgain() {
+        e.target.parentElement.parentElement.className = 'photo-grid-square';
+        e.target.removeEventListener('mouseenter', makeHoverableAgain, false);
+      }, false);
+    }
   }
 }, false);
 
@@ -245,27 +282,23 @@ showcases.addEventListener('touchmove', function(e) {
     // disable horizontal scrolling:
     e.preventDefault();
     var widthRatio = deltaX / window.innerWidth * 100;
-    njn.Array.forEach(
-      ['webkitTransform', 'mozTransform', 'msTransform', 'oTransform', 'transform'],
-      function(transformName) {
-        njn.Array.forEach(
-          ['left', null, 'right'], function(position) {
-            var element = getPositionedShowcase(position);
-            var basePct = position == 'left' ? 100 : position == null ? 200 : 300;
-            element.style[transformName] = 'translateX(' + (basePct + widthRatio) + '%)';
-          }
-        );
-      }
-    );
+    transformPositionedShowcases(widthRatio);
   }
 }, false);
 
 showcases.addEventListener('touchend', function(e) {
-  //currentlyShown.style.webkitTransform = 'translateX(0px)';
-  //currentlyShown.style.mozTransform    = 'translateX(0px)';
-  //currentlyShown.style.msTransform     = 'translateX(0px)';
-  //currentlyShown.style.oTransform      = 'translateX(0px)';
-  //currentlyShown.style.transform       = 'translateX(0px)';
+  var currTouch = e.changedTouches[0];
+  var deltaX = currTouch.screenX - firstTouch.screenX,
+      deltaY = currTouch.screenY - firstTouch.screenY,
+      isVertical = Math.abs(deltaY) > Math.abs(deltaX);
+  var quickSwipe = Date.now() - firstTouch.time < 250 && Math.abs(deltaX) > 20;
+  var halfScreen = Math.abs(deltaX) > window.innerWidth / 2;
+  var navSwipe = quickSwipe || halfScreen;
+  if(navSwipe) {
+    navigatePhotos(deltaX > 0 ? 'left' : 'right');
+  } else {
+    transformPositionedShowcases();
+  }
 }, false);
 
 var scrollbar = document.getElementById('scrollbar');

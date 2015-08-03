@@ -117,7 +117,7 @@ a:hover {
 
 #showcases > .showcase {
   display: block;
-  left: -200%;
+  left: -100%;
   position: absolute;
   height: 100%;
   width: 100%;
@@ -132,30 +132,6 @@ a:hover {
       -ms-transition:     -ms-transform 900ms ease 200ms;
        -o-transition:      -o-transform 900ms ease 200ms;
           transition:         transform 900ms ease 200ms;
-}
-
-#showcases > .showcase.left-of-shown {
-  -webkit-transform: translateX(100%);
-     -moz-transform: translateX(100%);
-      -ms-transform: translateX(100%);
-       -o-transform: translateX(100%);
-          transform: translateX(100%);
-}
-
-#showcases > .showcase.currently-shown {
-  -webkit-transform: translateX(200%);
-     -moz-transform: translateX(200%);
-      -ms-transform: translateX(200%);
-       -o-transform: translateX(200%);
-          transform: translateX(200%);
-}
-
-#showcases > .showcase.right-of-shown {
-  -webkit-transform: translateX(300%);
-     -moz-transform: translateX(300%);
-      -ms-transform: translateX(300%);
-       -o-transform: translateX(300%);
-          transform: translateX(300%);
 }
 
 #left-click, #right-click {
