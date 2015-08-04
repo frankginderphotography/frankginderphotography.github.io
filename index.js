@@ -89,6 +89,7 @@ function setHrefs() {
 }
 
 function clearTransform(element) {
+  element.className = 'showcase';
   element.style.webkitTransform = 'translateX(0%)';
   element.style.mozTransform    = 'translateX(0%)';
   element.style.msTransform     = 'translateX(0%)';
@@ -186,6 +187,9 @@ function setTransitionClass(element) {
 showcases.addEventListener('click', function(e) {
   var idMatch = e.target.id.match(/left|right/);
   if(idMatch) {
+    njn.Array.forEach(['left', 'center', 'right'], function(position) {
+      positionedShowcases[position].className = 'showcase';
+    });
     var previouslyShown = positionedShowcases.center;
     var oppositeDir = idMatch[0] == 'left' ? 'right' : 'left';
 
@@ -258,6 +262,9 @@ var firstTouch = {};
 
 showcases.addEventListener('touchstart', function(e) {
   // iOS safari reuses touch objects across events, so store properties in separate object:
+  njn.Array.forEach(['left', 'center', 'right'], function(position) {
+    positionedShowcases[position].className = 'showcase';
+  });
   firstTouch.screenX = e.changedTouches[0].screenX;
   firstTouch.screenY = e.changedTouches[0].screenY;
   firstTouch.time = Date.now();
