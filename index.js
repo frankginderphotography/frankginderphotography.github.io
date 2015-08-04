@@ -63,35 +63,10 @@ function loadAhead(photoId) {
   }
 }
 
-function clearTransform(element) {
-  element.style.webkitTransform = 'translateX(0%)';
-  element.style.mozTransform    = 'translateX(0%)';
-  element.style.msTransform     = 'translateX(0%)';
-  element.style.oTransform      = 'translateX(0%)';
-  element.style.transform       = 'translateX(0%)';
-}
-
-function getPositionedShowcase(partialClass) {
-  var className = partialClass ? partialClass + '-of-shown' : 'currently-shown';
-  var list = document.getElementsByClassName(className);
-  var toReturn = list[0];
-  if(list.length > 1) {
-    for(var i = 0; i < list.length; i++) {
-      if(!i && partialClass == 'right') {
-        toReturn = list[i];
-      } else if(i == list.length - 1 && partialClass == 'left') {
-        toReturn = list[i];
-      } else {
-        list[i].className = 'showcase';
-        clearTransform(list[i]);
-      }
-    }
-  }
-  return toReturn || {};
-}
+var positionedShowcases = {};
 
 function setHrefs() {
-  var idNum = +getPositionedShowcase().getAttribute('data-photo').match(/[0-9]+/)[0];
+  var idNum = +positionedShowcases.center.getAttribute('data-photo').match(/[0-9]+/)[0];
   var leftNum = idNum - 1, rightNum = idNum < max ? idNum + 1 : 1;
 
   leftClick.href = '#/' +
@@ -113,20 +88,27 @@ function setHrefs() {
   + '/photo_' + rightNum;
 }
 
+function clearTransform(element) {
+  element.style.webkitTransform = 'translateX(0%)';
+  element.style.mozTransform    = 'translateX(0%)';
+  element.style.msTransform     = 'translateX(0%)';
+  element.style.oTransform      = 'translateX(0%)';
+  element.style.transform       = 'translateX(0%)';
+}
+
 function clearShowcasePositions() {
-  njn.Array.forEach(['left-of-shown', 'currently-shown', 'right-of-shown'], function(className) {
-    var previouslyAssigned = document.getElementsByClassName(className);
-    if(previouslyAssigned[0]) {
-      previouslyAssigned[0].className = 'showcase';
-      clearTransform(previouslyAssigned[0]);
+  njn.Array.forEach(['left', 'center', 'right'], function(position) {
+    var previouslyAssigned = positionedShowcases[position];
+    if(previouslyAssigned) {
+      clearTransform(previouslyAssigned);
     }
   });
 }
 
 function transformPositionedShowcases(pctOffset) {
-  njn.Array.forEach(['left', null, 'right'], function(position, i) {
-    var showcase = getPositionedShowcase(position);
-    if(showcase.style) {
+  njn.Array.forEach(['left', 'center', 'right'], function(position, i) {
+    var showcase = positionedShowcases[position];
+    if(showcase) {
       showcase.style.webkitTransform = 'translateX(' + (i * 100 + (pctOffset || 0)) + '%)';
       showcase.style.mozTransform    = 'translateX(' + (i * 100 + (pctOffset || 0)) + '%)';
       showcase.style.msTransform     = 'translateX(' + (i * 100 + (pctOffset || 0)) + '%)';
@@ -142,9 +124,9 @@ function loadShowcase(photoId) {
   for(var i = -1; i < 2; i++) {
     var currPhoto = 'photo_' + (photoNum + i);
     var showcase = showcases.querySelector('[data-photo="' + currPhoto + '"]');
-    if(i == -1 && showcase) showcase.className = 'showcase left-of-shown';
-    if(i == 0) showcase.className = 'showcase currently-shown';
-    if(i == 1 && showcase) showcase.className = 'showcase right-of-shown';
+    if(i == -1 && showcase) positionedShowcases.left = showcase;
+    if(i == 0) positionedShowcases.center = showcase;
+    if(i == 1 && showcase) positionedShowcases.right = showcase;
   }
   transformPositionedShowcases();
   setHrefs();
@@ -165,7 +147,7 @@ window.addEventListener('hashchange', function() {
   } else {
     var photoId = location.hash.match(/photo_[0-9]+/);
     if(photoId) {
-      var isShown = photoId[0] == getPositionedShowcase().getAttribute('data-photo');
+      var isShown = photoId[0] == positionedShowcases.center.getAttribute('data-photo');
       if(showcases.style.display != 'block' || !isShown) {
         loadShowcase(photoId[0]);
       } else {
@@ -187,16 +169,16 @@ photoGallery.addEventListener('click', function(e) {
   }
 }, false);
 
-function setTransitionClass(element, className) {
-  if(!element.addEventListener) { return; }
+function setTransitionClass(element) {
+  if(!element) { return; }
   njn.Array.forEach(
     ['transitionend', 'webkitTransitionEnd', 'oTransitionEnd', 'otransitionend'],
     function(transitionName) {
       element.addEventListener(transitionName, function transitionEnd() {
-        element.className = className;
+        element.className = 'showcase';
         element.removeEventListener(transitionName, transitionEnd, false);
       }, false);
-      element.className = className + ' in-transition';
+      element.className = 'showcase in-transition';
     }
   );
 }
@@ -204,26 +186,26 @@ function setTransitionClass(element, className) {
 showcases.addEventListener('click', function(e) {
   var idMatch = e.target.id.match(/left|right/);
   if(idMatch) {
-    var previouslyShown = getPositionedShowcase();
+    var previouslyShown = positionedShowcases.center;
     var oppositeDir = idMatch[0] == 'left' ? 'right' : 'left';
 
-    var positionedOpposite = getPositionedShowcase(oppositeDir);
-    if(positionedOpposite.style) {
-      positionedOpposite.className = 'showcase';
-      clearTransform(positionedOpposite);
+    if(positionedShowcases[oppositeDir]) {
+      clearTransform(positionedShowcases[oppositeDir]);
     }
 
-    setTransitionClass(previouslyShown,'showcase ' + oppositeDir + '-of-shown');
-    setTransitionClass(getPositionedShowcase(idMatch[0]), 'showcase currently-shown');
+    positionedShowcases[oppositeDir] = previouslyShown;
+    setTransitionClass(previouslyShown);
+    positionedShowcases.center = positionedShowcases[idMatch[0]];
+    setTransitionClass(positionedShowcases.center);
 
     var upOrDown = idMatch[0] == 'left' ? -2 : 2;
     var newNextPhotoId = +previouslyShown.getAttribute('data-photo').match(/[0-9]+/)[0] + upOrDown;
     var newNextPhoto = showcases.querySelector('[data-photo="photo_' + newNextPhotoId + '"]');
-    if(newNextPhoto) newNextPhoto.className = 'showcase ' + idMatch[0] + '-of-shown';
+    positionedShowcases[idMatch[0]] = newNextPhoto;
 
-    if(getPositionedShowcase().getAttribute) {
+    if(positionedShowcases.center) {
       transformPositionedShowcases();    
-      loadAhead(getPositionedShowcase().getAttribute('data-photo'));
+      loadAhead(positionedShowcases.center.getAttribute('data-photo'));
     }
   }
 }, false);
