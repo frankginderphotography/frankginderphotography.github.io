@@ -188,7 +188,9 @@ showcases.addEventListener('click', function(e) {
   var idMatch = e.target.id.match(/left|right/);
   if(idMatch) {
     njn.Array.forEach(['left', 'center', 'right'], function(position) {
-      positionedShowcases[position].className = 'showcase';
+      if(positionedShowcases[position]) {
+        positionedShowcases[position].className = 'showcase';
+      }
     });
     var previouslyShown = positionedShowcases.center;
     var oppositeDir = idMatch[0] == 'left' ? 'right' : 'left';
