@@ -24,7 +24,7 @@ a:hover {
 #outer {
   position: fixed;
   top: 0;
-  bottom: 1.5em;
+  bottom: 0;
   right: 0;
   left: 0;
   text-align: center;
