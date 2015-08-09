@@ -190,9 +190,9 @@ function setTransition(element) {
         clearTransition(element);
         // reset globalTransition in case it was changed ontouchend:
         globalTransition = '800ms linear';
-        inTransition = false;
         element.removeEventListener(transitionName, transitionEnd, false);
         setHrefs();
+        inTransition = false;
       }, false);
       element.style.webkitTransition = '-webkit-transform ' + globalTransition;
          element.style.mozTransition =    '-moz-transform ' + globalTransition;
@@ -296,7 +296,7 @@ var firstTouch = {};
 showcases.addEventListener('touchstart', function(e) {
   if(!inTransition) {
     // clear css transition so finger controls translation:
-    positionedShowcases.forEach(clearTransition);
+    // positionedShowcases.forEach(clearTransition);
     // iOS safari reuses touch objects across events, so store properties in separate object:
     firstTouch.screenX = e.changedTouches[0].screenX;
     firstTouch.screenY = e.changedTouches[0].screenY;
@@ -329,18 +329,18 @@ showcases.addEventListener('touchmove', function(e) {
 }, false);
 
 showcases.addEventListener('touchend', function(e) {
+  var currTouch = e.changedTouches[0];
+  var deltaX = currTouch.screenX - firstTouch.screenX,
+      deltaY = currTouch.screenY - firstTouch.screenY,
+      isVertical = Math.abs(deltaY) > Math.abs(deltaX);
   if(!firstTouch.inTransition) {
-    var currTouch = e.changedTouches[0];
-    var deltaX = currTouch.screenX - firstTouch.screenX,
-        deltaY = currTouch.screenY - firstTouch.screenY,
-        isVertical = Math.abs(deltaY) > Math.abs(deltaX);
     var quickSwipe = Date.now() - firstTouch.time < 250 && Math.abs(deltaX) > 20;
     var halfScreen = Math.abs(deltaX) > window.innerWidth / 2;
     var navSwipe = quickSwipe || halfScreen;
     if(navSwipe) {
       globalTransition = Math.round((window.innerWidth - Math.abs(deltaX)) / window.innerWidth * 400) + 'ms linear';
       navigatePhotos(deltaX > 0 ? 'left' : 'right');
-    } else {
+    } else if(deltaX) {
       globalTransition = Math.round(Math.abs(deltaX) / window.innerWidth * 400) + 'ms linear';
       positionedShowcases.forEach(setTransition);
       transformPositionedShowcases();
