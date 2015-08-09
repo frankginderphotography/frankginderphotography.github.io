@@ -178,7 +178,7 @@ photoGallery.addEventListener('click', function(e) {
   }
 }, false);
 
-var globalTransition = '800ms linear',
+var globalTransition = '400ms linear',
     inTransition;
 
 function setTransition(element) {
@@ -294,21 +294,25 @@ photoGallery.addEventListener('touchstart', function(e) {
 var firstTouch = {};
 
 showcases.addEventListener('touchstart', function(e) {
-  if(!inTransition) {
+  var isNavClick = e.target.id.match(/left|right/);
+  if(!inTransition && !isNavClick) {
     // clear css transition so finger controls translation:
     // positionedShowcases.forEach(clearTransition);
     // iOS safari reuses touch objects across events, so store properties in separate object:
     firstTouch.screenX = e.changedTouches[0].screenX;
     firstTouch.screenY = e.changedTouches[0].screenY;
     firstTouch.inTransition = false;
+    firstTouch.isNavClick = false;
     firstTouch.time = Date.now();
-  } else {
+  } else if(!isNavClick) {
     firstTouch.inTransition = true;
+  } else {
+    firstTouch.isNavClick = true;
   }
 }, false);
 
 showcases.addEventListener('touchmove', function(e) {
-  if(!firstTouch.inTransition) {
+  if(!firstTouch.inTransition && !firstTouch.isNavClick) {
     var currTouch = e.changedTouches[0];
     // Ensure this is a one touch swipe and not, e.g. a pinch:
     if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
@@ -329,18 +333,18 @@ showcases.addEventListener('touchmove', function(e) {
 }, false);
 
 showcases.addEventListener('touchend', function(e) {
-  var currTouch = e.changedTouches[0];
-  var deltaX = currTouch.screenX - firstTouch.screenX,
-      deltaY = currTouch.screenY - firstTouch.screenY,
-      isVertical = Math.abs(deltaY) > Math.abs(deltaX);
-  if(!firstTouch.inTransition) {
+  if(!firstTouch.inTransition && !firstTouch.isNavClick) {
+    var currTouch = e.changedTouches[0];
+    var deltaX = currTouch.screenX - firstTouch.screenX,
+        deltaY = currTouch.screenY - firstTouch.screenY,
+        isVertical = Math.abs(deltaY) > Math.abs(deltaX);
     var quickSwipe = Date.now() - firstTouch.time < 250 && Math.abs(deltaX) > 20;
     var halfScreen = Math.abs(deltaX) > window.innerWidth / 2;
     var navSwipe = quickSwipe || halfScreen;
     if(navSwipe) {
       globalTransition = Math.round((window.innerWidth - Math.abs(deltaX)) / window.innerWidth * 400) + 'ms linear';
       navigatePhotos(deltaX > 0 ? 'left' : 'right');
-    } else if(deltaX) {
+    } else {
       globalTransition = Math.round(Math.abs(deltaX) / window.innerWidth * 400) + 'ms linear';
       positionedShowcases.forEach(setTransition);
       transformPositionedShowcases();
