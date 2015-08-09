@@ -214,7 +214,7 @@ function slideShowcase(goDir, target) {
     clearTransform(positionedShowcases[oppDir]);
   }
   
-  var transition = '1000ms ease-out';
+  var transition = '1000ms linear';
   
   positionedShowcases.set(oppDir, positionedShowcases.center);
   setTransition(positionedShowcases[oppDir], transition);
@@ -290,10 +290,9 @@ photoGallery.addEventListener('touchstart', function(e) {
 var firstTouch = {};
 
 showcases.addEventListener('touchstart', function(e) {
+  // clear css transition so finger controls translation:
+  positionedShowcases.forEach(clearTransition);
   // iOS safari reuses touch objects across events, so store properties in separate object:
-  njn.Array.forEach(['left', 'center', 'right'], function(position) {
-    positionedShowcases[position].className = position + ' showcase';
-  });
   firstTouch.screenX = e.changedTouches[0].screenX;
   firstTouch.screenY = e.changedTouches[0].screenY;
   firstTouch.time = Date.now();
