@@ -300,12 +300,15 @@ showcases.addEventListener('touchstart', function(e) {
     // iOS safari reuses touch objects across events, so store properties in separate object:
     firstTouch.screenX = e.changedTouches[0].screenX;
     firstTouch.screenY = e.changedTouches[0].screenY;
+    firstTouch.inTransition = false;
     firstTouch.time = Date.now();
+  } else {
+    firstTouch.inTransition = true;
   }
 }, false);
 
 showcases.addEventListener('touchmove', function(e) {
-  if(!inTransition) {
+  if(!firstTouch.inTransition) {
     var currTouch = e.changedTouches[0];
     // Ensure this is a one touch swipe and not, e.g. a pinch:
     if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
@@ -326,7 +329,7 @@ showcases.addEventListener('touchmove', function(e) {
 }, false);
 
 showcases.addEventListener('touchend', function(e) {
-  if(!inTransition) {
+  if(!firstTouch.inTransition) {
     var currTouch = e.changedTouches[0];
     var deltaX = currTouch.screenX - firstTouch.screenX,
         deltaY = currTouch.screenY - firstTouch.screenY,
