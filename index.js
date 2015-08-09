@@ -181,7 +181,7 @@ photoGallery.addEventListener('click', function(e) {
 var globalTransition = '800ms linear',
     inTransition;
 
-function setTransition(element, transition) {
+function setTransition(element) {
   if(!element) { return; }
   njn.Array.forEach(
     ['transitionend', 'webkitTransitionEnd', 'oTransitionEnd', 'otransitionend'],
@@ -194,11 +194,11 @@ function setTransition(element, transition) {
         element.removeEventListener(transitionName, transitionEnd, false);
         setHrefs();
       }, false);
-      element.style.webkitTransition = '-webkit-transform ' + transition;
-         element.style.mozTransition =    '-moz-transform ' + transition;
-          element.style.msTransition =     '-ms-transform ' + transition;
-           element.style.oTransition =      '-o-transform ' + transition;
-            element.style.transition =         'transform ' + transition;
+      element.style.webkitTransition = '-webkit-transform ' + globalTransition;
+         element.style.mozTransition =    '-moz-transform ' + globalTransition;
+          element.style.msTransition =     '-ms-transform ' + globalTransition;
+           element.style.oTransition =      '-o-transform ' + globalTransition;
+            element.style.transition =         'transform ' + globalTransition;
       inTransition = true;
     }
   );
@@ -221,11 +221,11 @@ function slideShowcase(goDir) {
   }
   
   positionedShowcases.set(oppDir, positionedShowcases.center);
-  setTransition(positionedShowcases[oppDir], globalTransition);
+  setTransition(positionedShowcases[oppDir]);
   positionedShowcases.center = undefined;
   
   positionedShowcases.set('center', positionedShowcases[goDir]);
-  setTransition(positionedShowcases.center, globalTransition);
+  setTransition(positionedShowcases.center);
   positionedShowcases[goDir] = undefined;
   
   var upOrDown = goDir == 'left' ? -2 : 2;
@@ -341,6 +341,7 @@ showcases.addEventListener('touchend', function(e) {
       globalTransition = Math.round((window.innerWidth - Math.abs(deltaX)) / window.innerWidth * 400) + 'ms linear';
       navigatePhotos(deltaX > 0 ? 'left' : 'right');
     } else {
+      positionedShowcases.forEach(setTransition);
       transformPositionedShowcases();
     }
   }
