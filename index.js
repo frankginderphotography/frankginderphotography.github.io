@@ -303,7 +303,7 @@ showcases.addEventListener('touchstart', function(e) {
 }, false);
 
 showcases.addEventListener('touchmove', function(e) {
-  if(!intTransition) {
+  if(!inTransition) {
     var currTouch = e.changedTouches[0];
     // Ensure this is a one touch swipe and not, e.g. a pinch:
     if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
@@ -324,7 +324,7 @@ showcases.addEventListener('touchmove', function(e) {
 }, false);
 
 showcases.addEventListener('touchend', function(e) {
-  if(!intTransition) {
+  if(!inTransition) {
     var currTouch = e.changedTouches[0];
     var deltaX = currTouch.screenX - firstTouch.screenX,
         deltaY = currTouch.screenY - firstTouch.screenY,
