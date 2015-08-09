@@ -189,7 +189,7 @@ function setTransition(element) {
       element.addEventListener(transitionName, function transitionEnd() {
         clearTransition(element);
         // reset globalTransition in case it was changed ontouchend:
-        globalTransition = '800ms linear';
+        globalTransition = '400ms linear';
         element.removeEventListener(transitionName, transitionEnd, false);
         setHrefs();
         inTransition = false;
