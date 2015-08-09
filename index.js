@@ -294,12 +294,14 @@ photoGallery.addEventListener('touchstart', function(e) {
 var firstTouch = {};
 
 showcases.addEventListener('touchstart', function(e) {
-  // clear css transition so finger controls translation:
-  positionedShowcases.forEach(clearTransition);
-  // iOS safari reuses touch objects across events, so store properties in separate object:
-  firstTouch.screenX = e.changedTouches[0].screenX;
-  firstTouch.screenY = e.changedTouches[0].screenY;
-  firstTouch.time = Date.now();
+  if(!inTransition) {
+    // clear css transition so finger controls translation:
+    positionedShowcases.forEach(clearTransition);
+    // iOS safari reuses touch objects across events, so store properties in separate object:
+    firstTouch.screenX = e.changedTouches[0].screenX;
+    firstTouch.screenY = e.changedTouches[0].screenY;
+    firstTouch.time = Date.now();
+  }
 }, false);
 
 showcases.addEventListener('touchmove', function(e) {
@@ -334,7 +336,6 @@ showcases.addEventListener('touchend', function(e) {
     var navSwipe = quickSwipe || halfScreen;
     if(navSwipe) {
       globalTransition = Math.round((window.innerWidth - Math.abs(deltaX)) / window.innerWidth * 800) + 'ms linear';
-      console.log(globalTransition);
       navigatePhotos(deltaX > 0 ? 'left' : 'right');
     } else {
       transformPositionedShowcases();
