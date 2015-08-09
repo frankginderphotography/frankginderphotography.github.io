@@ -178,6 +178,8 @@ photoGallery.addEventListener('click', function(e) {
   }
 }, false);
 
+var globalTransition = '800ms linear';
+
 function setTransition(element, transition) {
   if(!element) { return; }
   njn.Array.forEach(
@@ -185,6 +187,8 @@ function setTransition(element, transition) {
     function(transitionName) {
       element.addEventListener(transitionName, function transitionEnd() {
         clearTransition(element);
+        // reset globalTransition in case it was changed ontouchstart:
+        globalTransition = '800ms linear';
         element.removeEventListener(transitionName, transitionEnd, false);
         setHrefs();
       }, false);
@@ -213,14 +217,12 @@ function slideShowcase(goDir) {
     clearTransform(positionedShowcases[oppDir]);
   }
   
-  var transition = '800ms linear';
-  
   positionedShowcases.set(oppDir, positionedShowcases.center);
-  setTransition(positionedShowcases[oppDir], transition);
+  setTransition(positionedShowcases[oppDir], globalTransition);
   positionedShowcases.center = undefined;
   
   positionedShowcases.set('center', positionedShowcases[goDir]);
-  setTransition(positionedShowcases.center, transition);
+  setTransition(positionedShowcases.center, globalTransition);
   positionedShowcases[goDir] = undefined;
   
   var upOrDown = goDir == 'left' ? -2 : 2;
@@ -325,6 +327,8 @@ showcases.addEventListener('touchend', function(e) {
   var halfScreen = Math.abs(deltaX) > window.innerWidth / 2;
   var navSwipe = quickSwipe || halfScreen;
   if(navSwipe) {
+    globalTransition = Math.round((window.innerWidth - Math.abs(deltaX)) / window.innerWidth * 800) + 'ms linear';
+    console.log(globalTransition);
     navigatePhotos(deltaX > 0 ? 'left' : 'right');
   } else {
     transformPositionedShowcases();
