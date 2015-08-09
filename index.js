@@ -178,7 +178,8 @@ photoGallery.addEventListener('click', function(e) {
   }
 }, false);
 
-var globalTransition = '800ms linear';
+var globalTransition = '800ms linear',
+    inTransition;
 
 function setTransition(element, transition) {
   if(!element) { return; }
@@ -189,6 +190,7 @@ function setTransition(element, transition) {
         clearTransition(element);
         // reset globalTransition in case it was changed ontouchstart:
         globalTransition = '800ms linear';
+        inTransition = false;
         element.removeEventListener(transitionName, transitionEnd, false);
         setHrefs();
       }, false);
@@ -197,6 +199,7 @@ function setTransition(element, transition) {
           element.style.msTransition =     '-ms-transform ' + transition;
            element.style.oTransition =      '-o-transform ' + transition;
             element.style.transition =         'transform ' + transition;
+      inTransition = true;
     }
   );
 }
@@ -300,38 +303,42 @@ showcases.addEventListener('touchstart', function(e) {
 }, false);
 
 showcases.addEventListener('touchmove', function(e) {
-  var currTouch = e.changedTouches[0];
-  // Ensure this is a one touch swipe and not, e.g. a pinch:
-  if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
-    return;
-  }
-  var deltaX = currTouch.screenX - firstTouch.screenX,
-      deltaY = currTouch.screenY - firstTouch.screenY,
-      isVertical = Math.abs(deltaY) > Math.abs(deltaX);
-  if(isVertical) {
-    // shownShowcase.style.top = deltaY + 'px';
-  } else {
-    // disable horizontal scrolling:
-    e.preventDefault();
-    var widthRatio = deltaX / window.innerWidth * 100;
-    transformPositionedShowcases(widthRatio);
+  if(!intTransition) {
+    var currTouch = e.changedTouches[0];
+    // Ensure this is a one touch swipe and not, e.g. a pinch:
+    if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
+      return;
+    }
+    var deltaX = currTouch.screenX - firstTouch.screenX,
+        deltaY = currTouch.screenY - firstTouch.screenY,
+        isVertical = Math.abs(deltaY) > Math.abs(deltaX);
+    if(isVertical) {
+      // shownShowcase.style.top = deltaY + 'px';
+    } else {
+      // disable horizontal scrolling:
+      e.preventDefault();
+      var widthRatio = deltaX / window.innerWidth * 100;
+      transformPositionedShowcases(widthRatio);
+    }
   }
 }, false);
 
 showcases.addEventListener('touchend', function(e) {
-  var currTouch = e.changedTouches[0];
-  var deltaX = currTouch.screenX - firstTouch.screenX,
-      deltaY = currTouch.screenY - firstTouch.screenY,
-      isVertical = Math.abs(deltaY) > Math.abs(deltaX);
-  var quickSwipe = Date.now() - firstTouch.time < 250 && Math.abs(deltaX) > 20;
-  var halfScreen = Math.abs(deltaX) > window.innerWidth / 2;
-  var navSwipe = quickSwipe || halfScreen;
-  if(navSwipe) {
-    globalTransition = Math.round((window.innerWidth - Math.abs(deltaX)) / window.innerWidth * 800) + 'ms linear';
-    console.log(globalTransition);
-    navigatePhotos(deltaX > 0 ? 'left' : 'right');
-  } else {
-    transformPositionedShowcases();
+  if(!intTransition) {
+    var currTouch = e.changedTouches[0];
+    var deltaX = currTouch.screenX - firstTouch.screenX,
+        deltaY = currTouch.screenY - firstTouch.screenY,
+        isVertical = Math.abs(deltaY) > Math.abs(deltaX);
+    var quickSwipe = Date.now() - firstTouch.time < 250 && Math.abs(deltaX) > 20;
+    var halfScreen = Math.abs(deltaX) > window.innerWidth / 2;
+    var navSwipe = quickSwipe || halfScreen;
+    if(navSwipe) {
+      globalTransition = Math.round((window.innerWidth - Math.abs(deltaX)) / window.innerWidth * 800) + 'ms linear';
+      console.log(globalTransition);
+      navigatePhotos(deltaX > 0 ? 'left' : 'right');
+    } else {
+      transformPositionedShowcases();
+    }
   }
 }, false);
 
