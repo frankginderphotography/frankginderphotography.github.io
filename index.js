@@ -178,14 +178,13 @@ photoGallery.addEventListener('click', function(e) {
   }
 }, false);
 
-var showcasesToSlide = [];
-
 function setTransition(element, transition) {
   if(!element) { return; }
   njn.Array.forEach(
     ['transitionend', 'webkitTransitionEnd', 'oTransitionEnd', 'otransitionend'],
     function(transitionName) {
       element.addEventListener(transitionName, function transitionEnd() {
+        clearTransition(element);
         element.removeEventListener(transitionName, transitionEnd, false);
         setHrefs();
       }, false);
@@ -206,7 +205,7 @@ function clearTransition(element) {
   element.style.transition       = '';
 }
 
-function slideShowcase(goDir, target) {
+function slideShowcase(goDir) {
   var oppDir = goDir == 'left' ? 'right' : 'left';
   
   if(positionedShowcases[oppDir]) {
@@ -214,7 +213,7 @@ function slideShowcase(goDir, target) {
     clearTransform(positionedShowcases[oppDir]);
   }
   
-  var transition = '1000ms linear';
+  var transition = '800ms linear';
   
   positionedShowcases.set(oppDir, positionedShowcases.center);
   setTransition(positionedShowcases[oppDir], transition);
@@ -239,7 +238,7 @@ showcases.addEventListener('click', function(e) {
   var idMatch = (e.target.id || '').match(/left|right/);
   var hashpart = (e.target.href || '').match(/#.+/) || [];
   if(hashpart[0] !== location.hash && idMatch) {
-    slideShowcase(idMatch[0], e.target);
+    slideShowcase(idMatch[0]);
   }
 }, false);
 
