@@ -188,7 +188,7 @@ function setTransition(element, transition) {
     function(transitionName) {
       element.addEventListener(transitionName, function transitionEnd() {
         clearTransition(element);
-        // reset globalTransition in case it was changed ontouchstart:
+        // reset globalTransition in case it was changed ontouchend:
         globalTransition = '800ms linear';
         inTransition = false;
         element.removeEventListener(transitionName, transitionEnd, false);
@@ -338,7 +338,7 @@ showcases.addEventListener('touchend', function(e) {
     var halfScreen = Math.abs(deltaX) > window.innerWidth / 2;
     var navSwipe = quickSwipe || halfScreen;
     if(navSwipe) {
-      globalTransition = Math.round((window.innerWidth - Math.abs(deltaX)) / window.innerWidth * 800) + 'ms linear';
+      globalTransition = Math.round((window.innerWidth - Math.abs(deltaX)) / window.innerWidth * 400) + 'ms linear';
       navigatePhotos(deltaX > 0 ? 'left' : 'right');
     } else {
       transformPositionedShowcases();
