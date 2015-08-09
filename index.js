@@ -337,10 +337,11 @@ showcases.addEventListener('touchend', function(e) {
     var quickSwipe = Date.now() - firstTouch.time < 250 && Math.abs(deltaX) > 20;
     var halfScreen = Math.abs(deltaX) > window.innerWidth / 2;
     var navSwipe = quickSwipe || halfScreen;
-    globalTransition = Math.round((window.innerWidth - Math.abs(deltaX)) / window.innerWidth * 400) + 'ms linear';
     if(navSwipe) {
+      globalTransition = Math.round((window.innerWidth - Math.abs(deltaX)) / window.innerWidth * 400) + 'ms linear';
       navigatePhotos(deltaX > 0 ? 'left' : 'right');
     } else {
+      globalTransition = Math.round(Math.abs(deltaX) / window.innerWidth * 400) + 'ms linear';
       positionedShowcases.forEach(setTransition);
       transformPositionedShowcases();
     }
