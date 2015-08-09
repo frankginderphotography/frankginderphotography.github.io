@@ -118,14 +118,15 @@ function clearTransform(showcase) {
   }
 }
 
-function transformPositionedShowcases(pctOffset) {
+function transformPositionedShowcases(pctOffset, y) {
   positionedShowcases.forEach(function(showcase, i) {
+    var translateFunction = 'translate(' + (i * 100 + (pctOffset || 0)) + '%, ' + (y || '0') + '%)';
     if(showcase) {
-      showcase.style.webkitTransform = 'translateX(' + (i * 100 + (pctOffset || 0)) + '%)';
-      showcase.style.mozTransform    = 'translateX(' + (i * 100 + (pctOffset || 0)) + '%)';
-      showcase.style.msTransform     = 'translateX(' + (i * 100 + (pctOffset || 0)) + '%)';
-      showcase.style.oTransform      = 'translateX(' + (i * 100 + (pctOffset || 0)) + '%)';
-      showcase.style.transform       = 'translateX(' + (i * 100 + (pctOffset || 0)) + '%)';
+      showcase.style.webkitTransform = translateFunction;
+      showcase.style.mozTransform    = translateFunction;
+      showcase.style.msTransform     = translateFunction;
+      showcase.style.oTransform      = translateFunction;
+      showcase.style.transform       = translateFunction;
     }
   });
 }
