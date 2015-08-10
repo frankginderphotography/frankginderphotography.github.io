@@ -344,10 +344,11 @@ showcases.addEventListener('touchend', function(e) {
         deltaY = currTouch.screenY - firstTouch.screenY;
     var quickSwipe = Date.now() - firstTouch.time < 250;
     if(firstTouch.isVertical) {
-      var halfScreenY = Math.abs(deltaY) > window.innerHeight / 4;
+      var halfScreenY = Math.abs(deltaY) > window.innerHeight / 2;
       var exitSwipe = halfScreenY || (quickSwipe && Math.abs(deltaY) > 20);
       if(exitSwipe) {
-        globalTransition = Math.round((window.innerHeight / 2 - Math.abs(deltaY)) / (window.innerHeight / 2) * 400) + 'ms linear';
+        var yToGo = deltaY < 0 ? currTouch.screenY : window.innerHeight - currTouch.screenY;
+        globalTransition = Math.round(yToGo / window.innerHeight * 800) + 'ms linear';
         positionedShowcases.forEach(setTransition);
         setTransition(positionedShowcases.center, function() {
           var click = new MouseEvent('click', { bubbles: true });
