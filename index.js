@@ -120,7 +120,7 @@ function clearTransform(showcase) {
 
 function transformPositionedShowcases(pctOffset, y) {
   positionedShowcases.forEach(function(showcase, i) {
-    var translateFunction = 'translate(' + (i * 100 + (pctOffset || 0)) + '%, ' + (y || '0') + '%)';
+    var translateFunction = 'translate(' + (i * 100 + (pctOffset || 0)) + '%, ' + (y || 0) + '%)';
     if(showcase) {
       showcase.style.webkitTransform = translateFunction;
       showcase.style.mozTransform    = translateFunction;
@@ -182,18 +182,22 @@ photoGallery.addEventListener('click', function(e) {
 var globalTransition = '400ms linear',
     inTransition;
 
-function setTransition(element) {
+function setTransition(element, callback) {
   if(!element) { return; }
   njn.Array.forEach(
     ['transitionend', 'webkitTransitionEnd', 'oTransitionEnd', 'otransitionend'],
     function(transitionName) {
       element.addEventListener(transitionName, function transitionEnd() {
-        clearTransition(element);
-        // reset globalTransition in case it was changed ontouchend:
-        globalTransition = '400ms linear';
+        if(njn.isFunction(callback)) {
+          callback(element);
+        } else {
+          clearTransition(element);
+          // reset globalTransition in case it was changed ontouchend:
+          globalTransition = '400ms linear';
+          setHrefs();
+          inTransition = false;
+        }
         element.removeEventListener(transitionName, transitionEnd, false);
-        setHrefs();
-        inTransition = false;
       }, false);
       element.style.webkitTransition = '-webkit-transform ' + globalTransition;
          element.style.mozTransition =    '-moz-transform ' + globalTransition;
@@ -297,13 +301,10 @@ var firstTouch = {};
 showcases.addEventListener('touchstart', function(e) {
   var isNavClick = e.target.id.match(/left|right/);
   if(!inTransition && !isNavClick) {
-    // clear css transition so finger controls translation:
     // positionedShowcases.forEach(clearTransition);
     // iOS safari reuses touch objects across events, so store properties in separate object:
     firstTouch.screenX = e.changedTouches[0].screenX;
     firstTouch.screenY = e.changedTouches[0].screenY;
-    firstTouch.inTransition = false;
-    firstTouch.isNavClick = false;
     firstTouch.time = Date.now();
   } else if(!isNavClick) {
     firstTouch.inTransition = true;
@@ -320,10 +321,13 @@ showcases.addEventListener('touchmove', function(e) {
       return;
     }
     var deltaX = currTouch.screenX - firstTouch.screenX,
-        deltaY = currTouch.screenY - firstTouch.screenY,
-        isVertical = Math.abs(deltaY) > Math.abs(deltaX);
-    if(isVertical) {
-      // shownShowcase.style.top = deltaY + 'px';
+        deltaY = currTouch.screenY - firstTouch.screenY;
+    if(!firstTouch.hasOwnProperty('isVertical')) {
+      firstTouch.isVertical = Math.abs(deltaY) > Math.abs(deltaX);
+    }
+    if(firstTouch.isVertical) {
+      var heightRatio = deltaY / window.innerHeight * 100;
+      transformPositionedShowcases(0, heightRatio);
     } else {
       // disable horizontal scrolling:
       e.preventDefault();
@@ -337,20 +341,42 @@ showcases.addEventListener('touchend', function(e) {
   if(!firstTouch.inTransition && !firstTouch.isNavClick) {
     var currTouch = e.changedTouches[0];
     var deltaX = currTouch.screenX - firstTouch.screenX,
-        deltaY = currTouch.screenY - firstTouch.screenY,
-        isVertical = Math.abs(deltaY) > Math.abs(deltaX);
-    var quickSwipe = Date.now() - firstTouch.time < 250 && Math.abs(deltaX) > 20;
-    var halfScreen = Math.abs(deltaX) > window.innerWidth / 2;
-    var navSwipe = quickSwipe || halfScreen;
-    if(navSwipe) {
-      globalTransition = Math.round((window.innerWidth - Math.abs(deltaX)) / window.innerWidth * 400) + 'ms linear';
-      navigatePhotos(deltaX > 0 ? 'left' : 'right');
+        deltaY = currTouch.screenY - firstTouch.screenY;
+    var quickSwipe = Date.now() - firstTouch.time < 250;
+    if(firstTouch.isVertical) {
+      var halfScreenY = Math.abs(deltaY) > window.innerHeight / 4;
+      var exitSwipe = halfScreenY || (quickSwipe && Math.abs(deltaY) > 20);
+      if(exitSwipe) {
+        globalTransition = Math.round((window.innerHeight / 2 - Math.abs(deltaY)) / (window.innerHeight / 2) * 400) + 'ms linear';
+        positionedShowcases.forEach(setTransition);
+        setTransition(positionedShowcases.center, function() {
+          var click = new MouseEvent('click', { bubbles: true });
+          showcases.getElementsByClassName('showcase')[0].dispatchEvent(click);
+        });
+        transformPositionedShowcases(0, deltaY > 0 ? 100 : -100);
+      } else {
+        globalTransition = Math.round(Math.abs(deltaY) / window.innerHeight * 400) + 'ms linear';
+        positionedShowcases.forEach(setTransition);
+        transformPositionedShowcases();
+      }
     } else {
-      globalTransition = Math.round(Math.abs(deltaX) / window.innerWidth * 400) + 'ms linear';
-      positionedShowcases.forEach(setTransition);
-      transformPositionedShowcases();
+      var halfScreenX = Math.abs(deltaX) > window.innerWidth / 2;
+      var navSwipe = halfScreenX || (quickSwipe && Math.abs(deltaX) > 20);
+      if(navSwipe) {
+        globalTransition = Math.round((window.innerWidth - Math.abs(deltaX)) / window.innerWidth * 400) + 'ms linear';
+        navigatePhotos(deltaX > 0 ? 'left' : 'right');
+      } else {
+        globalTransition = Math.round(Math.abs(deltaX) / window.innerWidth * 400) + 'ms linear';
+        positionedShowcases.forEach(setTransition);
+        transformPositionedShowcases();
+      }
     }
   }
+  firstTouch = {};
+}, false);
+
+showcases.addEventListener('touchcancel', function(e) {
+  firstTouch = {};
 }, false);
 
 var scrollbar = document.getElementById('scrollbar');
