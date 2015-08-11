@@ -340,7 +340,7 @@ showcases.addEventListener('touchmove', function(e) {
 }, false);
 
 showcases.addEventListener('touchend', function(e) {
-  if(!firstTouch.inTransition && !firstTouch.isNavClick) {
+  if(e.touches.length == 1 && !firstTouch.inTransition && !firstTouch.isNavClick) {
     var currTouch = e.changedTouches[0];
     var deltaX = currTouch.screenX - firstTouch.screenX,
         deltaY = currTouch.screenY - firstTouch.screenY;
