@@ -210,11 +210,11 @@ function setTransition(element, callback) {
 }
 
 function clearTransition(element) {
-  element.style.webkitTransition = '';
-  element.style.mozTransition    = '';
-  element.style.msTransition     = '';
-  element.style.oTransition      = '';
-  element.style.transition       = '';
+  element.style.webkitTransition = 'none';
+  element.style.mozTransition    = 'none';
+  element.style.msTransition     = 'none';
+  element.style.oTransition      = 'none';
+  element.style.transition       = 'none';
 }
 
 function slideShowcase(goDir) {
@@ -300,26 +300,26 @@ var firstTouch = {};
 
 showcases.addEventListener('touchstart', function(e) {
   var isNavClick = e.target.id.match(/left|right/);
-  if(!inTransition && !isNavClick) {
+  var currTouch = e.changedTouches[0];
+  var multi = currTouch.length > 1 || (e.scale && e.scale !== 1);
+  if(!inTransition && !isNavClick && !multi) {
     // positionedShowcases.forEach(clearTransition);
     // iOS safari reuses touch objects across events, so store properties in separate object:
-    firstTouch.screenX = e.changedTouches[0].screenX;
-    firstTouch.screenY = e.changedTouches[0].screenY;
+    firstTouch.screenX = currTouch.screenX;
+    firstTouch.screenY = currTouch.screenY;
     firstTouch.time = Date.now();
-  } else if(!isNavClick) {
+  } else if(inTransition) {
     firstTouch.inTransition = true;
-  } else {
+  } else if(isNavClick) {
     firstTouch.isNavClick = true;
+  } else {
+    firstTouch.multi = true;
   }
 }, false);
 
 showcases.addEventListener('touchmove', function(e) {
-  if(!firstTouch.inTransition && !firstTouch.isNavClick) {
+  if(!firstTouch.inTransition && !firstTouch.isNavClick && !firstTouch.multi) {
     var currTouch = e.changedTouches[0];
-    // Ensure this is a one touch swipe and not, e.g. a pinch:
-    if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
-      return;
-    }
     var deltaX = currTouch.screenX - firstTouch.screenX,
         deltaY = currTouch.screenY - firstTouch.screenY;
     if(!firstTouch.hasOwnProperty('isVertical')) {
@@ -338,7 +338,7 @@ showcases.addEventListener('touchmove', function(e) {
 }, false);
 
 showcases.addEventListener('touchend', function(e) {
-  if(!firstTouch.inTransition && !firstTouch.isNavClick) {
+  if(!firstTouch.inTransition && !firstTouch.isNavClick && !firstTouch.multi) {
     var currTouch = e.changedTouches[0];
     var deltaX = currTouch.screenX - firstTouch.screenX,
         deltaY = currTouch.screenY - firstTouch.screenY;
