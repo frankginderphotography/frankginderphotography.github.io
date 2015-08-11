@@ -168,6 +168,8 @@ window.addEventListener('hashchange', function() {
       // was removed, so hide #showcases:
       clearTransform();
       showcases.style.display = 'none';
+      var noHover = document.getElementsByClassName('photo-grid-square-no-hover');
+      (noHover[0] || noHover).className = 'photo-grid-square';
     }
   }
 }, false);
@@ -175,6 +177,7 @@ window.addEventListener('hashchange', function() {
 photoGallery.addEventListener('click', function(e) {
   var photoId = (e.target.id || '').match(/photo_[0-9]+$/);
   if(photoId) {
+    e.target.parentElement.parentElement.className = 'photo-grid-square-no-hover';
     loadShowcase(photoId[0]);
   }
 }, false);
