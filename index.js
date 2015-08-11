@@ -317,21 +317,20 @@ showcases.addEventListener('touchstart', function(e) {
 showcases.addEventListener('touchmove', function(e) {
   e.preventDefault();
   var currTouch = e.changedTouches[0];
-  if(e.changedTouches.length > 1 || (e.scale && e.scale !== 1)) {
-    // return;
-  }
-  if(!firstTouch.inTransition && !firstTouch.isNavClick) {
-    var deltaX = currTouch.screenX - firstTouch.screenX,
-        deltaY = currTouch.screenY - firstTouch.screenY;
-    if(!firstTouch.hasOwnProperty('isVertical')) {
-      firstTouch.isVertical = Math.abs(deltaY) > Math.abs(deltaX);
-    }
-    if(firstTouch.isVertical) {
-      var heightRatio = deltaY / window.innerHeight * 100;
-      transformPositionedShowcases(0, heightRatio);
-    } else {
-      var widthRatio = deltaX / window.innerWidth * 100;
-      transformPositionedShowcases(widthRatio);
+  if(e.changedTouches.length == 1 && (!e.scale || e.scale !== 1)) {
+    if(!firstTouch.inTransition && !firstTouch.isNavClick) {
+      var deltaX = currTouch.screenX - firstTouch.screenX,
+          deltaY = currTouch.screenY - firstTouch.screenY;
+      if(!firstTouch.hasOwnProperty('isVertical')) {
+        firstTouch.isVertical = Math.abs(deltaY) > Math.abs(deltaX);
+      }
+      if(firstTouch.isVertical) {
+        var heightRatio = deltaY / window.innerHeight * 100;
+        transformPositionedShowcases(0, heightRatio);
+      } else {
+        var widthRatio = deltaX / window.innerWidth * 100;
+        transformPositionedShowcases(widthRatio);
+      }
     }
   }
 }, false);

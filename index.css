@@ -206,15 +206,25 @@ a:hover {
 }
 
 @media (max-width: 550px) {
-  #inner > div { float: none; }
-  #sidebar {
-    top: 0;
-    left: 0;
-    right: 0;
+  #hide-scrollbar {
+    width: 320px;
   }
-  #hide-scrollbar { left: 0px; }
-  #photo-gallery { width: 310px; left: 0px; padding-left: 45px; padding-right: 0px; }
-  .photo-grid-square { text-align: left; margin: 0px; }
+  #inner > div {
+    float: none;
+  }
+  #hide-scrollbar {
+    left: 0px;
+  }
+  #photo-gallery {
+    width: 310px;
+    left: 0px;
+    padding-left: 35px;
+    padding-right: 0px;
+  }
+  .photo-grid-square, .photo-grid-square-no-hover {
+    text-align: left;
+    margin: 0px;
+  }
   #topbar { display: block; }
   #sidebar-content { display: none; }
   #scrollbar { display: none; }
