@@ -318,6 +318,7 @@ showcases.addEventListener('touchstart', function(e) {
 }, false);
 
 showcases.addEventListener('touchmove', function(e) {
+  e.preventDefault();
   if(!firstTouch.inTransition && !firstTouch.isNavClick && !firstTouch.multi) {
     var currTouch = e.changedTouches[0];
     var deltaX = currTouch.screenX - firstTouch.screenX,
