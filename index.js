@@ -350,8 +350,8 @@ showcases.addEventListener('touchend', function(e) {
       var halfScreenY = Math.abs(deltaY) > window.innerHeight / 2;
       var exitSwipe = halfScreenY || (quickSwipe && Math.abs(deltaY) > 20);
       if(exitSwipe) {
-        var yToGo = deltaY < 0 ? currTouch.screenY || 1 : window.innerHeight - currTouch.screenY;
-        alert(yToGo);
+        var yToGo = deltaY < 0 ? currTouch.screenY : window.innerHeight - currTouch.screenY;
+        if(yToGo < 1) yToGo = 1;
         globalTransition = Math.round(yToGo / window.innerHeight * 800) + 'ms linear';
         positionedShowcases.forEach(setTransition);
         setTransition(positionedShowcases.center, function() {
