@@ -317,7 +317,7 @@ showcases.addEventListener('touchstart', function(e) {
 showcases.addEventListener('touchmove', function(e) {
   e.preventDefault();
   var currTouch = e.changedTouches[0];
-  if(e.changedTouches.length == 1) {
+  if(e.touches.length == 1) {
     if(!firstTouch.inTransition && !firstTouch.isNavClick) {
       var deltaX = currTouch.screenX - firstTouch.screenX,
           deltaY = currTouch.screenY - firstTouch.screenY;
