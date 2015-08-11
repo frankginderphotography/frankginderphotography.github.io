@@ -313,6 +313,8 @@ showcases.addEventListener('touchstart', function(e) {
     } else if(isNavClick) {
       firstTouch.isNavClick = true;
     }
+  } else {
+    preventDefault();
   }
 }, false);
 
