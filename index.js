@@ -350,8 +350,7 @@ showcases.addEventListener('touchend', function(e) {
       var halfScreenY = Math.abs(deltaY) > window.innerHeight / 2;
       var exitSwipe = halfScreenY || (quickSwipe && Math.abs(deltaY) > 20);
       if(exitSwipe) {
-        var yToGo = deltaY < 0 ? currTouch.screenY : window.innerHeight - currTouch.screenY;
-        console.log(yToGo);
+        var yToGo = deltaY < 0 ? currTouch.screenY || 1 : window.innerHeight - currTouch.screenY;
         globalTransition = Math.round(yToGo / window.innerHeight * 800) + 'ms linear';
         positionedShowcases.forEach(setTransition);
         setTransition(positionedShowcases.center, function() {
@@ -383,7 +382,6 @@ showcases.addEventListener('touchend', function(e) {
 }, false);
 
 showcases.addEventListener('touchcancel', function(e) {
-  alert('canceled');
   firstTouch = {};
 }, false);
 
