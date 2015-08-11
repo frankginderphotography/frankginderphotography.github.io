@@ -314,7 +314,7 @@ showcases.addEventListener('touchstart', function(e) {
       firstTouch.isNavClick = true;
     }
   } else {
-    preventDefault();
+    e.preventDefault();
   }
 }, false);
 
