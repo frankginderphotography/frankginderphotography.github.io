@@ -314,14 +314,15 @@ showcases.addEventListener('touchstart', function(e) {
       firstTouch.isNavClick = true;
     }
   } else {
+    firstTouch.multi = true;
     e.preventDefault();
   }
 }, false);
 
 showcases.addEventListener('touchmove', function(e) {
   e.preventDefault();
-  var currTouch = e.changedTouches[0];
-  if(e.touches.length == 1) {
+  if(e.touches.length == 1 && !firstTouch.multi) {
+    var currTouch = e.changedTouches[0];
     if(!firstTouch.inTransition && !firstTouch.isNavClick) {
       var deltaX = currTouch.screenX - firstTouch.screenX,
           deltaY = currTouch.screenY - firstTouch.screenY;
@@ -340,7 +341,7 @@ showcases.addEventListener('touchmove', function(e) {
 }, false);
 
 showcases.addEventListener('touchend', function(e) {
-  if(e.changedTouches.length == 1 && !firstTouch.inTransition && !firstTouch.isNavClick) {
+  if(e.changedTouches.length == 1 && !firstTouch.multi && !firstTouch.inTransition && !firstTouch.isNavClick) {
     var currTouch = e.changedTouches[0];
     var deltaX = currTouch.screenX - firstTouch.screenX,
         deltaY = currTouch.screenY - firstTouch.screenY;
@@ -350,6 +351,7 @@ showcases.addEventListener('touchend', function(e) {
       var exitSwipe = halfScreenY || (quickSwipe && Math.abs(deltaY) > 20);
       if(exitSwipe) {
         var yToGo = deltaY < 0 ? currTouch.screenY : window.innerHeight - currTouch.screenY;
+        console.log(yToGo);
         globalTransition = Math.round(yToGo / window.innerHeight * 800) + 'ms linear';
         positionedShowcases.forEach(setTransition);
         setTransition(positionedShowcases.center, function() {
