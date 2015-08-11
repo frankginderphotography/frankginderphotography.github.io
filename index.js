@@ -300,9 +300,6 @@ var firstTouch = {};
 
 showcases.addEventListener('touchstart', function(e) {
   var isNavClick = e.target.id.match(/left|right/);
-  if(e.changedTouches.length > 1 || (e.scale && e.scale != 1)) {
-    e.preventDefault();
-  }
   var currTouch = e.changedTouches[0];
   if(!inTransition && !isNavClick) {
     // positionedShowcases.forEach(clearTransition);
@@ -321,7 +318,7 @@ showcases.addEventListener('touchmove', function(e) {
   e.preventDefault();
   var currTouch = e.changedTouches[0];
   if(e.changedTouches.length > 1 || (e.scale && e.scale !== 1)) {
-    return;
+    // return;
   }
   if(!firstTouch.inTransition && !firstTouch.isNavClick) {
     var deltaX = currTouch.screenX - firstTouch.screenX,
