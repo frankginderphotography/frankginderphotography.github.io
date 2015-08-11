@@ -383,6 +383,7 @@ showcases.addEventListener('touchend', function(e) {
 }, false);
 
 showcases.addEventListener('touchcancel', function(e) {
+  alert('canceled');
   firstTouch = {};
 }, false);
 
