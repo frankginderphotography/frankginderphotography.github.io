@@ -342,7 +342,7 @@ showcases.addEventListener('touchend', function(e) {
     var deltaX = currTouch.screenX - firstTouch.screenX,
         deltaY = currTouch.screenY - firstTouch.screenY;
     var quickSwipe = Date.now() - firstTouch.time < 250;
-    if(firstTouch.isVertical) {
+    if(firstTouch.isVertical && deltaY) {
       var halfScreenY = Math.abs(deltaY) > window.innerHeight / 2;
       var exitSwipe = halfScreenY || (quickSwipe && Math.abs(deltaY) > 20);
       if(exitSwipe) {
@@ -359,7 +359,7 @@ showcases.addEventListener('touchend', function(e) {
         positionedShowcases.forEach(setTransition);
         transformPositionedShowcases();
       }
-    } else {
+    } else if(deltaX) {
       var halfScreenX = Math.abs(deltaX) > window.innerWidth / 2;
       var navSwipe = halfScreenX || (quickSwipe && Math.abs(deltaX) > 20);
       if(navSwipe) {
