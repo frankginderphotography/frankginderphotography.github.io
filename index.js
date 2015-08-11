@@ -321,6 +321,7 @@ showcases.addEventListener('touchmove', function(e) {
   e.preventDefault();
   var currTouch = e.changedTouches[0];
   if(currTouch.length > 1 || (e.scale && e.scale !== 1)) {
+    firstTouch = {};
     return;
   }
   if(!firstTouch.inTransition && !firstTouch.isNavClick && !firstTouch.multi) {
