@@ -301,6 +301,7 @@ var firstTouch = {};
 showcases.addEventListener('touchstart', function(e) {
   var isNavClick = e.target.id.match(/left|right/);
   var currTouch = e.changedTouches[0];
+  if(e.touches.length > 1) { e.preventDefault(); }
   if(!inTransition && !isNavClick) {
     // positionedShowcases.forEach(clearTransition);
     // iOS safari reuses touch objects across events, so store properties in separate object:
