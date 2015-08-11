@@ -374,6 +374,8 @@ showcases.addEventListener('touchend', function(e) {
         transformPositionedShowcases();
       }
     }
+  } else {
+    e.preventDefault();
   }
   firstTouch = {};
 }, false);
