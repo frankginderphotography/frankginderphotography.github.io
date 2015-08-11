@@ -379,7 +379,7 @@ showcases.addEventListener('touchend', function(e) {
         transformPositionedShowcases();
       }
     }
-  } else {
+  } else if(!firstTouch.isNavClick) {
     e.preventDefault();
   }
   firstTouch = {};
