@@ -299,20 +299,21 @@ photoGallery.addEventListener('touchstart', function(e) {
 var firstTouch = {};
 
 showcases.addEventListener('touchstart', function(e) {
-  if(!firstTouch.screenX) {
-    var isNavClick = e.target.id.match(/left|right/);
-    var currTouch = e.changedTouches[0];
-    if(!inTransition && !isNavClick) {
-      // positionedShowcases.forEach(clearTransition);
-      // iOS safari reuses touch objects across events, so store properties in separate object:
-      firstTouch.screenX = currTouch.screenX;
-      firstTouch.screenY = currTouch.screenY;
-      firstTouch.time = Date.now();
-    } else if(inTransition) {
-      firstTouch.inTransition = true;
-    } else if(isNavClick) {
-      firstTouch.isNavClick = true;
-    }
+  var isNavClick = e.target.id.match(/left|right/);
+  if(e.changedTouches.length > 1 || (e.scale && e.scale != 1)) {
+    e.preventDefault();
+  }
+  var currTouch = e.changedTouches[0];
+  if(!inTransition && !isNavClick) {
+    // positionedShowcases.forEach(clearTransition);
+    // iOS safari reuses touch objects across events, so store properties in separate object:
+    firstTouch.screenX = currTouch.screenX;
+    firstTouch.screenY = currTouch.screenY;
+    firstTouch.time = Date.now();
+  } else if(inTransition) {
+    firstTouch.inTransition = true;
+  } else if(isNavClick) {
+    firstTouch.isNavClick = true;
   }
 }, false);
 
