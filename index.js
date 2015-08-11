@@ -168,6 +168,8 @@ window.addEventListener('hashchange', function() {
       // was removed, so hide #showcases:
       clearTransform();
       showcases.style.display = 'none';
+      var noHover = document.getElementsByClassName('photo-grid-square-no-hover');
+      (noHover[0] || noHover).className = 'photo-grid-square';
     }
   }
 }, false);
@@ -175,6 +177,7 @@ window.addEventListener('hashchange', function() {
 photoGallery.addEventListener('click', function(e) {
   var photoId = (e.target.id || '').match(/photo_[0-9]+$/);
   if(photoId) {
+    e.target.parentElement.parentElement.className = 'photo-grid-square-no-hover';
     loadShowcase(photoId[0]);
   }
 }, false);
@@ -210,11 +213,11 @@ function setTransition(element, callback) {
 }
 
 function clearTransition(element) {
-  element.style.webkitTransition = '';
-  element.style.mozTransition    = '';
-  element.style.msTransition     = '';
-  element.style.oTransition      = '';
-  element.style.transition       = '';
+  element.style.webkitTransition = 'none';
+  element.style.mozTransition    = 'none';
+  element.style.msTransition     = 'none';
+  element.style.oTransition      = 'none';
+  element.style.transition       = 'none';
 }
 
 function slideShowcase(goDir) {
@@ -300,54 +303,58 @@ var firstTouch = {};
 
 showcases.addEventListener('touchstart', function(e) {
   var isNavClick = e.target.id.match(/left|right/);
-  if(!inTransition && !isNavClick) {
-    // positionedShowcases.forEach(clearTransition);
-    // iOS safari reuses touch objects across events, so store properties in separate object:
-    firstTouch.screenX = e.changedTouches[0].screenX;
-    firstTouch.screenY = e.changedTouches[0].screenY;
-    firstTouch.time = Date.now();
-  } else if(!isNavClick) {
-    firstTouch.inTransition = true;
+  if(e.touches.length == 1) {
+    var currTouch = e.changedTouches[0];
+    if(!inTransition && !isNavClick) {
+      // positionedShowcases.forEach(clearTransition);
+      // iOS safari reuses touch objects across events, so store properties in separate object:
+      firstTouch.screenX = currTouch.screenX;
+      firstTouch.screenY = currTouch.screenY;
+      firstTouch.time = Date.now();
+    } else if(inTransition) {
+      firstTouch.inTransition = true;
+    } else if(isNavClick) {
+      firstTouch.isNavClick = true;
+    }
   } else {
-    firstTouch.isNavClick = true;
+    firstTouch.multi = true;
+    e.preventDefault();
   }
 }, false);
 
 showcases.addEventListener('touchmove', function(e) {
-  if(!firstTouch.inTransition && !firstTouch.isNavClick) {
+  e.preventDefault();
+  if(e.touches.length == 1 && !firstTouch.multi) {
     var currTouch = e.changedTouches[0];
-    // Ensure this is a one touch swipe and not, e.g. a pinch:
-    if (currTouch.length > 1 || (e.scale && e.scale !== 1)) {
-      return;
-    }
-    var deltaX = currTouch.screenX - firstTouch.screenX,
-        deltaY = currTouch.screenY - firstTouch.screenY;
-    if(!firstTouch.hasOwnProperty('isVertical')) {
-      firstTouch.isVertical = Math.abs(deltaY) > Math.abs(deltaX);
-    }
-    if(firstTouch.isVertical) {
-      var heightRatio = deltaY / window.innerHeight * 100;
-      transformPositionedShowcases(0, heightRatio);
-    } else {
-      // disable horizontal scrolling:
-      e.preventDefault();
-      var widthRatio = deltaX / window.innerWidth * 100;
-      transformPositionedShowcases(widthRatio);
+    if(!firstTouch.inTransition && !firstTouch.isNavClick) {
+      var deltaX = currTouch.screenX - firstTouch.screenX,
+          deltaY = currTouch.screenY - firstTouch.screenY;
+      if(!firstTouch.hasOwnProperty('isVertical')) {
+        firstTouch.isVertical = Math.abs(deltaY) > Math.abs(deltaX);
+      }
+      if(firstTouch.isVertical) {
+        var heightRatio = deltaY / window.innerHeight * 100;
+        transformPositionedShowcases(0, heightRatio);
+      } else {
+        var widthRatio = deltaX / window.innerWidth * 100;
+        transformPositionedShowcases(widthRatio);
+      }
     }
   }
 }, false);
 
 showcases.addEventListener('touchend', function(e) {
-  if(!firstTouch.inTransition && !firstTouch.isNavClick) {
+  if(e.changedTouches.length == 1 && !firstTouch.multi && !firstTouch.inTransition && !firstTouch.isNavClick) {
     var currTouch = e.changedTouches[0];
     var deltaX = currTouch.screenX - firstTouch.screenX,
         deltaY = currTouch.screenY - firstTouch.screenY;
     var quickSwipe = Date.now() - firstTouch.time < 250;
-    if(firstTouch.isVertical) {
+    if(firstTouch.isVertical && deltaY) {
       var halfScreenY = Math.abs(deltaY) > window.innerHeight / 2;
       var exitSwipe = halfScreenY || (quickSwipe && Math.abs(deltaY) > 20);
       if(exitSwipe) {
         var yToGo = deltaY < 0 ? currTouch.screenY : window.innerHeight - currTouch.screenY;
+        if(yToGo < 1) yToGo = 1;
         globalTransition = Math.round(yToGo / window.innerHeight * 800) + 'ms linear';
         positionedShowcases.forEach(setTransition);
         setTransition(positionedShowcases.center, function() {
@@ -360,7 +367,7 @@ showcases.addEventListener('touchend', function(e) {
         positionedShowcases.forEach(setTransition);
         transformPositionedShowcases();
       }
-    } else {
+    } else if(deltaX) {
       var halfScreenX = Math.abs(deltaX) > window.innerWidth / 2;
       var navSwipe = halfScreenX || (quickSwipe && Math.abs(deltaX) > 20);
       if(navSwipe) {
@@ -372,6 +379,8 @@ showcases.addEventListener('touchend', function(e) {
         transformPositionedShowcases();
       }
     }
+  } else {
+    e.preventDefault();
   }
   firstTouch = {};
 }, false);
