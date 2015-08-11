@@ -319,8 +319,11 @@ showcases.addEventListener('touchstart', function(e) {
 
 showcases.addEventListener('touchmove', function(e) {
   e.preventDefault();
+  var currTouch = e.changedTouches[0];
+  if(currTouch.length > 1 || (e.scale && e.scale !== 1)) {
+    return;
+  }
   if(!firstTouch.inTransition && !firstTouch.isNavClick && !firstTouch.multi) {
-    var currTouch = e.changedTouches[0];
     var deltaX = currTouch.screenX - firstTouch.screenX,
         deltaY = currTouch.screenY - firstTouch.screenY;
     if(!firstTouch.hasOwnProperty('isVertical')) {
