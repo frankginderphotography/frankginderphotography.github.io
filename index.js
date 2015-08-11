@@ -301,7 +301,6 @@ var firstTouch = {};
 showcases.addEventListener('touchstart', function(e) {
   var isNavClick = e.target.id.match(/left|right/);
   var currTouch = e.changedTouches[0];
-  var multi = currTouch.length > 1 || (e.scale && e.scale !== 1);
   if(!inTransition && !isNavClick && !multi) {
     // positionedShowcases.forEach(clearTransition);
     // iOS safari reuses touch objects across events, so store properties in separate object:
@@ -312,8 +311,6 @@ showcases.addEventListener('touchstart', function(e) {
     firstTouch.inTransition = true;
   } else if(isNavClick) {
     firstTouch.isNavClick = true;
-  } else {
-    firstTouch.multi = true;
   }
 }, false);
 
@@ -323,7 +320,7 @@ showcases.addEventListener('touchmove', function(e) {
   if(currTouch.length > 1 || (e.scale && e.scale !== 1)) {
     return;
   }
-  if(!firstTouch.inTransition && !firstTouch.isNavClick && !firstTouch.multi) {
+  if(!firstTouch.inTransition && !firstTouch.isNavClick) {
     var deltaX = currTouch.screenX - firstTouch.screenX,
         deltaY = currTouch.screenY - firstTouch.screenY;
     if(!firstTouch.hasOwnProperty('isVertical')) {
@@ -341,7 +338,7 @@ showcases.addEventListener('touchmove', function(e) {
 }, false);
 
 showcases.addEventListener('touchend', function(e) {
-  if(!firstTouch.inTransition && !firstTouch.isNavClick && !firstTouch.multi) {
+  if(!firstTouch.inTransition && !firstTouch.isNavClick) {
     var currTouch = e.changedTouches[0];
     var deltaX = currTouch.screenX - firstTouch.screenX,
         deltaY = currTouch.screenY - firstTouch.screenY;
