@@ -433,12 +433,18 @@ scroller.addEventListener('mousedown', function(e) {
 }, false);
 
 document.getElementById('topbar').addEventListener('click', function showContent() {
-  var span = document.getElementsByTagName('span')[0];
-  sidebarContent.style.maxHeight = window.innerHeight - 45 - span.clientHeight + 'px';
+  var tm = document.getElementById('tm');
+  sidebarContent.style.maxHeight = window.innerHeight - 45 - tm.clientHeight + 'px';
+  njn.Array.forEach(this.getElementsByClassName('arrow'), function(span) {
+    span.innerHTML = "&#9652;"
+  });
   setTransform(sidebarContent, 'translateY(0px)');
   this.removeEventListener('click', showContent, false);
   var hideContent = (function() {
     setTransform(sidebarContent, '');
+    njn.Array.forEach(this.getElementsByClassName('arrow'), function(span) {
+      span.innerHTML = "&#9662;"
+    });
     this.removeEventListener('click', hideContent, false);
     window.removeEventListener('resize', hideContent, false);
     this.addEventListener('click', showContent, false);

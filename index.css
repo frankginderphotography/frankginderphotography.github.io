@@ -225,6 +225,18 @@ a:hover {
   }
   #topbar {
     display: block;
+    position: relative;
+  }
+  #topbar span {
+    font-size: 1em;
+    line-height: 33px;
+    vertical-align: top;
+    position: absolute;
+    left: 0px;
+  }
+  #topbar span:last-of-type {
+    left: initial;
+    right: 0;
   }
   #sidebar {
     position: relative;
