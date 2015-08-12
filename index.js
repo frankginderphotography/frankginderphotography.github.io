@@ -407,7 +407,6 @@ photoGallery.addEventListener('scroll', function() {
 var sidebarContent = document.getElementById('sidebar-content');
 
 (window.onresize = function() {
-  setTransform(sidebarContent, '');
   var heightRatio = Math.round(photoGallery.clientHeight / photoGallery.scrollHeight * 100);
   if(heightRatio < 100) {
     scroller.style.height = heightRatio + '%';
@@ -438,9 +437,12 @@ document.getElementById('topbar').addEventListener('click', function showContent
   sidebarContent.style.maxHeight = window.innerHeight - 45 - span.clientHeight + 'px';
   setTransform(sidebarContent, 'translateY(0px)');
   this.removeEventListener('click', showContent, false);
-  this.addEventListener('click', function hideContent() {
+  var hideContent = (function() {
     setTransform(sidebarContent, '');
     this.removeEventListener('click', hideContent, false);
+    window.removeEventListener('resize', hideContent, false);
     this.addEventListener('click', showContent, false);
-  }, false);
+  }).bind(this);
+  window.addEventListener('resize', hideContent, false); 
+  this.addEventListener('click', hideContent, false);
 }, false);
