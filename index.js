@@ -435,7 +435,7 @@ scroller.addEventListener('mousedown', function(e) {
 
 document.getElementById('topbar').addEventListener('click', function showContent() {
   var span = document.getElementsByTagName('span')[0];
-  sidebarContent.style.maxHeight = window.innerHeight - 44 - span.clientHeight + 'px';
+  sidebarContent.style.maxHeight = window.innerHeight - 45 - span.clientHeight + 'px';
   setTransform(sidebarContent, 'translateY(0px)');
   this.removeEventListener('click', showContent, false);
   this.addEventListener('click', function hideContent() {
