@@ -302,8 +302,8 @@ photoGallery.addEventListener('touchstart', function(e) {
 var firstTouch = {};
 
 showcases.addEventListener('touchstart', function(e) {
-  var isNavClick = e.target.id.match(/left|right/);
   if(e.touches.length == 1) {
+    var isNavClick = e.target.id.match(/left|right/);
     var currTouch = e.changedTouches[0];
     if(!inTransition && !isNavClick) {
       // positionedShowcases.forEach(clearTransition);
@@ -379,7 +379,7 @@ showcases.addEventListener('touchend', function(e) {
         transformPositionedShowcases();
       }
     }
-  } else {
+  } else if(!firstTouch.isNavClick) {
     e.preventDefault();
   }
   firstTouch = {};
@@ -420,4 +420,15 @@ scroller.addEventListener('mousedown', function(e) {
       scroller.className = '';
     });
   });
+}, false);
+
+document.getElementById('topbar').addEventListener('click', function showContent() {
+  var sidebarContent = document.getElementById('sidebar-content');
+  sidebarContent.style.transform = 'translateY(0px)';
+  this.removeEventListener('click', showContent, false);
+  this.addEventListener('click', function hideContent() {
+    sidebarContent.style.transform = '';
+    this.removeEventListener('click', hideContent, false);
+    this.addEventListener('click', showContent, false);
+  }, false);
 }, false);
