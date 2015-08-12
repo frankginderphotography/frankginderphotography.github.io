@@ -240,6 +240,7 @@ a:hover {
     border-bottom: 1px solid white;
     width: 100%;
     background: black;
+    overflow: auto;
     -webkit-transform: translateY(-100%);
        -moz-transform: translateY(-100%);
         -ms-transform: translateY(-100%);

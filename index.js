@@ -404,7 +404,10 @@ photoGallery.addEventListener('scroll', function() {
   scroller.style.top = Math.round(photoGallery.scrollTop / photoGallery.scrollHeight * 100) + '%';
 }, false);
 
+var sidebarContent = document.getElementById('sidebar-content');
+
 (window.onresize = function() {
+  setTransform(sidebarContent, '');
   var heightRatio = Math.round(photoGallery.clientHeight / photoGallery.scrollHeight * 100);
   if(heightRatio < 100) {
     scroller.style.height = heightRatio + '%';
@@ -431,7 +434,7 @@ scroller.addEventListener('mousedown', function(e) {
 }, false);
 
 document.getElementById('topbar').addEventListener('click', function showContent() {
-  var sidebarContent = document.getElementById('sidebar-content');
+  sidebarContent.style.maxHeight = window.innerHeight - 67 + 'px';
   setTransform(sidebarContent, 'translateY(0px)');
   this.removeEventListener('click', showContent, false);
   this.addEventListener('click', function hideContent() {
