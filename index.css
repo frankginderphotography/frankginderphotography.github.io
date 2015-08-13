@@ -52,9 +52,7 @@ a:hover {
 }
 
 .grouplink-div {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-right: 10px;
+  padding: 10px;
   text-align: right;
 }
 
@@ -225,7 +223,50 @@ a:hover {
     text-align: left;
     margin: 0px;
   }
-  #topbar { display: block; }
-  #sidebar-content { display: none; }
+  #topbar {
+    display: block;
+    position: relative;
+  }
+  #topbar span {
+    font-size: 1em;
+    line-height: 33px;
+    vertical-align: top;
+    position: absolute;
+    left: 0px;
+  }
+  #topbar span:last-of-type {
+    left: initial;
+    right: 0;
+  }
+  #sidebar {
+    position: relative;
+  }
+  #sidebar-content-container {
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+  }
+  #sidebar-content {
+    z-index: 2;
+    position: relative;
+    border-bottom: 1px solid white;
+    width: 100%;
+    background: black;
+    overflow: auto;
+    -webkit-transform: translateY(-100%);
+       -moz-transform: translateY(-100%);
+        -ms-transform: translateY(-100%);
+         -o-transform: translateY(-100%);
+            transform: translateY(-100%);
+    -webkit-transition: -webkit-transform 200ms linear;
+       -moz-transition:    -moz-transform 200ms linear;
+        -ms-transition:     -ms-transform 200ms linear;
+         -o-transition:      -o-transform 200ms linear;
+            transition:         transform 200ms linear;
+  }
+  .grouplink-div {
+    text-align: center;
+  }
   #scrollbar { display: none; }
+  #logo { display: none; }
 }

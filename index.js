@@ -122,13 +122,17 @@ function transformPositionedShowcases(pctOffset, y) {
   positionedShowcases.forEach(function(showcase, i) {
     var translateFunction = 'translate(' + (i * 100 + (pctOffset || 0)) + '%, ' + (y || 0) + '%)';
     if(showcase) {
-      showcase.style.webkitTransform = translateFunction;
-      showcase.style.mozTransform    = translateFunction;
-      showcase.style.msTransform     = translateFunction;
-      showcase.style.oTransform      = translateFunction;
-      showcase.style.transform       = translateFunction;
+      setTransform(showcase, translateFunction);
     }
   });
+}
+
+function setTransform(element, translateFunction) {
+  element.style.webkitTransform = translateFunction;
+  element.style.mozTransform    = translateFunction;
+  element.style.msTransform     = translateFunction;
+  element.style.oTransform      = translateFunction;
+  element.style.transform       = translateFunction;
 }
 
 function loadShowcase(photoId) {
@@ -185,7 +189,7 @@ photoGallery.addEventListener('click', function(e) {
 var globalTransition = '400ms linear',
     inTransition;
 
-function setTransition(element, callback) {
+function setTransitionWithEnd(element, callback) {
   if(!element) { return; }
   njn.Array.forEach(
     ['transitionend', 'webkitTransitionEnd', 'oTransitionEnd', 'otransitionend'],
@@ -202,14 +206,18 @@ function setTransition(element, callback) {
         }
         element.removeEventListener(transitionName, transitionEnd, false);
       }, false);
-      element.style.webkitTransition = '-webkit-transform ' + globalTransition;
-         element.style.mozTransition =    '-moz-transform ' + globalTransition;
-          element.style.msTransition =     '-ms-transform ' + globalTransition;
-           element.style.oTransition =      '-o-transform ' + globalTransition;
-            element.style.transition =         'transform ' + globalTransition;
+      setTransition(element, globalTransition);
       inTransition = true;
     }
   );
+}
+
+function setTransition(element, transition) {
+  element.style.webkitTransition = '-webkit-transform ' + transition;
+     element.style.mozTransition =    '-moz-transform ' + transition;
+      element.style.msTransition =     '-ms-transform ' + transition;
+       element.style.oTransition =      '-o-transform ' + transition;
+        element.style.transition =         'transform ' + transition;
 }
 
 function clearTransition(element) {
@@ -229,11 +237,11 @@ function slideShowcase(goDir) {
   }
   
   positionedShowcases.set(oppDir, positionedShowcases.center);
-  setTransition(positionedShowcases[oppDir]);
+  setTransitionWithEnd(positionedShowcases[oppDir]);
   positionedShowcases.center = undefined;
   
   positionedShowcases.set('center', positionedShowcases[goDir]);
-  setTransition(positionedShowcases.center);
+  setTransitionWithEnd(positionedShowcases.center);
   positionedShowcases[goDir] = undefined;
   
   var upOrDown = goDir == 'left' ? -2 : 2;
@@ -302,8 +310,8 @@ photoGallery.addEventListener('touchstart', function(e) {
 var firstTouch = {};
 
 showcases.addEventListener('touchstart', function(e) {
-  var isNavClick = e.target.id.match(/left|right/);
   if(e.touches.length == 1) {
+    var isNavClick = e.target.id.match(/left|right/);
     var currTouch = e.changedTouches[0];
     if(!inTransition && !isNavClick) {
       // positionedShowcases.forEach(clearTransition);
@@ -356,15 +364,15 @@ showcases.addEventListener('touchend', function(e) {
         var yToGo = deltaY < 0 ? currTouch.screenY : window.innerHeight - currTouch.screenY;
         if(yToGo < 1) yToGo = 1;
         globalTransition = Math.round(yToGo / window.innerHeight * 800) + 'ms linear';
-        positionedShowcases.forEach(setTransition);
-        setTransition(positionedShowcases.center, function() {
+        positionedShowcases.forEach(setTransitionWithEnd);
+        setTransitionWithEnd(positionedShowcases.center, function() {
           var click = new MouseEvent('click', { bubbles: true });
           showcases.getElementsByClassName('showcase')[0].dispatchEvent(click);
         });
         transformPositionedShowcases(0, deltaY > 0 ? 100 : -100);
       } else {
         globalTransition = Math.round(Math.abs(deltaY) / window.innerHeight * 400) + 'ms linear';
-        positionedShowcases.forEach(setTransition);
+        positionedShowcases.forEach(setTransitionWithEnd);
         transformPositionedShowcases();
       }
     } else if(deltaX) {
@@ -375,7 +383,7 @@ showcases.addEventListener('touchend', function(e) {
         navigatePhotos(deltaX > 0 ? 'left' : 'right');
       } else {
         globalTransition = Math.round(Math.abs(deltaX) / window.innerWidth * 400) + 'ms linear';
-        positionedShowcases.forEach(setTransition);
+        positionedShowcases.forEach(setTransitionWithEnd);
         transformPositionedShowcases();
       }
     }
@@ -395,6 +403,8 @@ var scroller = scrollbar.children[0];
 photoGallery.addEventListener('scroll', function() {
   scroller.style.top = Math.round(photoGallery.scrollTop / photoGallery.scrollHeight * 100) + '%';
 }, false);
+
+var sidebarContent = document.getElementById('sidebar-content');
 
 (window.onresize = function() {
   var heightRatio = Math.round(photoGallery.clientHeight / photoGallery.scrollHeight * 100);
@@ -420,4 +430,25 @@ scroller.addEventListener('mousedown', function(e) {
       scroller.className = '';
     });
   });
+}, false);
+
+document.getElementById('topbar').addEventListener('click', function showContent() {
+  var tm = document.getElementById('tm');
+  sidebarContent.style.maxHeight = window.innerHeight - 45 - tm.clientHeight + 'px';
+  njn.Array.forEach(this.getElementsByClassName('arrow'), function(span) {
+    span.innerHTML = "&#9652;"
+  });
+  setTransform(sidebarContent, 'translateY(0px)');
+  this.removeEventListener('click', showContent, false);
+  var hideContent = (function() {
+    setTransform(sidebarContent, '');
+    njn.Array.forEach(this.getElementsByClassName('arrow'), function(span) {
+      span.innerHTML = "&#9662;"
+    });
+    this.removeEventListener('click', hideContent, false);
+    window.removeEventListener('resize', hideContent, false);
+    this.addEventListener('click', showContent, false);
+  }).bind(this);
+  window.addEventListener('resize', hideContent, false); 
+  this.addEventListener('click', hideContent, false);
 }, false);
