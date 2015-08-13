@@ -43,10 +43,10 @@ for(var i = rangeStart; i <= rangeEnd; i++) {
   });
 }
 
-njn.controller('photo-gallery', { photos: photos });
+njn.controller('thumbnail-gallery', { photos: photos });
 njn.controller('showcases', { photos: photos, indexRange: indexRange });
 
-var photoGallery = document.getElementById('photo-gallery');
+var photoGallery = document.getElementById('thumbnail-gallery');
 var showcases    = document.getElementById('showcases');
 var leftClick    = document.getElementById('left-click');
 var rightClick   = document.getElementById('right-click');
@@ -172,8 +172,8 @@ window.addEventListener('hashchange', function() {
       // was removed, so hide #showcases:
       clearTransform();
       showcases.style.display = 'none';
-      var noHover = document.getElementsByClassName('photo-grid-square-no-hover');
-      (noHover[0] || noHover).className = 'photo-grid-square';
+      var noHover = document.getElementsByClassName('thumbnail-grid-square-no-hover');
+      (noHover[0] || noHover).className = 'thumbnail-grid-square';
     }
   }
 }, false);
@@ -181,7 +181,7 @@ window.addEventListener('hashchange', function() {
 photoGallery.addEventListener('click', function(e) {
   var photoId = (e.target.id || '').match(/photo_[0-9]+$/);
   if(photoId) {
-    e.target.parentElement.parentElement.className = 'photo-grid-square-no-hover';
+    e.target.parentElement.parentElement.className = 'thumbnail-grid-square-no-hover';
     loadShowcase(photoId[0]);
   }
 }, false);
@@ -297,10 +297,10 @@ window.addEventListener('keydown', function(e) {
 photoGallery.addEventListener('touchstart', function(e) {
   if(e.target.className === 'thumbnail') {
     var gridSquare = e.target.parentElement.parentElement;
-    if(gridSquare.className === 'photo-grid-square') {
-      gridSquare.className = 'photo-grid-square-no-hover';
+    if(gridSquare.className === 'thumbnail-grid-square') {
+      gridSquare.className = 'thumbnail-grid-square-no-hover';
       e.target.addEventListener('mouseenter', function makeHoverableAgain() {
-        e.target.parentElement.parentElement.className = 'photo-grid-square';
+        e.target.parentElement.parentElement.className = 'thumbnail-grid-square';
         e.target.removeEventListener('mouseenter', makeHoverableAgain, false);
       }, false);
     }
