@@ -180,6 +180,7 @@ a:hover {
 
 @media (max-width: 448px) {
   #outer { bottom: auto; }
+  #inner { height: auto; }
 
   #inner > div {
     float: none;
@@ -187,11 +188,13 @@ a:hover {
   
   #hide-scrollbar {
     width: 300px;
+    height: auto;
   }
 
   #thumbnail-gallery {
     width: 320px;
     padding-left: 25px;
+    height: auto;
   }
   
   .thumbnail-grid-square, .thumbnail-grid-square-no-hover {
