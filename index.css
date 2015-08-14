@@ -260,4 +260,8 @@ a:hover {
   
   #scrollbar { display: none; }
   #logo { display: none; }
+
+  .showcases {
+    z-index: 2;
+  }
 }
