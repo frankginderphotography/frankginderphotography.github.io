@@ -264,4 +264,8 @@ a:hover {
   #showcases {
     z-index: 2;
   }
+
+  #tm {
+    z-index: 2;
+  }
 }
