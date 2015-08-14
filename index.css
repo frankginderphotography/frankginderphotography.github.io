@@ -179,6 +179,8 @@ a:hover {
 }
 
 @media (max-width: 448px) {
+  #outer { bottom: auto; }
+
   #inner > div {
     float: none;
   }
