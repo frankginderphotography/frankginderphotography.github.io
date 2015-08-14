@@ -261,7 +261,7 @@ a:hover {
   #scrollbar { display: none; }
   #logo { display: none; }
 
-  .showcases {
+  #showcases {
     z-index: 2;
   }
 }
