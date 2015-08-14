@@ -179,7 +179,7 @@ a:hover {
 }
 
 @media (max-width: 448px) {
-  #outer { bottom: auto; }
+  #outer { bottom: auto; position: static; }
   #inner { height: auto; }
 
   #inner > div {
