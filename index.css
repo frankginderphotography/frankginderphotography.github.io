@@ -195,6 +195,7 @@ a:hover {
     width: 320px;
     padding-left: 25px;
     height: auto;
+    margin-top: 44px;
   }
   
   .thumbnail-grid-square, .thumbnail-grid-square-no-hover {
@@ -202,7 +203,8 @@ a:hover {
   }
   
   #sidebar {
-    position: relative;
+    position: fixed;
+    top: 0; left: 0; right: 0;
   }
   
   #topbar {
