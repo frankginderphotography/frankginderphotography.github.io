@@ -22,13 +22,17 @@ a:hover {
 }
 
 #outer {
+  /* next two lines make it fill screen: */
   position: fixed;
   top: 0; bottom: 0; right: 0; left: 0;
+  /* center all content: */
   text-align: center;
 }
 
 #inner {
+  /* allow it to be centered: */
   display: inline-block;
+  /* not as wide as screen (because it will be centered), but as tall: */
   height: 100%;
 }
 
@@ -228,7 +232,7 @@ a:hover {
     position: relative;
     z-index: 2;
     border-bottom: 1px solid white;
-    width: 100%;
+    width: 320px;
     background: black;
     overflow: auto;
     -webkit-transform: translateY(-100%);
