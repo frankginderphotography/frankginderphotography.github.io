@@ -470,7 +470,7 @@ document.addEventListener('touchmove', function(e) {
     var touchYDelta = touchY - lastTouchY;
     lastTouchY = touchY;
 
-    if (startFromZero && touchYDelta > 0 && window.pageYOffset >= 0) {
+    if (startFromZero && touchYDelta > 0 && window.pageYOffset == 0) {
       startFromZero = false;
       e.preventDefault();
       return;
