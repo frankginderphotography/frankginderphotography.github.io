@@ -473,8 +473,8 @@ document.addEventListener('touchmove', function(e) {
     if (startFromZero) {
       // To suppress pull-to-refresh it is sufficient to preventDefault the
       // first overscrolling touchmove.
-      startFromZero = false;
       if (touchYDelta > 0) {
+        startFromZero = false;
         e.preventDefault();
         return;
       }
