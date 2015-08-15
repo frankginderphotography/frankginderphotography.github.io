@@ -307,6 +307,8 @@ photoGallery.addEventListener('touchstart', function(e) {
   }
 }, false);
 
+photoGallery.addEventListener('touchmove', function(e) { e.stopPropagation(); }, false);
+
 var firstTouch = {};
 
 showcases.addEventListener('touchstart', function(e) {
