@@ -307,8 +307,6 @@ photoGallery.addEventListener('touchstart', function(e) {
   }
 }, false);
 
-photoGallery.addEventListener('touchmove', function(e) { e.stopPropagation(); }, false);
-
 var firstTouch = {};
 
 showcases.addEventListener('touchstart', function(e) {
@@ -453,4 +451,31 @@ document.getElementById('topbar').addEventListener('click', function showContent
   }).bind(this);
   window.addEventListener('resize', hideContent, false); 
   this.addEventListener('click', hideContent, false);
+}, false);
+
+// hack from https://docs.google.com/document/d/12Ay4s3NWake8Qd6xQeGiYimGJ_gCe0UMDZKwP9Ni4m8/edit
+// to prevent pull-to-refresh in mobile chrome:
+
+var lastTouchY,
+    startFromZero = false;
+
+document.addEventListener('touchstart', function(e) {
+  if (e.touches.length != 1) return;
+  lastTouchY = e.touches[0].clientY;
+  startFromZero = window.pageYOffset == 0;
+}, false);
+
+document.addEventListener('touchmove', function(e) {
+    var touchY = e.touches[0].clientY;
+    var touchYDelta = touchY - lastTouchY;
+
+    if (startFromZero) {
+      // To suppress pull-to-refresh it is sufficient to preventDefault the
+      // first overscrolling touchmove.
+      startFromZero = false;
+      if (touchYDelta > 0) {
+        e.preventDefault();
+        return;
+      }
+    }
 }, false);
