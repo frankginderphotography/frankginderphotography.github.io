@@ -468,14 +468,11 @@ document.addEventListener('touchstart', function(e) {
 document.addEventListener('touchmove', function(e) {
     var touchY = e.touches[0].clientY;
     var touchYDelta = touchY - lastTouchY;
+    lastTouchY = touchY;
 
-    if (maybePreventPullToRefresh) {
-      // To suppress pull-to-refresh it is sufficient to preventDefault the
-      // first overscrolling touchmove.
-      maybePreventPullToRefresh = false;
-      if (touchYDelta > 0) {
-        e.preventDefault();
-        return;
-      }
+    if (startFromZero && touchYDelta > 0 && window.pageYOffset >= 0) {
+      startFromZero = false;
+      e.preventDefault();
+      return;
     }
 }, false);
