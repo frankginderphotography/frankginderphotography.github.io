@@ -470,13 +470,10 @@ document.addEventListener('touchmove', function(e) {
     var touchYDelta = touchY - lastTouchY;
     lastTouchY = touchY;
 
-    if (startFromZero) {
+    if (window.pageYOffset == 0 && touchDelta > 0) {
       // To suppress pull-to-refresh it is sufficient to preventDefault the
       // first overscrolling touchmove.
-      if (touchYDelta > 0) {
-        startFromZero = false;
-        e.preventDefault();
-        return;
-      }
+      e.preventDefault();
+      return;
     }
 }, false);
