@@ -194,8 +194,14 @@ a:hover {
 }
 
 @media (max-width: 448px) {
-  #outer { bottom: auto; position: static; }
-  #inner { height: auto; }
+  #outer {
+    bottom: auto;
+    position: static;
+  }
+  
+  #inner {
+    height: auto;
+  }
 
   #inner > div {
     float: none;
@@ -207,9 +213,9 @@ a:hover {
   }
 
   #thumbnail-gallery {
-    width: 320px;
-    padding-left: 25px;
+    width: 300px;
     height: auto;
+    padding-left: 25px;
     margin-top: 44px;
   }
   
@@ -226,6 +232,8 @@ a:hover {
   #topbar {
     display: block;
     position: relative;
+    z-index: 2;
+    background: black;
   }
   
   #topbar span {
@@ -234,22 +242,16 @@ a:hover {
   }
   
   #topbar span:first-of-type {
-    left: 0;
+    left: 10px;
   }
   
   #topbar span:last-of-type {
-    right: 0;
+    right: 10px;
   }
   
   #sidebar-content-container {
     position: absolute;
-    width: 100%;
-  }
-  
-  #sidebar-content {
-    border-bottom: 1px solid white;
-    width: 320px;
-    background: black;
+    width: 125%;
     -webkit-transform: translateY(-100%);
        -moz-transform: translateY(-100%);
         -ms-transform: translateY(-100%);
@@ -262,14 +264,20 @@ a:hover {
             transition:         transform 200ms linear;
   }
   
-  /* to do: make sidebar-content scrollable */
-  /* to do: figure out weird resizing on iPhone chrome */
+  #sidebar-content {
+    border-bottom: 1px solid white;
+    width: 80%;
+    background: black;
+  }
+  
   /* to do: arrows when scrollable */
   /* to do: swipe left/right for next/prev photo grouping */
   /* set no-hover on touchmove */
+  
   .grouplink-div {
     text-align: center;
-    width: 280px;
+    width: 100%;
+    padding: 10px 0px;
   }
   
   #scrollbar { display: none; }

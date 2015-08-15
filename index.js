@@ -438,10 +438,10 @@ document.getElementById('topbar').addEventListener('click', function showContent
   njn.Array.forEach(this.getElementsByClassName('arrow'), function(span) {
     span.innerHTML = "&#9652;"
   });
-  setTransform(sidebarContent, 'translateY(0px)');
+  setTransform(sidebarContent.parentElement, 'translateY(0px)');
   this.removeEventListener('click', showContent, false);
   var hideContent = (function() {
-    setTransform(sidebarContent, '');
+    setTransform(sidebarContent.parentElement, '');
     njn.Array.forEach(this.getElementsByClassName('arrow'), function(span) {
       span.innerHTML = "&#9662;"
     });
