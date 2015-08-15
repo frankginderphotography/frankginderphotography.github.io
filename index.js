@@ -470,7 +470,7 @@ document.addEventListener('touchmove', function(e) {
     var touchYDelta = touchY - lastTouchY;
     lastTouchY = touchY;
 
-    if (window.pageYOffset == 0 && touchDelta > 0) {
+    if (window.pageYOffset == 0 && touchYDelta > 0) {
       // To suppress pull-to-refresh it is sufficient to preventDefault the
       // first overscrolling touchmove.
       e.preventDefault();
