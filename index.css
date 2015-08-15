@@ -44,6 +44,16 @@ a:hover {
   max-height: 100%;
 }
 
+#sidebar-content-container {
+  overflow: hidden;
+  width: 113px;
+}
+
+#sidebar-content {
+  overflow: auto;
+  width: 133px;
+}
+
 #topbar {
   display: none;
 }
@@ -54,6 +64,7 @@ a:hover {
 }
 
 .grouplink-div {
+  width: 93px;
   padding: 10px;
   text-align: right;
 }
@@ -224,7 +235,6 @@ a:hover {
   
   #sidebar-content-container {
     position: absolute;
-    overflow: hidden;
     width: 100%;
   }
   
@@ -234,7 +244,6 @@ a:hover {
     border-bottom: 1px solid white;
     width: 320px;
     background: black;
-    overflow: auto;
     -webkit-transform: translateY(-100%);
        -moz-transform: translateY(-100%);
         -ms-transform: translateY(-100%);
@@ -254,6 +263,7 @@ a:hover {
   
   .grouplink-div {
     text-align: center;
+    width: 280px;
   }
   
   #scrollbar { display: none; }
