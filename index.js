@@ -468,6 +468,7 @@ document.addEventListener('touchstart', function(e) {
 document.addEventListener('touchmove', function(e) {
     var touchY = e.touches[0].clientY;
     var touchYDelta = touchY - lastTouchY;
+    lastTouchY = touchY;
 
     if (startFromZero) {
       // To suppress pull-to-refresh it is sufficient to preventDefault the
