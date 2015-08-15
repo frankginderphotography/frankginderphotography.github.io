@@ -10,6 +10,7 @@ body {
   background: black;
   color: white;
   font-family: 'Open Sans Condensed', sans-serif;
+  touch-action: none;
 }
 
 a {

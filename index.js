@@ -452,7 +452,3 @@ document.getElementById('topbar').addEventListener('click', function showContent
   window.addEventListener('resize', hideContent, false); 
   this.addEventListener('click', hideContent, false);
 }, false);
-
-document.addEventListener('scroll', function(e) {
-  if(this.body.scrollTop == 0) { e.preventDefault(); }
-}, false);
