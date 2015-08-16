@@ -1,4 +1,3 @@
-// strict mode broke mobile, need to find out why:
 "use strict";
 
 // var max = number of photos on server
@@ -6,7 +5,7 @@
 // if small screen, groups of 12 instead to minimize loading time:
 
 var indexRanges = [],
-    max = 151,
+    max = Object.keys(registeredPhotos).length,
     groupsOf = window.innerWidth < 551 ? 11 : 23;
 
 (function() {
@@ -35,7 +34,6 @@ var photos = [];
 for(var i = rangeStart; i <= rangeEnd; i++) {
   var id = registeredPhotos[i];
   photos.push({
-    id:         id,
     src:        'photos/' + id + '.jpg',
     href:       '#/' + indexRange + '/' + i,
     thumbnail:  'photos/thumbnails/' + id + '.png',
