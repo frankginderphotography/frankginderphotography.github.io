@@ -22,16 +22,17 @@ a:hover {
 }
 
 #outer {
+  /* next two lines make it fill screen: */
   position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
+  top: 0; bottom: 0; right: 0; left: 0;
+  /* center all content: */
   text-align: center;
 }
 
 #inner {
+  /* allow it to be centered: */
   display: inline-block;
+  /* not as wide as screen (because it will be centered), but as tall: */
   height: 100%;
 }
 
@@ -39,50 +40,57 @@ a:hover {
   float: left;
 }
 
+#sidebar {
+  max-height: 100%;
+}
+
+#sidebar-content-container {
+  overflow: hidden;
+  width: 113px;
+}
+
+#sidebar-content {
+  overflow: auto;
+  width: 133px;
+}
+
 #topbar {
   display: none;
-  background: black;
 }
 
 #logo {
   display: block;
-  margin-right: 10px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px 10px 10px 0px;
 }
 
 .grouplink-div {
+  width: 93px;
   padding: 10px;
   text-align: right;
 }
 
-#photo-gallery, #hide-scrollbar {
-  position: relative;
-  /* four thumbnails, each 250px wide + 5px left- and right-margin + extra 25px on left and right */
-  /* plus extra 20 for default scrollbar and extra 10 for custom scrollbar: */
-  width: 1120px;
+#hide-scrollbar, #thumbnail-gallery {
   height: 100%;
 }
 
-#photo-gallery {
-  overflow-y: auto;
-  left: 20px; /* move to the right to hide scrollbar */
-  text-align: left; /* because set to center on #outer */
-  overflow-x: hidden;
-  padding-left: 25px;
-  padding-right: 25px;
+#hide-scrollbar {
+  /* #thumbnail-gallery width - 20 to hide default scrollbar */
+  width: 1075px;
+  overflow: hidden;
 }
 
-#hide-scrollbar {
-  left: -20px;
-  overflow-x: hidden;
+#thumbnail-gallery {
+  /* four thumbnails, each 250px wide + 10px margin each + 25px padding */
+  /* plus extra 20 for default scrollbar and extra 10 for custom scrollbar: */
+  width: 1095px;
+  overflow-y: auto;
+  text-align: left; /* because set to center on #outer */
+  padding-left: 25px;
 }
 
 #scrollbar {
   width: 10px;
   height: 100%;
-  position: relative;
-  left: -20px;
 }
 
 #scrollbar div {
@@ -111,60 +119,39 @@ a:hover {
   background-size: 64px 64px;
 }
 
-
-#showcases > .in-transition {
-  -webkit-transition: -webkit-transform 900ms ease 200ms;
-     -moz-transition:    -moz-transform 900ms ease 200ms;
-      -ms-transition:     -ms-transform 900ms ease 200ms;
-       -o-transition:      -o-transform 900ms ease 200ms;
-          transition:         transform 900ms ease 200ms;
-}
-
 #left-click, #right-click {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-#left-click, #right-click {
-  /* taken from blueimp/Gallery: */
   font-size: 60px;
-  line-height: 30px;
+  line-height: 60px;
   position: absolute;
-  top: 50%;
+  height: 60px;
+  display: block;
+  top: 0; bottom: 0;
+  margin: auto;
+}
+
+#left-click {
   left: 15px;
-  margin-top: -23px;
-  z-index: 2;
 }
 
 #right-click {
-  left: auto;
   right: 15px;
 }
 
 #topbar {
   border-bottom: 1px solid white;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 5px 0px;
   height: 33px;
 }
 
-#topbar span {
-  display: inline-block;
-}
-
 .fullsize {
-  height: auto;
-  width: auto;
   max-width: 100%;
   max-height: 100%;
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
+  left: 0; right: 0; top: 0; bottom: 0;
   margin: auto;
 }
 
-.photo-grid-square, .photo-grid-square-no-hover {
+.thumbnail-grid-square, .thumbnail-grid-square-no-hover {
   position: relative;
   display: inline-block;
   width: 250px;
@@ -172,87 +159,99 @@ a:hover {
   margin: 5px;
 }
 
-.photo-grid-square .photo-link, .photo-grid-square-no-hover .photo-link {
+.thumbnail-grid-square .thumbnail-link, .thumbnail-grid-square-no-hover .thumbnail-link {
   position: absolute;
 }
 
-.photo-grid-square:hover {
-  z-index: 1000;
+.thumbnail-grid-square:hover {
+  z-index: 1;
 }
 
-.photo-grid-square:hover .photo-link {
+.thumbnail-grid-square:hover .thumbnail-link {
   left: -25px;
   top: -25px;
 }
 
-.photo-grid-square:hover .thumbnail {
+.thumbnail-grid-square:hover .thumbnail {
   height: 300px;
   width: 300px;
 }
 
-@media (max-width: 1320px) {
-  #hide-scrollbar, #photo-gallery { width: 860px; }
+@media (max-width: 1228px) {
+  #hide-scrollbar    { width: 830px; }
+  #thumbnail-gallery { width: 850px; }
 }
 
-@media (max-width: 1060px) {
-  #hide-scrollbar, #photo-gallery { width: 600px; }
+@media (max-width: 968px) {
+  #hide-scrollbar    { width: 570px; }
+  #thumbnail-gallery { width: 590px; }
 }
 
 
-@media (max-width: 800px) {
-  #hide-scrollbar, #photo-gallery { width: 340px; }
+@media (max-width: 708px) {
+  #hide-scrollbar    { width: 310px; }
+  #thumbnail-gallery { width: 330px; }
 }
 
-@media (max-width: 550px) {
-  #hide-scrollbar {
-    width: 320px;
+@media (max-width: 448px) {
+  #outer {
+    bottom: auto;
+    position: static;
   }
+  
+  #inner {
+    height: auto;
+  }
+
   #inner > div {
     float: none;
   }
+  
   #hide-scrollbar {
-    left: 0px;
+    width: 300px;
+    height: auto;
   }
-  #photo-gallery {
-    width: 310px;
-    left: 0px;
-    padding-left: 35px;
-    padding-right: 0px;
+
+  #thumbnail-gallery {
+    width: 300px;
+    height: auto;
+    padding-left: 25px;
+    margin-top: 44px;
   }
-  .photo-grid-square, .photo-grid-square-no-hover {
-    text-align: left;
+  
+  .thumbnail-grid-square, .thumbnail-grid-square-no-hover {
     margin: 0px;
   }
+  
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 2;
+  }
+  
   #topbar {
     display: block;
     position: relative;
+    z-index: 2;
+    background: black;
   }
+  
   #topbar span {
-    font-size: 1em;
     line-height: 33px;
-    vertical-align: top;
     position: absolute;
-    left: 0px;
   }
+  
+  #topbar span:first-of-type {
+    left: 10px;
+  }
+  
   #topbar span:last-of-type {
-    left: initial;
-    right: 0;
+    right: 10px;
   }
-  #sidebar {
-    position: relative;
-  }
+  
   #sidebar-content-container {
     position: absolute;
-    overflow: hidden;
-    width: 100%;
-  }
-  #sidebar-content {
-    z-index: 2;
-    position: relative;
-    border-bottom: 1px solid white;
-    width: 100%;
-    background: black;
-    overflow: auto;
+    width: 125%;
     -webkit-transform: translateY(-100%);
        -moz-transform: translateY(-100%);
         -ms-transform: translateY(-100%);
@@ -264,9 +263,31 @@ a:hover {
          -o-transition:      -o-transform 200ms linear;
             transition:         transform 200ms linear;
   }
+  
+  #sidebar-content {
+    border-bottom: 1px solid white;
+    width: 80%;
+    background: black;
+  }
+  
+  /* to do: arrows when scrollable */
+  /* to do: swipe left/right for next/prev photo grouping */
+  /* set no-hover on touchmove */
+  
   .grouplink-div {
     text-align: center;
+    width: 100%;
+    padding: 10px 0px;
   }
+  
   #scrollbar { display: none; }
   #logo { display: none; }
+
+  #showcases {
+    z-index: 2;
+  }
+
+  #tm {
+    z-index: 2;
+  }
 }
