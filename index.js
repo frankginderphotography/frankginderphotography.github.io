@@ -365,7 +365,7 @@ showcases.addEventListener('touchend', function(e) {
       var halfScreenY = Math.abs(deltaY) > window.innerHeight / 2;
       var exitSwipe = halfScreenY || (quickSwipe && Math.abs(deltaY) > 20);
       if(exitSwipe) {
-        var yToGo = deltaY < 0 ? currTouch.screenY : window.innerHeight - currTouch.screenY;
+        var yToGo = deltaY < 0 ? currTouch.clientY : window.innerHeight - currTouch.clientY;
         if(yToGo < 1) yToGo = 1;
         globalTransition = Math.round(yToGo / window.innerHeight * 800) + 'ms linear';
         positionedShowcases.forEach(setTransitionWithEnd);
