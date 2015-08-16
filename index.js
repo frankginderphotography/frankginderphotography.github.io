@@ -297,10 +297,10 @@ var makeNoHover = function(e) {
     var gridSquare = e.target.parentElement.parentElement;
     if(gridSquare.className === 'thumbnail-grid-square') {
       gridSquare.className = 'thumbnail-grid-square-no-hover';
-      e.target.addEventListener('mouseenter', function makeHoverableAgain() {
-        e.target.parentElement.parentElement.className = 'thumbnail-grid-square';
-        //e.target.removeEventListener('mouseenter', makeHoverableAgain, false);
-      }, false);
+      //e.target.addEventListener('mouseenter', function makeHoverableAgain() {
+      //  e.target.parentElement.parentElement.className = 'thumbnail-grid-square';
+      //  e.target.removeEventListener('mouseenter', makeHoverableAgain, false);
+      //}, false);
     }
   }
 };
