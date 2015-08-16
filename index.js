@@ -294,7 +294,7 @@ window.addEventListener('keydown', function(e) {
   }
 }, false);
 
-photoGallery.addEventListener('touchstart', function(e) {
+var makeNoHover = function(e) {
   if(e.target.className === 'thumbnail') {
     var gridSquare = e.target.parentElement.parentElement;
     if(gridSquare.className === 'thumbnail-grid-square') {
@@ -305,7 +305,11 @@ photoGallery.addEventListener('touchstart', function(e) {
       }, false);
     }
   }
-}, false);
+};
+
+photoGallery.addEventListener('touchstart', makeNoHover, false);
+
+photoGallery.addEventListener('touchmove', makeNoHover, false);
 
 var firstTouch = {};
 
@@ -453,7 +457,7 @@ document.getElementById('topbar').addEventListener('click', function showContent
   this.addEventListener('click', hideContent, false);
 }, false);
 
-// hack from https://docs.google.com/document/d/12Ay4s3NWake8Qd6xQeGiYimGJ_gCe0UMDZKwP9Ni4m8/edit
+// hack from https://docs.google.com/document/d/12Ay4s3NWake8Qd6xQeGiYimGJ_gCe0UMDZKwP9Ni4m8
 // to prevent pull-to-refresh in mobile chrome:
 
 var lastTouchY,
@@ -470,7 +474,7 @@ document.addEventListener('touchmove', function(e) {
     var touchYDelta = touchY - lastTouchY;
     lastTouchY = touchY;
 
-    if (startFromZero && touchYDelta > 0 && window.pageYOffset == 0) {
+    if (startFromZero && touchYDelta > 0) {
       startFromZero = false;
       e.preventDefault();
       return;
