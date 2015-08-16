@@ -299,7 +299,7 @@ var makeNoHover = function(e) {
       gridSquare.className = 'thumbnail-grid-square-no-hover';
       e.target.addEventListener('mouseenter', function makeHoverableAgain() {
         e.target.parentElement.parentElement.className = 'thumbnail-grid-square';
-        e.target.removeEventListener('mouseenter', makeHoverableAgain, false);
+        //e.target.removeEventListener('mouseenter', makeHoverableAgain, false);
       }, false);
     }
   }
