@@ -1,5 +1,5 @@
 // strict mode broke mobile, need to find out why:
-// "use strict";
+"use strict";
 
 // var max = number of photos on server
 // break up into groups of 24, returning strings like: '1-24', '25-48', etc.
@@ -238,9 +238,11 @@ function slideShowcase(goDir) {
   setTransitionWithEnd(positionedShowcases[oppDir]);
   positionedShowcases.center = undefined;
 
-  positionedShowcases.set('center', positionedShowcases[goDir]);
-  setTransitionWithEnd(positionedShowcases.center);
-  positionedShowcases[goDir] = undefined;
+  if(positionedShowcases[goDir]) {
+    positionedShowcases.set('center', positionedShowcases[goDir]);
+    setTransitionWithEnd(positionedShowcases.center);
+    positionedShowcases[goDir] = undefined;
+  }
 
   var upOrDown = goDir == 'left' ? -2 : 2;
   var newNextPhotoId = positionedShowcases[oppDir].photoNumber + upOrDown;
