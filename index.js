@@ -301,14 +301,13 @@ var makeNoHover = function(e) {
         e.target.parentElement.parentElement.className = 'thumbnail-grid-square';
         e.target.removeEventListener('mouseenter', makeHoverableAgain, false);
       }, false);
-      e.target.addEventListener('touchend', function(e) {
-        e.preventDefault();
-      }, false);
     }
   }
 };
 
 photoGallery.addEventListener('touchstart', makeNoHover, false);
+
+photoGallery.addEventListener('touchend', makeNoHover, false);
 
 var firstTouch = {};
 
