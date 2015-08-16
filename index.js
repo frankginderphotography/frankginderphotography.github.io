@@ -292,22 +292,21 @@ window.addEventListener('keydown', function(e) {
   }
 }, false);
 
-var makeNoHover = function(e) {
-  if(e.target.className === 'thumbnail') {
-    var gridSquare = e.target.parentElement.parentElement;
-    if(gridSquare.className === 'thumbnail-grid-square') {
-      gridSquare.className = 'thumbnail-grid-square-no-hover';
-      e.target.addEventListener('mouseenter', function makeHoverableAgain() {
-        e.target.parentElement.parentElement.className = 'thumbnail-grid-square';
-        e.target.removeEventListener('mouseenter', makeHoverableAgain, false);
-      }, false);
-    }
-  }
-};
-
-photoGallery.addEventListener('touchstart', makeNoHover, false);
-
-photoGallery.addEventListener('touchend', makeNoHover, false);
+window.addEventListener('touchstart', function makeNoHover() {
+  var gridSquares = document.getElementsByClassName('thumbnail-grid-square');
+  gridSquares = Array.prototype.slice.call(gridSquares);
+  gridSquares.forEach(function(gridSquare) {
+    gridSquare.className = 'thumbnail-grid-square-no-hover';
+  });
+  window.removeEventListener('touchstart', makeNoHover, false);
+  window.addEventListener('mousemove', function makeHover() {
+    gridSquares.forEach(function(gridSquare) {
+      gridSquare.className = 'thumbnail-grid-square';
+    });
+    window.removeEventListener('mousemove', makeHover, false);
+    window.addEventListener('touchstart', makeNoHover, false);
+  }, false);
+}, false);
 
 var firstTouch = {};
 
