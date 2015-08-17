@@ -405,8 +405,6 @@ photoGallery.addEventListener('scroll', function() {
   scroller.style.top = Math.round(photoGallery.scrollTop / photoGallery.scrollHeight * 100) + '%';
 }, false);
 
-var sidebarContent = document.getElementById('sidebar-content');
-
 (window.onresize = function() {
   var heightRatio = Math.round(photoGallery.clientHeight / photoGallery.scrollHeight * 100);
   if(heightRatio < 100) {
@@ -433,8 +431,10 @@ scroller.addEventListener('mousedown', function(e) {
   });
 }, false);
 
+var sidebarContent = document.getElementById('sidebar-content');
+var tm = document.getElementById('tm');
+
 document.getElementById('topbar').addEventListener('click', function showContent() {
-  var tm = document.getElementById('tm');
   sidebarContent.style.maxHeight = window.innerHeight - 45 - tm.clientHeight + 'px';
   njn.Array.forEach(this.getElementsByClassName('arrow'), function(span) {
     span.innerHTML = "&#9652;"
@@ -447,11 +447,13 @@ document.getElementById('topbar').addEventListener('click', function showContent
       span.innerHTML = "&#9662;"
     });
     this.removeEventListener('click', hideContent, false);
-    window.removeEventListener('resize', hideContent, false);
     this.addEventListener('click', showContent, false);
   }).bind(this);
-  window.addEventListener('resize', hideContent, false);
   this.addEventListener('click', hideContent, false);
+}, false);
+
+window.addEventListener('resize', function() {
+  sidebarContent.style.maxHeight = window.innerHeight - 45 - tm.clientHeight + 'px';
 }, false);
 
 // hack from https://docs.google.com/document/d/12Ay4s3NWake8Qd6xQeGiYimGJ_gCe0UMDZKwP9Ni4m8
