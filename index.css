@@ -278,10 +278,6 @@ a:hover {
     background: black;
   }
 
-  /* to do: arrows when scrollable */
-  /* to do: swipe left/right for next/prev photo grouping */
-  /* set no-hover on touchmove */
-
   .grouplink-div {
     text-align: center;
     width: 100%;
