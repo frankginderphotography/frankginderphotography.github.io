@@ -55,12 +55,13 @@ a:hover {
 #sidebar-content-container {
   position: absolute;
   top: 92px; left: 0px; right: 0px; bottom: 0px;
-  overflow-x: hidden;
+  overflow: hidden;
   width: 113px;
 }
 
 #sidebar-content {
   overflow: auto;
+  height: 100%;
   width: 133px;
 }
 
@@ -80,6 +81,7 @@ a:hover {
 
 #hide-scrollbar {
   /* #thumbnail-gallery width - 20 to hide default scrollbar */
+  position: relative;
   width: 1075px;
   overflow: hidden;
 }

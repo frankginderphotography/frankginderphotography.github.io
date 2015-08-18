@@ -25,29 +25,42 @@ njn.controller('sidebar', { indexRanges: indexRanges });
 // #/[startNum]-[endNum]. It may not be present when the site is first
 // loaded, so we'll default to the first index range in the ranges array
 // defined above:
-var indexRange = (location.hash.match(/#\/([0-9]+-[0-9]+)/) || ['',indexRanges[0]])[1];
-var rangeStart = +indexRange.split('-')[0];
-var rangeEnd = +indexRange.split('-')[1];
+var indexRange = location.hash.match(/[0-9]+-[0-9]+/);
 
-var photos = [];
-
-for(var i = rangeStart; i <= rangeEnd; i++) {
-  var id = registeredPhotos[i];
-  photos.push({
-    src:        'photos/' + id + '.jpg',
-    href:       '#/' + indexRange + '/' + i,
-    thumbnail:  'photos/thumbnails/' + id + '.png',
-    photoInd:   i
-  });
+if(!indexRange) {
+  if(!location.hash.match(/contact/)) {
+    indexRange = indexRanges[0];
+  }
+} else {
+  indexRange = indexRange[0];
 }
 
-njn.controller('thumbnail-gallery', { photos: photos });
-njn.controller('showcases', { photos: photos, indexRange: indexRange });
+if(indexRange) {
+  var rangeStart = +indexRange.split('-')[0];
+  var rangeEnd = +indexRange.split('-')[1];
+  
+  var photos = [];
+  
+  for(var i = rangeStart; i <= rangeEnd; i++) {
+    var id = registeredPhotos[i];
+    photos.push({
+      src:        'photos/' + id + '.jpg',
+      href:       '#/' + indexRange + '/' + i,
+      thumbnail:  'photos/thumbnails/' + id + '.png',
+      photoInd:   i
+    });
+  }
+  
+  njn.controller('thumbnail-gallery', { photos: photos });
+  njn.controller('showcases', { photos: photos, indexRange: indexRange });
+}
 
 var photoGallery = document.getElementById('thumbnail-gallery');
 var showcases    = document.getElementById('showcases');
 var leftClick    = document.getElementById('left-click');
 var rightClick   = document.getElementById('right-click');
+var scrollbar    = document.getElementById('scrollbar');
+var scroller     = scrollbar.firstElementChild;
 
 function loadAhead(photoInd) {
   for(var i = 0, diffs = [0, 1, -1, 2, -2]; i < 5; i++) {
@@ -147,19 +160,26 @@ function loadShowcase(photoInd) {
   showcases.style.display = 'block';
 }
 
-var photoInd = location.hash.match(/\/([0-9]+)$/);
-if(photoInd && photoInd[1]) loadShowcase(+photoInd[1]);
+//var photoInd = location.hash.match(/\/([0-9]+)$/);
+//if(photoInd && photoInd[1]) loadShowcase(+photoInd[1]);
 
-window.addEventListener('hashchange', function() {
+(window.onhashchange = function() {
   // on clicking one of the group links, the index range part of the
   // hash is changes, so load the new group:
-  var newRange = location.hash.match(/#\/([0-9]+-[0-9]+)/);
-  if(newRange && newRange[1] !== indexRange) {
+  var newRange = location.hash.match(/[0-9]+-[0-9]+/);
+  if(newRange && newRange[0] !== indexRange) {
     location.reload();
+  } else if(location.hash.match(/contact/)) {
+    indexRange = '';
+    document.getElementById('hide-scrollbar').innerHTML =
+      '<img style="max-width:100%;max-height:100%;position:absolute;left:0;top:0;" src="photos/selfp.jpg">' +
+      '<b style="position:absolute;top:0;left:0;padding:20px 1em 1em 1em;">fginder@hotmail.com</cb>';
+    scroller.style.display = 'none';
   } else {
     var photoInd = location.hash.match(/\/([0-9]+)$/);
     if(photoInd && photoInd[1]) {
-      var isShown = photoInd[1] == positionedShowcases.center.getAttribute('data-photoind');
+      var isShown = positionedShowcases.center &&
+        photoInd[1] == positionedShowcases.center.getAttribute('data-photoind');
       if(showcases.style.display != 'block' || !isShown) {
         loadShowcase(+photoInd[1]);
       }
@@ -172,7 +192,7 @@ window.addEventListener('hashchange', function() {
       (noHover[0] || noHover).className = 'thumbnail-grid-square';
     }
   }
-}, false);
+})();
 
 photoGallery.addEventListener('click', function(e) {
   var photoInd = e.target.getAttribute('data-photoind');
@@ -398,9 +418,6 @@ showcases.addEventListener('touchcancel', function(e) {
   firstTouch = {};
 }, false);
 
-var scrollbar = document.getElementById('scrollbar');
-var scroller = scrollbar.children[0];
-
 photoGallery.addEventListener('scroll', function() {
   scroller.style.top = Math.round(photoGallery.scrollTop / photoGallery.scrollHeight * 100) + '%';
 }, false);
@@ -411,7 +428,7 @@ photoGallery.addEventListener('scroll', function() {
     scroller.style.height = heightRatio + '%';
     scroller.style.top = Math.round(photoGallery.scrollTop / photoGallery.scrollHeight * 100) + '%';
   } else {
-    scroller.style.height = '0px';
+    scroller.style.display = 'none';
   }
 })();
 
