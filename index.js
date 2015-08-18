@@ -172,8 +172,8 @@ function loadShowcase(photoInd) {
   } else if(location.hash.match(/contact/)) {
     indexRange = '';
     document.getElementById('hide-scrollbar').innerHTML =
-      '<img style="max-width:100%;max-height:100%;position:absolute;left:0;top:0;" src="photos/selfp.jpg">' +
-      '<b style="position:absolute;top:0;left:0;padding:20px 1em 1em 1em;">fginder@hotmail.com</cb>';
+      '<img class="selfp" src="photos/selfp.jpg">' +
+      '<b class="email">fginder@hotmail.com</cb>';
     scroller.style.display = 'none';
   } else {
     var photoInd = location.hash.match(/\/([0-9]+)$/);
@@ -450,6 +450,10 @@ scroller.addEventListener('mousedown', function(e) {
 
 var sidebarContent = document.getElementById('sidebar-content');
 var tm = document.getElementById('tm');
+
+document.getElementsByClassName('grouplink-div')[0].addEventListener('click', function() {
+  topbar.dispatchEvent(new MouseEvent('click'));
+}, false);
 
 document.getElementById('topbar').addEventListener('click', function showContent() {
   sidebarContent.style.maxHeight = window.innerHeight - 45 - tm.clientHeight + 'px';
