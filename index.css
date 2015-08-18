@@ -41,11 +41,21 @@ a:hover {
 }
 
 #sidebar {
-  max-height: 100%;
+  height: 100%;
+  position: relative;
+  width: 113px;
+}
+
+#logo {
+  position: absolute;
+  top: 20px;
+  display: block;
 }
 
 #sidebar-content-container {
-  overflow: hidden;
+  position: absolute;
+  top: 92px; left: 0px; right: 0px; bottom: 0px;
+  overflow-x: hidden;
   width: 113px;
 }
 
@@ -56,11 +66,6 @@ a:hover {
 
 #topbar {
   display: none;
-}
-
-#logo {
-  display: block;
-  margin: 20px 10px 10px 0px;
 }
 
 .grouplink-div {
@@ -198,7 +203,7 @@ a:hover {
     bottom: auto;
     position: static;
   }
-  
+
   #inner {
     height: auto;
   }
@@ -206,7 +211,7 @@ a:hover {
   #inner > div {
     float: none;
   }
-  
+
   #hide-scrollbar {
     width: 300px;
     height: auto;
@@ -218,40 +223,43 @@ a:hover {
     padding-left: 25px;
     margin-top: 44px;
   }
-  
+
   .thumbnail-grid-square, .thumbnail-grid-square-no-hover {
     margin: 0px;
   }
-  
+
   #sidebar {
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 2;
+    height: auto;
+    width: auto;
   }
-  
+
   #topbar {
     display: block;
     position: relative;
     z-index: 2;
     background: black;
   }
-  
+
   #topbar span {
     line-height: 33px;
     position: absolute;
   }
-  
+
   #topbar span:first-of-type {
     left: 10px;
   }
-  
+
   #topbar span:last-of-type {
     right: 10px;
   }
-  
+
   #sidebar-content-container {
     position: absolute;
     width: 125%;
+    top: auto; left: auto; right: auto; bottom: auto;
     -webkit-transform: translateY(-100%);
        -moz-transform: translateY(-100%);
         -ms-transform: translateY(-100%);
@@ -263,23 +271,19 @@ a:hover {
          -o-transition:      -o-transform 200ms linear;
             transition:         transform 200ms linear;
   }
-  
+
   #sidebar-content {
     border-bottom: 1px solid white;
     width: 80%;
     background: black;
   }
-  
-  /* to do: arrows when scrollable */
-  /* to do: swipe left/right for next/prev photo grouping */
-  /* set no-hover on touchmove */
-  
+
   .grouplink-div {
     text-align: center;
     width: 100%;
     padding: 10px 0px;
   }
-  
+
   #scrollbar { display: none; }
   #logo { display: none; }
 
