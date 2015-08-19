@@ -436,7 +436,7 @@ var sidebarContent = document.getElementById('sidebar-content');
 var tm = document.getElementById('tm');
 
 sidebarContent.addEventListener('click', function(e) {
-  if(e.target.className == 'grouplink-div') {
+  if(e.target.tagName == 'A') {
     topbar.dispatchEvent(new MouseEvent('click'));
   }
 }, false);
