@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Frank Ginder Photography</title>
     <meta name="description" content="homepage of frank ginder's photography">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="njn/njn.js"></script>
     <script src="njn/njn_controller.js"></script>
     <link rel="stylesheet" href="index.css">
@@ -18,9 +18,12 @@
             <img src="straight_logo.png" width="250" height="33">
             <span class="arrow">&#9662;</span>
           </div>
-          <img id="logo" src="logo.png" width="103" height="62">
+          <a href="#/contact">
+            <img id="logo" src="logo.png" width="103" height="62">
+          </a>
           <div id="sidebar-content-container">
             <div id="sidebar-content">
+              <div class="grouplink-div"><a href="#/contact">/contact</a></div>
               <div data-njnrepeat="indexRanges" class="grouplink-div">
                 <a href="#/{{indexRanges:toString}}">/{{indexRanges:toString}}</a>
               </div>

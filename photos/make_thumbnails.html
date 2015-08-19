@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <p><b>Step 1:</b> Click the button below these instructions.</p>
+    <p><b>Step 2:</b> In the pop-up window, choose the photos you want to upload.  The browser may ask if you want to download multiple files.  Say yes.</p>
+    <p><b>Step 3:</b> The browser will create and download thumbnail versions of the photos.  It will also download a file named "photos.js".</p>
+    <p><b>Step 4:</b> Move the thumbnails to the "photos/thumbnails" directory.</p>
+    <p><b>Step 5:</b> Replace "photos.js" in the "photos" directory with the new "photos.js".</p>
+    <p><b>Step 6:</b> Move all the original photos to the "photos" directory.</p>
+    <form>
+      <input id="upload-images" type="file" multiple>
+    </form>
+    <script src="photos.js"></script>
+    <script>
+      var files;
+      document.getElementById('upload-images').addEventListener('change', function() {
+        files = this.files;
+        if(files.length == 0) return;
+        Array.prototype.forEach.call(files, function(file) {
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            var image = new Image();
+            var canvas = document.createElement('canvas');
+            canvas.height = 300;
+            canvas.width = 300;
+            var context = canvas.getContext('2d');
+            image.onload = function() {
+              var height = this.height;
+              var width = this.width;
+              var startX, startY;
+              if(width < height) {
+                height = 300 / width * height;
+                width = 300;
+                startX = -150;
+                startY = -height / 2;
+              } else {
+                width = 300 / height * width;
+                height = 300;
+                startX = -width / 2;
+                startY = -150;
+              }
+              context.translate(150,150);
+              context.drawImage(this,startX,startY,width,height);
+              var imgData = canvas.toDataURL();
+              var a = document.createElement('a');
+              a.href = imgData;
+              a.download = file.name.match(/.+(?=\.)/) + '.png';
+              a.dispatchEvent(new MouseEvent('click'));
+            };
+            image.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        });
+        var keys = Object.keys(registeredPhotos);
+        keys.sort(function(a, b) { return a - b; });
+        Array.prototype.forEach.call(files, function(file, i) {
+          registeredPhotos[keys.length + i + 1] = file.name.match(/.+(?=\.)/)[0];
+        });
+        keys = Object.keys(registeredPhotos);
+        var stringified = 'var registeredPhotos = {\n\n' +
+          keys.map(function(key) {
+            return key + ': "' + registeredPhotos[key] + '"';
+          }).join(",\n") +
+        '\n\n};'
+        var blob = new Blob([stringified], {type:'text/plain'});
+        var a = document.createElement('a');
+        a.download = 'photos.js';
+        a.href = window.URL.createObjectURL(blob);
+        a.dispatchEvent(new MouseEvent('click'));
+      }, false);
+      // to make logo:
+      // var cvs = document.createElement('canvas'); cvs.style.border = '1px solid white'; cvs.style.position = 'absolute'; cvs.style.top = '19px'; cvs.style.left = '60px'; cvs.width = "103"; cvs.height = "62"; var ctx = cvs.getContext('2d'); document.body.appendChild(cvs); ctx.fillStyle = 'white'; ctx.textAlign = 'right'; ctx.font = 'bold 24px "Open Sans Condensed"'; ctx.fillText('Frank Ginder', 101, 21); ctx.fillText('Photography', 101, 54); var a = document.createElement('a'); a.download = 'img.png'; a.href = cvs.toDataURL('image/png'); a.dispatchEvent(new MouseEvent('click'));
+    </script>
+  </body>
+</html>
