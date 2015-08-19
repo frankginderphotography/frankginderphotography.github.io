@@ -435,8 +435,10 @@ scroller.addEventListener('mousedown', function(e) {
 var sidebarContent = document.getElementById('sidebar-content');
 var tm = document.getElementById('tm');
 
-document.getElementsByClassName('grouplink-div')[0].addEventListener('click', function() {
-  topbar.dispatchEvent(new MouseEvent('click'));
+sidebarContent.addEventListener('click', function() {
+  if(e.target.className == 'grouplink-div') {
+    topbar.dispatchEvent(new MouseEvent('click'));
+  }
 }, false);
 
 document.getElementById('topbar').addEventListener('click', function showContent() {
