@@ -435,7 +435,7 @@ scroller.addEventListener('mousedown', function(e) {
 var sidebarContent = document.getElementById('sidebar-content');
 var tm = document.getElementById('tm');
 
-sidebarContent.addEventListener('click', function() {
+sidebarContent.addEventListener('click', function(e) {
   if(e.target.className == 'grouplink-div') {
     topbar.dispatchEvent(new MouseEvent('click'));
   }
