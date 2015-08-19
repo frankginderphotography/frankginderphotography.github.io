@@ -312,24 +312,6 @@ window.addEventListener('keydown', function(e) {
   }
 }, false);
 
-//document.body.addEventListener('touchmove', function makeNoHover(e) {
-//  var gridSquares = document.getElementsByClassName('thumbnail-grid-square');
-//  gridSquares = Array.prototype.slice.call(gridSquares);
-//  gridSquares.forEach(function(gridSquare) {
-//    gridSquare.className = 'thumbnail-grid-square-no-hover';
-//  });
-//  window.removeEventListener('touchstart', makeNoHover, false);
-//  window.addEventListener('mousemove', function makeHover() {
-//    var noHovers = document.getElementsByClassName('thumbnail-grid-square-no-hover');
-//    noHovers = Array.prototype.slice.call(noHovers);
-//    noHovers.forEach(function(noHover) {
-//      noHover.className = 'thumbnail-grid-square';
-//    });
-//    window.removeEventListener('mousemove', makeHover, false);
-//    window.addEventListener('touchstart', makeNoHover, false);
-//  }, false);
-//}, false);
-
 var firstTouch = {};
 
 showcases.addEventListener('touchstart', function(e) {

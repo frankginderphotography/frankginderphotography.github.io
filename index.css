@@ -170,18 +170,20 @@ a:hover {
   position: absolute;
 }
 
-.thumbnail-grid-square:hover {
-  z-index: 1;
-}
-
-.thumbnail-grid-square:hover .thumbnail-link {
-  left: -25px;
-  top: -25px;
-}
-
-.thumbnail-grid-square:hover .thumbnail {
-  height: 300px;
-  width: 300px;
+@media (min-width: 449px) {
+  .thumbnail-grid-square:hover {
+    z-index: 1;
+  }
+  
+  .thumbnail-grid-square:hover .thumbnail-link {
+    left: -25px;
+    top: -25px;
+  }
+  
+  .thumbnail-grid-square:hover .thumbnail {
+    height: 300px;
+    width: 300px;
+  }
 }
 
 .grouplink-div:first-child {
