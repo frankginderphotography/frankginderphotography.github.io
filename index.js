@@ -42,7 +42,7 @@ if(indexRange) {
   var photos = [];
   
   for(var i = rangeStart; i <= rangeEnd; i++) {
-    var id = registeredPhotos[i];
+    var id = registeredPhotos[i - 1];
     photos.push({
       src:        'photos/' + id + '.jpg',
       href:       '#/' + indexRange + '/' + i,
@@ -67,7 +67,7 @@ function loadAhead(photoInd) {
     var currInd = photoInd + diffs[i];
     var showcase = showcases.querySelector('[data-photoind="' + currInd + '"]');
     if(showcase) {
-      showcase.getElementsByTagName('img')[0].src = 'photos/' + registeredPhotos[currInd] + '.jpg';
+      showcase.getElementsByTagName('img')[0].src = 'photos/' + registeredPhotos[currInd - 1] + '.jpg';
     }
   }
 }
