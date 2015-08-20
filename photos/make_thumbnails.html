@@ -57,7 +57,9 @@
           registeredPhotos.push(file.name.match(/.+(?=\.)/)[0]);
         });
         var stringified = 'var registeredPhotos = [\n\n' +
-          registeredPhotos.join(",\n") +
+          registeredPhotos.map(function(filename) {
+            return '"' + filename + '"';
+          }).join(",\n") +
         '\n\n];'
         var blob = new Blob([stringified], {type:'text/plain'});
         var a = document.createElement('a');
