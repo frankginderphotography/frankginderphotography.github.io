@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>frank ginder photography</title>
+    <title>Frank Ginder Photography</title>
     <meta name="description" content="homepage of frank ginder's photography">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="njn/njn.js"></script>
     <script src="njn/njn_controller.js"></script>
     <link rel="stylesheet" href="index.css">
@@ -18,9 +18,12 @@
             <img src="straight_logo.png" width="250" height="33">
             <span class="arrow">&#9662;</span>
           </div>
-          <img id="logo" src="logo.png" width="103" height="62">
+          <a href="#/contact">
+            <img id="logo" src="logo.png" width="103" height="62">
+          </a>
           <div id="sidebar-content-container">
             <div id="sidebar-content">
+              <div class="grouplink-div"><a href="#/contact">/contact</a></div>
               <div data-njnrepeat="indexRanges" class="grouplink-div">
                 <a href="#/{{indexRanges:toString}}">/{{indexRanges:toString}}</a>
               </div>
@@ -28,10 +31,10 @@
           </div>
         </div>
         <div id="hide-scrollbar">
-          <div id="photo-gallery">
-            <div data-njnrepeat="photos" class="photo-grid-square">
-              <a class="photo-link" href={{photos:href}}>
-                <img height=250 width=250 id={{photos:id}} data-njnsrc={{photos:thumbnail}} class=thumbnail>
+          <div id="thumbnail-gallery">
+            <div data-njnrepeat="photos" class="thumbnail-grid-square">
+              <a class="thumbnail-link" href="{{photos:href}}">
+                <img height="250" width="250" id="{{photos:id}}" data-photoind="{{photos:photoInd}}" data-njnsrc="{{photos:thumbnail}}" class="thumbnail">
               </a>
             </div>
           </div>
@@ -42,15 +45,16 @@
       </div>
     </div>
     <div id="showcases">
-      <a id="left-click">&lt;</a>
-      <a data-njnrepeat="photos" class="showcase" data-photo="{{photos:id}}" href="#/{{indexRange}}">
+      <a data-njnrepeat="photos" class="showcase" data-photoind="{{photos:photoInd}}" href="#/{{indexRange}}">
         <img class="fullsize">
       </a>
+      <a id="left-click">&lt;</a>
       <a id="right-click">&gt;</a>
     </div>
     <span id="tm" style="color:white;position:fixed;right:0;bottom:0;text-align:right;background:black;padding-left:5px;padding-right:5px;">
       All images on this site &copy; 2015 Frank Ginder.  All rights reserved.
     </span>
+    <script src="photos/photos.js"></script>
     <script src="index.js"></script>
   </body>
 </html>

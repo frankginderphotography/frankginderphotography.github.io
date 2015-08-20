@@ -1,12 +1,11 @@
-// strict mode broke mobile, need to find out why:
-// "use strict";
+"use strict";
 
 // var max = number of photos on server
 // break up into groups of 24, returning strings like: '1-24', '25-48', etc.
 // if small screen, groups of 12 instead to minimize loading time:
 
 var indexRanges = [],
-    max = 151,
+    max = Object.keys(registeredPhotos).length,
     groupsOf = window.innerWidth < 551 ? 11 : 23;
 
 (function() {
@@ -26,38 +25,49 @@ njn.controller('sidebar', { indexRanges: indexRanges });
 // #/[startNum]-[endNum]. It may not be present when the site is first
 // loaded, so we'll default to the first index range in the ranges array
 // defined above:
-var indexRange = (location.hash.match(/#\/([0-9]+-[0-9]+)/) || ['',indexRanges[0]])[1];
-var rangeStart = +indexRange.split('-')[0];
-var rangeEnd = +indexRange.split('-')[1];
+var indexRange = location.hash.match(/[0-9]+-[0-9]+/);
 
-var photos = [];
-
-for(var i = rangeStart; i <= rangeEnd; i++) {
-  var id = 'photo_' + i;
-  photos.push({
-    id:         id,
-    src:        'photos/' + id + '.jpg',
-    href:       '#/' + indexRange + '/' + id,
-    thumbnail:  'thumbnails/' + id + '.png',
-    photoInd:   i - rangeStart
-  });
+if(!indexRange) {
+  if(!location.hash.match(/contact/)) {
+    indexRange = indexRanges[0];
+  }
+} else {
+  indexRange = indexRange[0];
 }
 
-njn.controller('photo-gallery', { photos: photos });
-njn.controller('showcases', { photos: photos, indexRange: indexRange });
+if(indexRange) {
+  var rangeStart = +indexRange.split('-')[0];
+  var rangeEnd = +indexRange.split('-')[1];
+  
+  var photos = [];
+  
+  for(var i = rangeStart; i <= rangeEnd; i++) {
+    var id = registeredPhotos[i];
+    photos.push({
+      src:        'photos/' + id + '.jpg',
+      href:       '#/' + indexRange + '/' + i,
+      thumbnail:  'photos/thumbnails/' + id + '.png',
+      photoInd:   i
+    });
+  }
+  
+  njn.controller('thumbnail-gallery', { photos: photos });
+  njn.controller('showcases', { photos: photos, indexRange: indexRange });
+}
 
-var photoGallery = document.getElementById('photo-gallery');
+var photoGallery = document.getElementById('thumbnail-gallery');
 var showcases    = document.getElementById('showcases');
 var leftClick    = document.getElementById('left-click');
 var rightClick   = document.getElementById('right-click');
+var scrollbar    = document.getElementById('scrollbar');
+var scroller     = scrollbar.firstElementChild;
 
-function loadAhead(photoId) {
-  var startNum = +photoId.match(/[0-9]+/)[0];
+function loadAhead(photoInd) {
   for(var i = 0, diffs = [0, 1, -1, 2, -2]; i < 5; i++) {
-    var currPhoto = 'photo_' + (startNum + diffs[i]);
-    var showcase = showcases.querySelector('[data-photo="' + currPhoto + '"]');
+    var currInd = photoInd + diffs[i];
+    var showcase = showcases.querySelector('[data-photoind="' + currInd + '"]');
     if(showcase) {
-      showcase.getElementsByTagName('img')[0].src = 'photos/' + currPhoto + '.jpg';
+      showcase.getElementsByTagName('img')[0].src = 'photos/' + registeredPhotos[currInd] + '.jpg';
     }
   }
 }
@@ -76,7 +86,7 @@ var positionedShowcases = {
       this[position].className = 'showcase';
     }
     showcase.position = position;
-    showcase.photoNumber = Number(showcase.getAttribute('data-photo').match(/[0-9]+/)[0]);
+    showcase.photoNumber = Number(showcase.getAttribute('data-photoind'));
     showcase.className = position + ' showcase';
     this[position] = showcase;
   }
@@ -93,7 +103,7 @@ function setHrefs() {
         leftNum ? Math.max(leftNum - groupsOf, 1) + '-' + leftNum : max - groupsOf + '-' + max
       )
     )
-  + '/photo_' + (leftNum || max);
+  + '/' + (leftNum || max);
 
   rightClick.href = '#/' +
     (
@@ -102,7 +112,7 @@ function setHrefs() {
         idNum < max ? rightNum + '-' + Math.min(rightNum + groupsOf, max) : indexRanges[0]
       )
     )
-  + '/photo_' + rightNum;
+  + '/' + rightNum;
 }
 
 function clearTransform(showcase) {
@@ -135,54 +145,60 @@ function setTransform(element, translateFunction) {
   element.style.transform       = translateFunction;
 }
 
-function loadShowcase(photoId) {
+function loadShowcase(photoInd) {
   clearTransform();
-  var photoNum = +photoId.match(/[0-9]+/)[0];
   for(var i = -1; i < 2; i++) {
-    var currPhoto = 'photo_' + (photoNum + i);
-    var showcase = showcases.querySelector('[data-photo="' + currPhoto + '"]');
+    var currInd = photoInd + i;
+    var showcase = showcases.querySelector('[data-photoind="' + currInd + '"]');
     if(i == -1 && showcase) positionedShowcases.set('left', showcase);
     if(i == 0) positionedShowcases.set('center', showcase);
     if(i == 1 && showcase) positionedShowcases.set('right', showcase);
   }
   transformPositionedShowcases();
   setHrefs();
-  loadAhead(photoId);
+  loadAhead(photoInd);
   showcases.style.display = 'block';
 }
 
-var photoId = location.hash.match(/photo_[0-9]+/);
-if(photoId) loadShowcase(photoId[0]);
+//var photoInd = location.hash.match(/\/([0-9]+)$/);
+//if(photoInd && photoInd[1]) loadShowcase(+photoInd[1]);
 
-window.addEventListener('hashchange', function() {
+(window.onhashchange = function() {
   // on clicking one of the group links, the index range part of the
   // hash is changes, so load the new group:
-  var newRange = location.hash.match(/#\/([0-9]+-[0-9]+)/);
-  if(newRange && newRange[1] !== indexRange) {
+  var newRange = location.hash.match(/[0-9]+-[0-9]+/);
+  if(newRange && newRange[0] !== indexRange) {
     location.reload();
+  } else if(location.hash.match(/contact/)) {
+    indexRange = '';
+    document.getElementById('hide-scrollbar').innerHTML =
+      '<img class="selfp" src="photos/selfp.jpg">' +
+      '<b class="email">fginder@hotmail.com</cb>';
+    scroller.style.display = 'none';
   } else {
-    var photoId = location.hash.match(/photo_[0-9]+/);
-    if(photoId) {
-      var isShown = photoId[0] == positionedShowcases.center.getAttribute('data-photo');
+    var photoInd = location.hash.match(/\/([0-9]+)$/);
+    if(photoInd && photoInd[1]) {
+      var isShown = positionedShowcases.center &&
+        photoInd[1] == positionedShowcases.center.getAttribute('data-photoind');
       if(showcases.style.display != 'block' || !isShown) {
-        loadShowcase(photoId[0]);
+        loadShowcase(+photoInd[1]);
       }
     } else {
       // if a fullsized image was clicked, the photo_id part of the hash
       // was removed, so hide #showcases:
       clearTransform();
       showcases.style.display = 'none';
-      var noHover = document.getElementsByClassName('photo-grid-square-no-hover');
-      (noHover[0] || noHover).className = 'photo-grid-square';
+      var noHover = document.getElementsByClassName('thumbnail-grid-square-no-hover');
+      (noHover[0] || noHover).className = 'thumbnail-grid-square';
     }
   }
-}, false);
+})();
 
 photoGallery.addEventListener('click', function(e) {
-  var photoId = (e.target.id || '').match(/photo_[0-9]+$/);
-  if(photoId) {
-    e.target.parentElement.parentElement.className = 'photo-grid-square-no-hover';
-    loadShowcase(photoId[0]);
+  var photoInd = e.target.getAttribute('data-photoind');
+  if(photoInd) {
+    e.target.parentElement.parentElement.className = 'thumbnail-grid-square-no-hover';
+    loadShowcase(+photoInd);
   }
 }, false);
 
@@ -230,28 +246,30 @@ function clearTransition(element) {
 
 function slideShowcase(goDir) {
   var oppDir = goDir == 'left' ? 'right' : 'left';
-  
+
   if(positionedShowcases[oppDir]) {
     clearTransition(positionedShowcases[oppDir]);
     clearTransform(positionedShowcases[oppDir]);
   }
-  
+
   positionedShowcases.set(oppDir, positionedShowcases.center);
   setTransitionWithEnd(positionedShowcases[oppDir]);
   positionedShowcases.center = undefined;
-  
-  positionedShowcases.set('center', positionedShowcases[goDir]);
-  setTransitionWithEnd(positionedShowcases.center);
-  positionedShowcases[goDir] = undefined;
-  
+
+  if(positionedShowcases[goDir]) {
+    positionedShowcases.set('center', positionedShowcases[goDir]);
+    setTransitionWithEnd(positionedShowcases.center);
+    positionedShowcases[goDir] = undefined;
+  }
+
   var upOrDown = goDir == 'left' ? -2 : 2;
   var newNextPhotoId = positionedShowcases[oppDir].photoNumber + upOrDown;
-  var newNextPhoto = showcases.querySelector('[data-photo="photo_' + newNextPhotoId + '"]');
+  var newNextPhoto = showcases.querySelector('[data-photoind="' + newNextPhotoId + '"]');
   if(newNextPhoto) positionedShowcases.set(goDir, newNextPhoto);
-  
+
   if(positionedShowcases.center) {
     transformPositionedShowcases();
-    loadAhead(positionedShowcases.center.getAttribute('data-photo'));
+    loadAhead(+positionedShowcases.center.getAttribute('data-photoind'));
   }
 }
 
@@ -291,19 +309,6 @@ window.addEventListener('keydown', function(e) {
     navigatePhotos(match[0]);
   } else if(match = whichKey(e).match(/Up|Down/)) {
     scrollThumbnails(match[0]);
-  }
-}, false);
-
-photoGallery.addEventListener('touchstart', function(e) {
-  if(e.target.className === 'thumbnail') {
-    var gridSquare = e.target.parentElement.parentElement;
-    if(gridSquare.className === 'photo-grid-square') {
-      gridSquare.className = 'photo-grid-square-no-hover';
-      e.target.addEventListener('mouseenter', function makeHoverableAgain() {
-        e.target.parentElement.parentElement.className = 'photo-grid-square';
-        e.target.removeEventListener('mouseenter', makeHoverableAgain, false);
-      }, false);
-    }
   }
 }, false);
 
@@ -361,7 +366,7 @@ showcases.addEventListener('touchend', function(e) {
       var halfScreenY = Math.abs(deltaY) > window.innerHeight / 2;
       var exitSwipe = halfScreenY || (quickSwipe && Math.abs(deltaY) > 20);
       if(exitSwipe) {
-        var yToGo = deltaY < 0 ? currTouch.screenY : window.innerHeight - currTouch.screenY;
+        var yToGo = deltaY < 0 ? currTouch.clientY : window.innerHeight - currTouch.clientY;
         if(yToGo < 1) yToGo = 1;
         globalTransition = Math.round(yToGo / window.innerHeight * 800) + 'ms linear';
         positionedShowcases.forEach(setTransitionWithEnd);
@@ -397,14 +402,9 @@ showcases.addEventListener('touchcancel', function(e) {
   firstTouch = {};
 }, false);
 
-var scrollbar = document.getElementById('scrollbar');
-var scroller = scrollbar.children[0];
-
 photoGallery.addEventListener('scroll', function() {
   scroller.style.top = Math.round(photoGallery.scrollTop / photoGallery.scrollHeight * 100) + '%';
 }, false);
-
-var sidebarContent = document.getElementById('sidebar-content');
 
 (window.onresize = function() {
   var heightRatio = Math.round(photoGallery.clientHeight / photoGallery.scrollHeight * 100);
@@ -412,7 +412,7 @@ var sidebarContent = document.getElementById('sidebar-content');
     scroller.style.height = heightRatio + '%';
     scroller.style.top = Math.round(photoGallery.scrollTop / photoGallery.scrollHeight * 100) + '%';
   } else {
-    scroller.style.height = '0px';
+    scroller.style.display = 'none';
   }
 })();
 
@@ -432,23 +432,57 @@ scroller.addEventListener('mousedown', function(e) {
   });
 }, false);
 
+var sidebarContent = document.getElementById('sidebar-content');
+var tm = document.getElementById('tm');
+
+sidebarContent.addEventListener('click', function(e) {
+  if(e.target.tagName == 'A') {
+    topbar.dispatchEvent(new MouseEvent('click'));
+  }
+}, false);
+
 document.getElementById('topbar').addEventListener('click', function showContent() {
-  var tm = document.getElementById('tm');
   sidebarContent.style.maxHeight = window.innerHeight - 45 - tm.clientHeight + 'px';
   njn.Array.forEach(this.getElementsByClassName('arrow'), function(span) {
     span.innerHTML = "&#9652;"
   });
-  setTransform(sidebarContent, 'translateY(0px)');
+  setTransform(sidebarContent.parentElement, 'translateY(0px)');
   this.removeEventListener('click', showContent, false);
   var hideContent = (function() {
-    setTransform(sidebarContent, '');
+    setTransform(sidebarContent.parentElement, '');
     njn.Array.forEach(this.getElementsByClassName('arrow'), function(span) {
       span.innerHTML = "&#9662;"
     });
     this.removeEventListener('click', hideContent, false);
-    window.removeEventListener('resize', hideContent, false);
     this.addEventListener('click', showContent, false);
   }).bind(this);
-  window.addEventListener('resize', hideContent, false); 
   this.addEventListener('click', hideContent, false);
+}, false);
+
+window.addEventListener('resize', function() {
+  sidebarContent.style.maxHeight = window.innerHeight - 45 - tm.clientHeight + 'px';
+}, false);
+
+// hack from https://docs.google.com/document/d/12Ay4s3NWake8Qd6xQeGiYimGJ_gCe0UMDZKwP9Ni4m8
+// to prevent pull-to-refresh in mobile chrome:
+
+var lastTouchY,
+    startFromZero = false;
+
+document.addEventListener('touchstart', function(e) {
+  if (e.touches.length != 1) return;
+  lastTouchY = e.touches[0].clientY;
+  startFromZero = window.pageYOffset == 0;
+}, false);
+
+document.addEventListener('touchmove', function(e) {
+  var touchY = e.touches[0].clientY;
+  var touchYDelta = touchY - lastTouchY;
+  lastTouchY = touchY;
+
+  if (startFromZero && touchYDelta > 0) {
+    startFromZero = false;
+    e.preventDefault();
+    return;
+  }
 }, false);
