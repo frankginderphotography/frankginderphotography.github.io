@@ -152,5 +152,5 @@ var registeredPhotos = [
 "photo_150",
 "photo_151"
 
-};
+];
 //test
