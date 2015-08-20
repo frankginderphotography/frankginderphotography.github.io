@@ -153,4 +153,3 @@ var registeredPhotos = [
 "photo_151"
 
 ];
-//test
