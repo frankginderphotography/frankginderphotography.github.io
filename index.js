@@ -173,7 +173,8 @@ function loadShowcase(photoInd) {
     indexRange = '';
     document.getElementById('hide-scrollbar').innerHTML =
       '<img class="selfp" src="photos/selfp.jpg">' +
-      '<b class="email">fginder@hotmail.com</cb>';
+      '<b class="email">fginder@hotmail.com</b>' +
+      '<a href="http://fofx-software.com"><b class="design-cred">website by f(x) software</b></a>';
     scroller.style.display = 'none';
   } else {
     var photoInd = location.hash.match(/\/([0-9]+)$/);
